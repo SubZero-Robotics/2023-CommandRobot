@@ -57,10 +57,7 @@ DriveSubsystem::DriveSubsystem()
 
 void DriveSubsystem::DisabledInit()
 {
-    SetCoast(&RightLead);
-    SetCoast(&RightFollow);
-    SetCoast(&LeftLead);
-    SetCoast(&LeftFollow);
+
 }
 
 void DriveSubsystem::TeleopInit()
