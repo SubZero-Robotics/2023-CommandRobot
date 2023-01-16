@@ -8,28 +8,33 @@
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
+#include "commands/DefaultDrive.h"
 
-RobotContainer::RobotContainer() {
+RobotContainer::RobotContainer()
+{
   // Initialize all of your commands and subsystems here
 
   // Configure the button bindings
   ConfigureBindings();
+
+  // Default drive command.  This will be run in teleop and when no other command is running.
+  m_drive.SetDefaultCommand(DefaultDrive(
+      &m_drive,
+      [this]
+      { return Xbox.GetLeftY(); },
+      [this]
+      { return Xbox.GetLeftX() * 0.85; }));
 }
 
-void RobotContainer::ConfigureBindings() {
+void RobotContainer::ConfigureBindings()
+{
   // Configure your trigger bindings here
-
-  // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-  frc2::Trigger([this] {
-    return m_subsystem.ExampleCondition();
-  }).OnTrue(ExampleCommand(&m_subsystem).ToPtr());
-
-  // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
-  // pressed, cancelling on release.
-  m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
+  // This is a fun change from 2022. Button bindings as we knew them are gone.
+  // We now have triggers.
 }
 
-frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
+frc2::CommandPtr RobotContainer::GetAutonomousCommand()
+{
   // An example command will be run in autonomous
   return autos::ExampleAuto(&m_subsystem);
 }
