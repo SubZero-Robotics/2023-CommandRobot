@@ -51,7 +51,7 @@ namespace DriveConstants
     constexpr double kRamseteB = 2.0;
     constexpr double kRamseteZeta = 0.7;
 }
-constexpr double kDeadzone = 0.1;
+constexpr double kDeadzone = 0;
 
 // DriveSubsystem constants
 

@@ -23,7 +23,7 @@ RobotContainer::RobotContainer()
       [this]
       { return Xbox.GetLeftY(); },
       [this]
-      { return Xbox.GetLeftX() * 0.85; }));
+      { return Xbox.GetLeftX(); }));
 }
 
 void RobotContainer::ConfigureBindings()
