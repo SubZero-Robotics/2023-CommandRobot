@@ -1,7 +1,7 @@
 #include "commands/DriveResetOdometry.h"
 #include <frc/geometry/Pose2d.h>
 
-DriveResetOdometry::DriveResetOdometry(drivetrain* subsystem, frc::Joystick* controller) 
+DriveResetOdometry::DriveResetOdometry(DriveSubsystem* subsystem, frc::Joystick* controller) 
     : m_drive(subsystem), m_controller(controller)  {
   AddRequirements({subsystem});
 }

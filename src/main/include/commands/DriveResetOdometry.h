@@ -4,11 +4,11 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc/Joystick.h>
 
-#include "subsystems/drivetrain.h"
+#include "subsystems/DriveSubsystem.h"
 
 class DriveResetOdometry : public frc2::CommandHelper<frc2::CommandBase, DriveResetOdometry> {   // this line builds fine
     public: 
-     explicit DriveResetOdometry(drivetrain* subsystem, frc::Joystick* controller);
+     explicit DriveResetOdometry(DriveSubsystem* subsystem, frc::Joystick* controller);
 
      void Initialize() override;
      
@@ -19,7 +19,7 @@ class DriveResetOdometry : public frc2::CommandHelper<frc2::CommandBase, DriveRe
      bool IsFinished() override;
 
     private: 
-     drivetrain* m_drive;
+     DriveSubsystem* m_drive;
      frc::Joystick* m_controller;
 
 };
