@@ -19,6 +19,7 @@
         {
             "groupId": "com.kauailabs.navx.frc",
             "artifactId": "navx-frc-cpp",
+
             "version": "2023.0.3",
             "headerClassifier": "headers",
             "sourcesClassifier": "sources",
