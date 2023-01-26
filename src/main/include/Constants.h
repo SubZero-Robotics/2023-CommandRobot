@@ -34,7 +34,7 @@ namespace DriveConstants
 {
     constexpr auto kTrackWidth = 0.6096_m;
     constexpr int kEncoderCPR = 29020.16; // Counts Per Rotation. To get this, multiply gear ratio by encoder ticks. 14.17*2048 = 2920.16
-    constexpr double kWheelDiameterMeters = 0.15875;
+    constexpr auto kWheelDiameterMeters = 0.1524_m;
     constexpr double kEncoderDistancePerPulse = 0.00001699323;
 
     // These characterization values MUST be determined either experimentally or
