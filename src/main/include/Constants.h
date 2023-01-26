@@ -33,7 +33,7 @@
 namespace DriveConstants
 {
     constexpr auto kTrackWidth = 0.6096_m;
-    constexpr int kEncoderCPR = 29860.57; // Counts Per Rotation. TalonFX is 2048
+    constexpr int kEncoderCPR = 29020.16; // Counts Per Rotation. To get this, multiply gear ratio by encoder ticks. 14.17*2048 = 2920.16
     constexpr double kWheelDiameterMeters = 0.15875;
     constexpr double kEncoderDistancePerPulse = 0.00001699323;
 
