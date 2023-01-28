@@ -41,12 +41,12 @@ namespace DriveConstants
     // theoretically for *your* robot's drive. The Robot Characterization
     // Toolsuite provides a convenient tool for obtaining these values for your
     // robot.
-    constexpr auto ks = 0.6416_V;
-    constexpr auto kv = 3.1057 * 1_V * 1_s / 1_m;
-    constexpr auto ka = 0.29699 * 1_V * 1_s * 1_s / 1_m;
+    constexpr auto ks = 0.12305_V;
+    constexpr auto kv = 6.4668 * 1_V * 1_s / 1_m;
+    constexpr auto ka = 0.72235 * 1_V * 1_s * 1_s / 1_m;
     inline const frc::DifferentialDriveKinematics kDriveKinematics(kTrackWidth);
 
-    constexpr double kPDriveVel = 1.6686;
+    constexpr double kPDriveVel = 7.9072;
 
     constexpr double kRamseteB = 2.0;
     constexpr double kRamseteZeta = 0.7;

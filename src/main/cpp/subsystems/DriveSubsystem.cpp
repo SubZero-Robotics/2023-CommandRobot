@@ -39,8 +39,8 @@ DriveSubsystem::DriveSubsystem()
     ResetEncoders();
 
     // setup for trajectories
-    trajectoryConfig = new frc::TrajectoryConfig(kMaxSpeed,
-                                                 kMaxAcceleration);
+    //trajectoryConfig = new frc::TrajectoryConfig(kMaxSpeed,
+                                                 //kMaxAcceleration);
     // Create a voltage constraint to ensure we don't accelerate too fast
     frc::DifferentialDriveVoltageConstraint autoVoltageConstraint(
         frc::SimpleMotorFeedforward<units::meters>(
@@ -78,7 +78,7 @@ void DriveSubsystem::Periodic()
     // Implementation of subsystem periodic method goes here.
     // Things that happen while robot is running */
 
-    m_odometry.Update(currentrobotAngle,
+    m_odometry.Update(m_gyro.GetRotation2d(),
                       units::meter_t(lEncoder * kEncoderDistancePerPulse),
                       units::meter_t(rEncoder * kEncoderDistancePerPulse));
 
@@ -160,8 +160,7 @@ void DriveSubsystem::SetMaxOutput(double maxOutput)
 
 units::degree_t DriveSubsystem::GetHeading()
 {
-    // make sure it fits in +/- 180.  Yaw does this, so should be ok.
-    return units::degree_t((gyroAngle) * (kGyroReversed ? -1.0 : 1.0));
+    return m_gyro.GetRotation2d().Degrees();
 }
 
 double DriveSubsystem::GetTurnRate()

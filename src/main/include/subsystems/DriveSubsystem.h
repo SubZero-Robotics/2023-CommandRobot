@@ -6,6 +6,8 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
+#include <hal/SimDevice.h>
+#include <hal/simulation/SimDeviceData.h>
 
 #include <ctre/Phoenix.h>
 #include <frc/AnalogInput.h>
@@ -15,6 +17,8 @@
 #include <frc/DriverStation.h>
 
 #include <frc/drive/DifferentialDrive.h>
+#include <frc/kinematics/DifferentialDriveWheelSpeeds.h>
+#include <AHRS.h>
 
 #include "Constants.h"
 
@@ -131,6 +135,8 @@ public:
      */
     void ConfigureMotor(WPI_TalonFX *_talon);
 
+    frc::DifferentialDrive m_drive{RightLead, LeftLead};
+
 private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
@@ -141,8 +147,6 @@ private:
     // left motor controllers
     WPI_TalonFX LeftLead{10};
     WPI_TalonFX LeftFollow{11};
-
-    frc::DifferentialDrive m_drive{RightLead, LeftLead};
 
     // The default (starting) values for the encoder
     double lEncoder = 0.0;
@@ -165,6 +169,8 @@ private:
     // navx
     double gyroAngle = 0.0; // What is the angle (degrees) from the gyro?
     double gyroRate = 0.0;  // What is angle change (deg/sec)
+
+    AHRS m_gyro{frc::SPI::Port::kMXP};
 
     // TurnToAnglePID
     frc2::PIDController TurnToAngle{0.0396, 0.132, 0.00297};
