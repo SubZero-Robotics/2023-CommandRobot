@@ -6,7 +6,7 @@
 
 #include <frc2/command/button/Trigger.h>
 
-#include "commands/Autos.h"
+include "commands/autos/test.h"
 #include "commands/ExampleCommand.h"
 #include "commands/DefaultDrive.h"
 
@@ -35,6 +35,5 @@ void RobotContainer::ConfigureBindings()
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-  // An example command will be run in autonomous
-  return autos::ExampleAuto(&m_subsystem);
+  test::Initialize();
 }

@@ -27,9 +27,10 @@ class TestAuto
 
   bool IsFinished() override;
 
+
  private:
   bool finished = false;
-  
+
   // The controller
   frc::XboxController Xbox{0};
 };

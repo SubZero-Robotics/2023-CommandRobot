@@ -27,6 +27,7 @@ void TestAuto::Initialize() {
     deployDirectory = deployDirectory / "pathplanner" / "generatedJSON" / "StraightBack.wpilib.json";
     StraightBack = frc::TrajectoryUtil::FromPathweaverJson(deployDirectory.string());
 
-    m_drive->ResetOdometry(StraightBack.InitialPose());
+    DriveSubsystem m_drive;
+    m_drive.ResetOdometry(StraightBack.InitialPose());
 
 }
