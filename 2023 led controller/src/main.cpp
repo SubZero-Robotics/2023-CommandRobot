@@ -8,11 +8,27 @@
 // Forward declaration
 void receiveEvent(int);
 
-/*
-enum class CommandType
-*/
 
-struct RGBColorData {
+enum class CommandType {
+   On = 0,
+   Off = 1,
+   Pattern = 2,
+   ChangeColor = 3
+};
+
+struct CommandOn {
+
+};
+
+struct CommandOff {
+
+};
+
+struct CommandPattern {
+    uint8_t pattern;
+};
+
+struct CommandColor {
     uint8_t red;
     uint8_t green;
     uint8_t blue;
@@ -20,14 +36,18 @@ struct RGBColorData {
 };
 
 union CommandData {
-    uint8_t pattern;
-    RGBColorData color;
+    CommandOn commandOn;
+    CommandOff commandOff;
+    CommandPattern commandPattern;
+    CommandColor commandColor;
 };
 
 struct Command {
-    uint8_t command;
+    CommandType commandType;
     CommandData commandData;
 };
+
+static Command command;
 
 constexpr uint8_t slaveAddress = 0x01;
 
@@ -44,11 +64,5 @@ void loop() {
 // function that executes whenever data is received from master
 // this function is registered as an event, see setup()
 void receiveEvent(int howMany) {
-    while(1 < Wire.available()) // loop through all but the last
-    {
-      char c = Wire.read(); // receive byte as a character
-      Serial.print(c);         // print the character
-    }
-    int x = Wire.read();    // receive byte as an integer
-    Serial.println(x);         // print the integer
+// 
 }
