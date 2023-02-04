@@ -13,6 +13,8 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 
+#include "commands/autos/TestAuto.h"
+
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -37,6 +39,9 @@ class RobotContainer {
 
   // Drive subsystem from 2022. We should probably make cross season code easier to reuse.
   DriveSubsystem m_drive;
+
+  // Auto command
+  TestAuto m_auto;
 
   void ConfigureBindings();
 };

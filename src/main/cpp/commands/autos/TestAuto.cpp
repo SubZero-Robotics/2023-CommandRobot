@@ -6,7 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 
-#include "commands/autos/test.h"
+#include "commands/autos/TestAuto.h"
 
 #include <frc/controller/PIDController.h>
 #include <frc/controller/RamseteController.h>
