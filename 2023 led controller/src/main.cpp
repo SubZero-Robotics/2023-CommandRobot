@@ -8,7 +8,6 @@
 // Forward declaration
 void receiveEvent(int);
 
-
 enum class CommandType {
    On = 0,
    Off = 1,
@@ -47,9 +46,13 @@ struct Command {
     CommandData commandData;
 };
 
-static Command command;
-
+constexpr uint8_t receiveBufSize = 8;
 constexpr uint8_t slaveAddress = 0x01;
+
+static volatile byte receiveBuf[receiveBufSize];
+static volatile uint8_t *receiveBufPtr = receiveBuf;
+static volatile bool newData = false;
+static Command command;
 
 void setup() {
     Wire.begin(slaveAddress);     // join i2c bus with address #4
@@ -58,11 +61,22 @@ void setup() {
 }
 
 void loop() {
-    delay(100);
+    /* If there's new data, process it
+    byte buf[receiveBufSize];
+    noInterrupts();
+    memcpy(buf, receiveBuf, receiveBufSize);
+    receiveBufPtr = receiveBuf;
+    newData = false;
+    interrupts();
+    */
+
+   // What do we do with the data in command?
 }
+
+// function to take data from buf and populate command
 
 // function that executes whenever data is received from master
 // this function is registered as an event, see setup()
 void receiveEvent(int howMany) {
-// 
+
 }
