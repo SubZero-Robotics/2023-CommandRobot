@@ -20,6 +20,7 @@
 class TestAuto
     : public frc2::CommandHelper<frc2::CommandBase, TestAuto> {
  public:
+    TestAuto(DriveSubsystem *drive);
 
   void Initialize() override;
 
@@ -29,6 +30,7 @@ class TestAuto
 
 
  private:
+    DriveSubsystem *_m_drive;
   bool finished = false;
 
   // The controller

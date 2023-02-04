@@ -21,13 +21,16 @@
 #include <frc2/command/ParallelRaceGroup.h>
 #include <subsystems/DriveSubsystem.h>
 
+TestAuto::TestAuto(DriveSubsystem *drive) :
+    _m_drive(drive) {
+}
+
 void TestAuto::Initialize() {
     frc::Trajectory StraightBack;
     fs::path deployDirectory = frc::filesystem::GetDeployDirectory();
     deployDirectory = deployDirectory / "pathplanner" / "generatedJSON" / "StraightBack.wpilib.json";
     StraightBack = frc::TrajectoryUtil::FromPathweaverJson(deployDirectory.string());
 
-    DriveSubsystem m_drive;
-    m_drive.ResetOdometry(StraightBack.InitialPose());
+    _m_drive->ResetOdometry(StraightBack.InitialPose());
 
 }
