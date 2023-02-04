@@ -49,7 +49,7 @@ struct Command {
 constexpr uint8_t receiveBufSize = 8;
 constexpr uint8_t slaveAddress = 0x01;
 
-static volatile byte receiveBuf[receiveBufSize];
+static volatile uint8_t receiveBuf[receiveBufSize];
 static volatile uint8_t *receiveBufPtr = receiveBuf;
 static volatile bool newData = false;
 static Command command;
@@ -61,14 +61,13 @@ void setup() {
 }
 
 void loop() {
-    /* If there's new data, process it
-    byte buf[receiveBufSize];
+    // If there's new data, process it
+    uint8_t buf[receiveBufSize];
     noInterrupts();
-    memcpy(buf, receiveBuf, receiveBufSize);
+    memcpy(buf, (const void*)receiveBuf, receiveBufSize);
     receiveBufPtr = receiveBuf;
     newData = false;
     interrupts();
-    */
 
    // What do we do with the data in command?
 }
