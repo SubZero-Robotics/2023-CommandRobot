@@ -24,7 +24,15 @@
  */
 class RobotContainer {
  public:
-  RobotContainer();
+  RobotContainer() {
+    m_auto = new TestAuto(&m_drive);
+  };
+
+    ~RobotContainer() {
+        if (m_auto) {
+            delete m_auto;
+        }
+    }
 
   frc2::CommandPtr GetAutonomousCommand();
 
@@ -41,7 +49,7 @@ class RobotContainer {
   DriveSubsystem m_drive;
 
   // Auto command
-  TestAuto m_auto;
+  TestAuto *m_auto;
 
   void ConfigureBindings();
 };
