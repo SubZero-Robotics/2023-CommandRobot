@@ -1,47 +1,10 @@
 #include <Arduino.h>
 #include <FastLED.h>
 #include <Wire.h>
+#include "Commands.h"
 
 // Forward declaration
 void receiveEvent(int);
-
-enum class CommandType {
-   On = 0,
-   Off = 1,
-   Pattern = 2,
-   ChangeColor = 3
-};
-
-struct CommandOn {
-
-};
-
-struct CommandOff {
-
-};
-
-struct CommandPattern {
-    uint8_t pattern;
-};
-
-struct CommandColor {
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-    // uint8_t colors[3];
-};
-
-union CommandData {
-    CommandOn commandOn;
-    CommandOff commandOff;
-    CommandPattern commandPattern;
-    CommandColor commandColor;
-};
-
-struct Command {
-    CommandType commandType;
-    CommandData commandData;
-};
 
 constexpr uint8_t receiveBufSize = 8;
 constexpr uint8_t slaveAddress = 0x01;
