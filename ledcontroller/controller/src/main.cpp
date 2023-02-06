@@ -83,20 +83,23 @@ void loop() {
         newData = false;
         switch (command.commandType)
         {
-        case CommandType::On :
+        case CommandType::On:
+            // Go back to the last color and pattern instead
             setAllLEDs(CRGB::White);
             break;
 
-        case CommandType::Off :
+        case CommandType::Off:
             setAllLEDs(CRGB::Black);
             break;
 
-        case CommandType::Pattern :
-            
+        case CommandType::Pattern:
+            // To set everything to a certain color, change color then call the 'set all' pattern
+            // Create named pattern types and a method for running each pattern
             break;
 
-        case CommandType::ChangeColor :
-            
+        case CommandType::ChangeColor:
+            auto colors = command.commandData.commandColor;
+            currentColor = CRGB(colors.red, colors.green, colors.blue);
             break;
         default:
             break;
@@ -135,8 +138,6 @@ void parseCommand(uint8_t *buf, size_t len) {
     case CommandType::ChangeColor :
         command.commandData.commandColor;
         memcpy(&command.commandData.commandColor.red, &buf[1], 3);
-        auto colors = command.commandData.commandColor;
-        currentColor = CRGB(colors.red, colors.green, colors.blue);
         break;
 
     default:
