@@ -25,6 +25,8 @@ jobs:
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
-          clang_format: true
           auto_fix: true
+          clang_format: true
           clang_format_auto_fix: true
+          autopep8: true
+          autopep8_auto_fix: true
