@@ -9,6 +9,6 @@
 #include "commands/ExampleCommand.h"
 
 frc2::CommandPtr autos::ExampleAuto(ExampleSubsystem* subsystem) {
-  return frc2::cmd::Sequence(subsystem->ExampleMethodCommand(),
-                             ExampleCommand(subsystem).ToPtr());
+    return frc2::cmd::Sequence(subsystem->ExampleMethodCommand(),
+                               ExampleCommand(subsystem).ToPtr());
 }
