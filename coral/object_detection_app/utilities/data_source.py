@@ -4,6 +4,7 @@ import numpy as np
 import interpreter
 from interpreter import Interpreter
 
+
 class Datasource:
     def __init__(self, src: str):
         self.src = cv.VideoCapture(1)

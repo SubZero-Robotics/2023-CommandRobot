@@ -36,18 +36,20 @@ from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.edgetpu import run_inference
 
+
 def main():
     default_model_dir = '../models'
     default_model = 'object_int8_edgetpu.tflite'
     default_labels = 'labels.txt'
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', help='.tflite model path',
-                        default=os.path.join(default_model_dir,default_model))
+                        default=os.path.join(default_model_dir, default_model))
     parser.add_argument('--labels', help='label file path',
                         default=os.path.join(default_model_dir, default_labels))
     parser.add_argument('--top_k', type=int, default=3,
                         help='number of categories with highest score to display')
-    parser.add_argument('--camera_idx', type=int, help='Index of which video source to use. ', default = 1)
+    parser.add_argument('--camera_idx', type=int,
+                        help='Index of which video source to use. ', default=1)
     parser.add_argument('--threshold', type=float, default=0.1,
                         help='classifier score threshold')
     args = parser.parse_args()
@@ -79,6 +81,7 @@ def main():
     cap.release()
     cv2.destroyAllWindows()
 
+
 def append_objs_to_img(cv2_im, inference_size, objs, labels):
     height, width, channels = cv2_im.shape
     scale_x, scale_y = width / inference_size[0], height / inference_size[1]
@@ -94,6 +97,7 @@ def append_objs_to_img(cv2_im, inference_size, objs, labels):
         cv2_im = cv2.putText(cv2_im, label, (x0, y0+30),
                              cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
     return cv2_im
+
 
 if __name__ == '__main__':
     main()

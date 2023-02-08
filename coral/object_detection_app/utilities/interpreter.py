@@ -3,11 +3,12 @@ import tflite_runtime.interpreter as tflite
 import numpy as np
 from output import Output
 
+
 class Interpreter:
 
     def __init__(self, modelpath: str):
         self.model = tflite.Interpreter(model_path=modelpath,
-                                experimental_delegates=[tflite.load_delegate('libedgetpu.so.1')])
+                                        experimental_delegates=[tflite.load_delegate('libedgetpu.so.1')])
         self.model.allocate_tensors()
         self.input_details = self.model.get_input_details()
         self.output_details = self.model.get_output_details()

@@ -46,7 +46,8 @@ for i in range(int(num)):
         y = bbox[0] * rows
         right = bbox[3] * cols
         bottom = bbox[2] * rows
-        cv.rectangle(img, (int(x), int(y)), (int(right), int(bottom)), colors[str(classId)], thickness=2)
+        cv.rectangle(img, (int(x), int(y)), (int(right), int(
+            bottom)), colors[str(classId)], thickness=2)
 
 cv.imshow('TensorFlow MobileNet-SSD', img)
 cv.waitKey()

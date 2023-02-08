@@ -21,7 +21,7 @@ for idx, d in enumerate(output_details):
 # Allocate tensors
 interpreter.allocate_tensors()
 # Read and preprocess an image.
-while(True):
+while (True):
     ret, frame = vid.read()
     rows = frame.shape[0]
     cols = frame.shape[1]
@@ -48,7 +48,8 @@ while(True):
             y = bbox[0] * rows
             right = bbox[3] * cols
             bottom = bbox[2] * rows
-            cv.rectangle(frame, (int(x), int(y)), (int(right), int(bottom)), colors[str(classId)], thickness=2)
+            cv.rectangle(frame, (int(x), int(y)), (int(right), int(
+                bottom)), colors[str(classId)], thickness=2)
 
     cv.imshow('TensorFlow MobileNet-SSD', frame)
     if cv.waitKey(1) & 0xFF == ord('q'):
