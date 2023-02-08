@@ -3,18 +3,11 @@
 
 #include <Arduino.h>
 
-enum class CommandType {
-   On = 0,
-   Off = 1,
-   Pattern = 2,
-   ChangeColor = 3
-};
+enum class CommandType { On = 0, Off = 1, Pattern = 2, ChangeColor = 3 };
 
-struct CommandOn {
-};
+struct CommandOn {};
 
-struct CommandOff {
-};
+struct CommandOff {};
 
 struct CommandPattern {
     uint8_t pattern;

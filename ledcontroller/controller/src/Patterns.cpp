@@ -8,7 +8,8 @@ void PatternRunner::update() {
             reset();
         }
 
-        if (curPattern->cb(_fastLed->leds(), _curColor, _curState, _fastLed->size())) {
+        if (curPattern->cb(_fastLed->leds(), _curColor, _curState,
+                           _fastLed->size())) {
             _fastLed->show();
         }
 

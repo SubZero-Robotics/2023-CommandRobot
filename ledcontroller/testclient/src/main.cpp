@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include <Wire.h>
 #include <FastLED.h>
+#include <Wire.h>
 
 constexpr uint8_t slaveAddr = 0x08;
 constexpr uint16_t commandDelayMs = 1000;
@@ -49,7 +49,7 @@ void setPattern(uint8_t pattern) {
 }
 
 void setColor(CRGB color) {
-    uint8_t buf[] = { color.r, color.g, color.b };
+    uint8_t buf[] = {color.r, color.g, color.b};
     writeCommand(CommandType::CommandColor, buf);
 }
 
@@ -70,7 +70,7 @@ void writeCommand(CommandType type, uint8_t *data) {
         case CommandType::CommandOn:
         case CommandType::CommandOff:
             break;
-        
+
         case CommandType::CommandPattern:
             Wire.write(data[0]);
             break;
@@ -80,7 +80,7 @@ void writeCommand(CommandType type, uint8_t *data) {
                 Wire.write(data[i]);
             }
             break;
-        
+
         default:
             break;
     }
