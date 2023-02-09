@@ -11,6 +11,10 @@ void parseCommand(uint8_t *, size_t);
 // The function type comes from ExecutePatternCallback in Patterns.h
 bool executePatternNone(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternBlink(CRGB *, CRGB, uint16_t, uint16_t);
+bool executePatternRGBFade(CRGB *, CRGB, uint16_t, uint16_t);
+bool executePatternHackerMode(CRGB *, CRGB, uint16_t, uint16_t);
+bool executePatternChase(CRGB *, CRGB, uint16_t, uint16_t);
+bool executePatternWipe(CRGB *, CRGB, uint16_t, uint16_t);
 // TODO: Forward declare your new patterns here
 
 constexpr uint8_t receiveBufSize = 8;
@@ -29,7 +33,23 @@ static Pattern patterns[patternCount] = {{.type = PatternType::None,
                                          {.type = PatternType::Blink,
                                           .numStates = 2,
                                           .changeDelay = 3000u,
-                                          .cb = &executePatternBlink}};
+                                          .cb = &executePatternBlink},
+                                         {.type = PatternType::RGBFade,
+                                          .numStates = 2,
+                                          .changeDelay = 3000u,
+                                          .cb = &executePatternRGBFade},
+                                         {.type = PatternType::HackerMode,
+                                          .numStates = 2,
+                                          .changeDelay = 3000u,
+                                          .cb = &executePatternHackerMode},
+                                         {.type = PatternType::Chase,
+                                          .numStates = 2,
+                                          .changeDelay = 3000u,
+                                          .cb = &executePatternChase},
+                                         {.type = PatternType::Wipe,
+                                          .numStates = 2,
+                                          .changeDelay = 3000u,
+                                          .cb = &executePatternWipe}};
 
 static volatile uint8_t receiveBuf[receiveBufSize];
 static volatile bool newData = false;
@@ -143,6 +163,87 @@ bool executePatternBlink(CRGB *leds, CRGB color, uint16_t state,
         case 1:
             for (size_t i = 0; i < ledCount; i++) {
                 leds[i] = CRGB::Black;
+            }
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+bool executePatternRGBFade(CRGB *leds, CRGB color, uint16_t state,
+                         uint16_t ledCount) {
+    switch (state) {
+        case 0:
+            for (size_t i = 0; i < ledCount; i++) {
+                //put code here
+            }
+            return true;
+
+        case 1:
+            for (size_t i = 0; i < ledCount; i++) {
+                //put code here
+            }
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+bool executePatternHackerMode(CRGB *leds, CRGB color, uint16_t state,
+                         uint16_t ledCount) {
+    switch (state) {
+        case 0:
+            for (size_t i = 0; i < ledCount; i++) {
+                leds[i] = CRGB::Green;
+            }
+            return true;
+
+        case 1:
+            for (size_t i = 0; i < ledCount; i++) {
+                leds[i] = CRGB::DarkGreen;
+            }
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+bool executePatternChase(CRGB *leds, CRGB color, uint16_t state,
+                         uint16_t ledCount) {
+    switch (state) {
+    case 0:
+        for (size_t i = 0; i < ledCount; i++) {
+        
+        }
+        
+        return true;
+    
+    case 1:
+        for (size_t i = 0; i < ledCount; i++) {
+
+        }
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+bool executePatternWipe(CRGB *leds, CRGB color, uint16_t state,
+                         uint16_t ledCount) {
+    switch (state) {
+        case 0:
+            for (size_t i = 0; i < ledCount; i++) {
+                //put code here
+            }
+            return true;
+
+        case 1:
+            for (size_t i = 0; i < ledCount; i++) {
+                //put code here
             }
             return true;
 
