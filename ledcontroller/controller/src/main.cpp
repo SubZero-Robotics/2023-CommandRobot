@@ -172,17 +172,17 @@ bool executePatternBlink(CRGB *leds, CRGB color, uint16_t state,
 }
 
 bool executePatternRGBFade(CRGB *leds, CRGB color, uint16_t state,
-                         uint16_t ledCount) {
+                           uint16_t ledCount) {
     switch (state) {
         case 0:
             for (size_t i = 0; i < ledCount; i++) {
-                //put code here
+                // put code here
             }
             return true;
 
         case 1:
             for (size_t i = 0; i < ledCount; i++) {
-                //put code here
+                // put code here
             }
             return true;
 
@@ -192,7 +192,7 @@ bool executePatternRGBFade(CRGB *leds, CRGB color, uint16_t state,
 }
 
 bool executePatternHackerMode(CRGB *leds, CRGB color, uint16_t state,
-                         uint16_t ledCount) {
+                              uint16_t ledCount) {
     switch (state) {
         case 0:
             for (size_t i = 0; i < ledCount; i++) {
@@ -214,36 +214,34 @@ bool executePatternHackerMode(CRGB *leds, CRGB color, uint16_t state,
 bool executePatternChase(CRGB *leds, CRGB color, uint16_t state,
                          uint16_t ledCount) {
     switch (state) {
-    case 0:
-        for (size_t i = 0; i < ledCount; i++) {
-        
-        }
-        
-        return true;
-    
-    case 1:
-        for (size_t i = 0; i < ledCount; i++) {
+        case 0:
+            for (size_t i = 0; i < ledCount; i++) {
+            }
 
-        }
-        return true;
+            return true;
 
-    default:
-        return false;
+        case 1:
+            for (size_t i = 0; i < ledCount; i++) {
+            }
+            return true;
+
+        default:
+            return false;
     }
 }
 
 bool executePatternWipe(CRGB *leds, CRGB color, uint16_t state,
-                         uint16_t ledCount) {
+                        uint16_t ledCount) {
     switch (state) {
         case 0:
             for (size_t i = 0; i < ledCount; i++) {
-                //put code here
+                // put code here
             }
             return true;
 
         case 1:
             for (size_t i = 0; i < ledCount; i++) {
-                //put code here
+                // put code here
             }
             return true;
 
