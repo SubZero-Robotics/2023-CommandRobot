@@ -27,4 +27,3 @@ class DataSource:
             bottom = bbox[2] * rows
             cv.rectangle(frame, (int(x), int(y)), (int(right), int(
                 bottom)), colors[str(output.classId)], thickness=2)
-    

@@ -3,6 +3,7 @@ import logging
 import sys
 from output import Output
 
+
 class Networking:
 
     def __init__(self, teamnum, server):
