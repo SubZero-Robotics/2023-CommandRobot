@@ -193,7 +193,7 @@ bool executePatternRGBFade(CRGB *leds, CRGB color, uint16_t state,
 }
 
 bool executePatternHackerMode(CRGB *leds, CRGB color, uint16_t state,
-                         uint16_t ledCount) {
+                              uint16_t ledCount) {
     switch (state) {
         case 0:
             return executePatternSetAll(leds, CRGB::Green, 0, ledCount);
