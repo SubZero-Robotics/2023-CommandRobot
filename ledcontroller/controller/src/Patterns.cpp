@@ -38,16 +38,11 @@ Pattern* PatternRunner::currentPattern() const {
 }
 
 CRGB PatternRunner::Wheel(uint8_t position) {
-    if (position < 85)
-    {
+    if (position < 85) {
         return CRGB(position * 3, 255 - position * 3, 0);
-    }
-    else if (position < 170)
-    {
+    } else if (position < 170) {
         position -= 85;
         return CRGB(255 - position * 3, 0, position * 3);
     }
     return CRGB(0, position * 3, 255 - position * 3);
-    
-    
 }

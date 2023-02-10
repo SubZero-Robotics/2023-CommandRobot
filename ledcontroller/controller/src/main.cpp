@@ -26,34 +26,35 @@ constexpr uint8_t ledBrightness = 100;
 static CRGB leds[ledNum];
 // ! The order of these MUST match the order in PatternType!
 // TODO: Fill the rest of these
-static Pattern patterns[patternCount] = {{.type = PatternType::None,
-                                          .numStates = 0,
-                                          .changeDelay = 0,
-                                          .cb = &executePatternNone},
-                                          {.type = PatternType::SetAll,
-                                          .numStates = 0,
-                                          .changeDelay = 20000u,
-                                          .cb = &executePatternSetAll},
-                                         {.type = PatternType::Blink,
-                                          .numStates = 2,
-                                          .changeDelay = 3000u,
-                                          .cb = &executePatternBlink},
-                                         {.type = PatternType::RGBFade,
-                                          .numStates = 256,
-                                          .changeDelay = 5u,
-                                          .cb = &executePatternRGBFade},
-                                         {.type = PatternType::HackerMode,
-                                          .numStates = 2,
-                                          .changeDelay = 3000u,
-                                          .cb = &executePatternHackerMode},
-                                         {.type = PatternType::Chase,
-                                          .numStates = ledNum + chaseLEDWidth - 1,
-                                          .changeDelay = 25u,
-                                          .cb = &executePatternChase},
-                                         {.type = PatternType::Wipe,
-                                          .numStates = ledNum,
-                                          .changeDelay = 25u,
-                                          .cb = &executePatternWipe}};
+static Pattern patterns[patternCount] = {
+    {.type = PatternType::None,
+     .numStates = 0,
+     .changeDelay = 0,
+     .cb = &executePatternNone},
+    {.type = PatternType::SetAll,
+     .numStates = 0,
+     .changeDelay = 20000u,
+     .cb = &executePatternSetAll},
+    {.type = PatternType::Blink,
+     .numStates = 2,
+     .changeDelay = 3000u,
+     .cb = &executePatternBlink},
+    {.type = PatternType::RGBFade,
+     .numStates = 256,
+     .changeDelay = 5u,
+     .cb = &executePatternRGBFade},
+    {.type = PatternType::HackerMode,
+     .numStates = 2,
+     .changeDelay = 3000u,
+     .cb = &executePatternHackerMode},
+    {.type = PatternType::Chase,
+     .numStates = ledNum + chaseLEDWidth - 1,
+     .changeDelay = 25u,
+     .cb = &executePatternChase},
+    {.type = PatternType::Wipe,
+     .numStates = ledNum,
+     .changeDelay = 25u,
+     .cb = &executePatternWipe}};
 
 static volatile uint8_t receiveBuf[receiveBufSize];
 static volatile bool newData = false;
@@ -156,11 +157,11 @@ bool executePatternNone(CRGB *leds, CRGB color, uint16_t state,
 }
 
 bool executePatternSetAll(CRGB *leds, CRGB color, uint16_t state,
-                         uint16_t ledCount) {
-                            for (size_t i = 0; i < ledCount; i++) {
-                            leds[i] = color;
-                            }
-                        return true;
+                          uint16_t ledCount) {
+    for (size_t i = 0; i < ledCount; i++) {
+        leds[i] = color;
+    }
+    return true;
 }
 
 bool executePatternBlink(CRGB *leds, CRGB color, uint16_t state,
@@ -184,12 +185,11 @@ bool executePatternBlink(CRGB *leds, CRGB color, uint16_t state,
 }
 
 bool executePatternRGBFade(CRGB *leds, CRGB color, uint16_t state,
-                         uint16_t ledCount) {
+                           uint16_t ledCount) {
     for (size_t i = 0; i < ledCount; i++) {
         leds[i] = PatternRunner::Wheel(((i * 256 / ledCount) + state) & 255);
     }
     return true;
-    
 }
 
 bool executePatternHackerMode(CRGB *leds, CRGB color, uint16_t state,
@@ -208,22 +208,19 @@ bool executePatternHackerMode(CRGB *leds, CRGB color, uint16_t state,
 
 bool executePatternChase(CRGB *leds, CRGB color, uint16_t state,
                          uint16_t ledCount) {
-    if (state - 1 >= 0)
-    {
+    if (state - 1 >= 0) {
         leds[state - 1] = CRGB::Black;
     }
     for (size_t i = state; i < state + chaseLEDWidth; i++) {
-        if (i < ledCount)
-        {
+        if (i < ledCount) {
             leds[i] = color;
         }
     }
     return true;
-                            
 }
 
 bool executePatternWipe(CRGB *leds, CRGB color, uint16_t state,
-                         uint16_t ledCount) {
+                        uint16_t ledCount) {
     leds[state] = color;
     return true;
 }
