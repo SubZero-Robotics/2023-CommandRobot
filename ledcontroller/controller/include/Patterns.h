@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include <FastLED.h>
 
+constexpr uint16_t ledNum = 150;
+
 /**
  * Will be called after set delay has passed
  * @param state resets to 0 after current state >= numStates
@@ -12,6 +14,7 @@
 typedef bool (*ExecutePatternCallback)(CRGB *leds, CRGB color, uint16_t state,
                                        uint16_t ledCount);
 constexpr uint8_t patternCount = 7;
+constexpr uint8_t chaseLEDWidth = ceil((float)ledNum / 20);
 
 enum class PatternType {
     None = 0,
@@ -60,6 +63,8 @@ class PatternRunner {
      * Get pointer to the current pattern
      */
     Pattern *currentPattern() const;
+
+    static CRGB Wheel(uint8_t);
 
     /**
      * Start the current pattern over from the start

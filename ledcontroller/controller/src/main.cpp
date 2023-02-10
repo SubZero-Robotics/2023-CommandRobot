@@ -10,17 +10,17 @@ void receiveEvent(int);
 void parseCommand(uint8_t *, size_t);
 // The function type comes from ExecutePatternCallback in Patterns.h
 bool executePatternNone(CRGB *, CRGB, uint16_t, uint16_t);
+bool executePatternSetAll(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternBlink(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternRGBFade(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternHackerMode(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternChase(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternWipe(CRGB *, CRGB, uint16_t, uint16_t);
-// TODO: Forward declare your new patterns here
+// Forward declares new patterns here
 
 constexpr uint8_t receiveBufSize = 8;
 constexpr uint8_t slaveAddress = 0x01;
 constexpr uint8_t ledDataOutPin = 2;
-constexpr uint16_t ledNum = 150;
 constexpr uint8_t ledBrightness = 100;
 
 static CRGB leds[ledNum];
@@ -30,25 +30,29 @@ static Pattern patterns[patternCount] = {{.type = PatternType::None,
                                           .numStates = 0,
                                           .changeDelay = 0,
                                           .cb = &executePatternNone},
+                                          {.type = PatternType::SetAll,
+                                          .numStates = 0,
+                                          .changeDelay = 20000u,
+                                          .cb = &executePatternSetAll},
                                          {.type = PatternType::Blink,
                                           .numStates = 2,
                                           .changeDelay = 3000u,
                                           .cb = &executePatternBlink},
                                          {.type = PatternType::RGBFade,
-                                          .numStates = 2,
-                                          .changeDelay = 3000u,
+                                          .numStates = 256,
+                                          .changeDelay = 5u,
                                           .cb = &executePatternRGBFade},
                                          {.type = PatternType::HackerMode,
                                           .numStates = 2,
                                           .changeDelay = 3000u,
                                           .cb = &executePatternHackerMode},
                                          {.type = PatternType::Chase,
-                                          .numStates = 2,
-                                          .changeDelay = 3000u,
+                                          .numStates = ledNum + chaseLEDWidth - 1,
+                                          .changeDelay = 25u,
                                           .cb = &executePatternChase},
                                          {.type = PatternType::Wipe,
-                                          .numStates = 2,
-                                          .changeDelay = 3000u,
+                                          .numStates = ledNum,
+                                          .changeDelay = 25u,
                                           .cb = &executePatternWipe}};
 
 static volatile uint8_t receiveBuf[receiveBufSize];
@@ -151,6 +155,14 @@ bool executePatternNone(CRGB *leds, CRGB color, uint16_t state,
     return false;
 }
 
+bool executePatternSetAll(CRGB *leds, CRGB color, uint16_t state,
+                         uint16_t ledCount) {
+                            for (size_t i = 0; i < ledCount; i++) {
+                            leds[i] = color;
+                            }
+                        return true;
+}
+
 bool executePatternBlink(CRGB *leds, CRGB color, uint16_t state,
                          uint16_t ledCount) {
     switch (state) {
@@ -173,38 +185,21 @@ bool executePatternBlink(CRGB *leds, CRGB color, uint16_t state,
 
 bool executePatternRGBFade(CRGB *leds, CRGB color, uint16_t state,
                          uint16_t ledCount) {
-    switch (state) {
-        case 0:
-            for (size_t i = 0; i < ledCount; i++) {
-                //put code here
-            }
-            return true;
-
-        case 1:
-            for (size_t i = 0; i < ledCount; i++) {
-                //put code here
-            }
-            return true;
-
-        default:
-            return false;
+    for (size_t i = 0; i < ledCount; i++) {
+        leds[i] = PatternRunner::Wheel(((i * 256 / ledCount) + state) & 255);
     }
+    return true;
+    
 }
 
 bool executePatternHackerMode(CRGB *leds, CRGB color, uint16_t state,
                          uint16_t ledCount) {
     switch (state) {
         case 0:
-            for (size_t i = 0; i < ledCount; i++) {
-                leds[i] = CRGB::Green;
-            }
-            return true;
+            return executePatternSetAll(leds, CRGB::Green, 0, ledCount);
 
         case 1:
-            for (size_t i = 0; i < ledCount; i++) {
-                leds[i] = CRGB::DarkGreen;
-            }
-            return true;
+            return executePatternSetAll(leds, CRGB::DarkGreen, 0, ledCount);
 
         default:
             return false;
@@ -213,43 +208,24 @@ bool executePatternHackerMode(CRGB *leds, CRGB color, uint16_t state,
 
 bool executePatternChase(CRGB *leds, CRGB color, uint16_t state,
                          uint16_t ledCount) {
-    switch (state) {
-    case 0:
-        for (size_t i = 0; i < ledCount; i++) {
-        
-        }
-        
-        return true;
-    
-    case 1:
-        for (size_t i = 0; i < ledCount; i++) {
-
-        }
-        return true;
-
-    default:
-        return false;
+    if (state - 1 >= 0)
+    {
+        leds[state - 1] = CRGB::Black;
     }
+    for (size_t i = state; i < state + chaseLEDWidth; i++) {
+        if (i < ledCount)
+        {
+            leds[i] = color;
+        }
+    }
+    return true;
+                            
 }
 
 bool executePatternWipe(CRGB *leds, CRGB color, uint16_t state,
                          uint16_t ledCount) {
-    switch (state) {
-        case 0:
-            for (size_t i = 0; i < ledCount; i++) {
-                //put code here
-            }
-            return true;
-
-        case 1:
-            for (size_t i = 0; i < ledCount; i++) {
-                //put code here
-            }
-            return true;
-
-        default:
-            return false;
-    }
+    leds[state] = color;
+    return true;
 }
 
 // TODO: Implement your pattern callbacks here
