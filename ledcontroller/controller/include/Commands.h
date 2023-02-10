@@ -3,7 +3,13 @@
 
 #include <Arduino.h>
 
-enum class CommandType { On = 0, Off = 1, Pattern = 2, ChangeColor = 3, ReadPatternDone = 4 };
+enum class CommandType {
+    On = 0,
+    Off = 1,
+    Pattern = 2,
+    ChangeColor = 3,
+    ReadPatternDone = 4
+};
 
 struct CommandOn {};
 

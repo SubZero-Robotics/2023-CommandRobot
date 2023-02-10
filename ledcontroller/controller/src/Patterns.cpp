@@ -8,8 +8,7 @@ void PatternRunner::update() {
         if (_curState >= curPattern->numStates) {
             if (_oneShot) {
                 _doneRunning = true;
-            }
-            else {
+            } else {
                 reset();
             }
         }
@@ -24,7 +23,7 @@ void PatternRunner::update() {
     }
 }
 
-bool PatternRunner::setCurrentPattern(uint8_t pattern, bool isOneShot=false) {
+bool PatternRunner::setCurrentPattern(uint8_t pattern, bool isOneShot = false) {
     if (pattern > patternCount - 1) {
         return false;
     }
@@ -35,7 +34,8 @@ bool PatternRunner::setCurrentPattern(uint8_t pattern, bool isOneShot=false) {
     return true;
 }
 
-bool PatternRunner::setCurrentPattern(PatternType type, bool isOneShot=false) {
+bool PatternRunner::setCurrentPattern(PatternType type,
+                                      bool isOneShot = false) {
     return setCurrentPattern((uint8_t)type, isOneShot);
 }
 

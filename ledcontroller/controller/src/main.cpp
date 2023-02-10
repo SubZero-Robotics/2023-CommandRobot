@@ -67,7 +67,7 @@ void setup() {
     Wire.begin(slaveAddress);      // join i2c bus with address #4
     Wire.onReceive(receiveEvent);  // register event
     Wire.onRequest(requestEvent);
-    Serial.begin(115200);            // start serial for output
+    Serial.begin(115200);  // start serial for output
     FastLED.addLeds<WS2812B, ledDataOutPin, BGR>(leds, ledNum);
     FastLED.setBrightness(ledBrightness);
 
@@ -106,13 +106,11 @@ void loop() {
                     command.commandData.commandPattern.oneShot);
                 break;
 
-            case CommandType::ChangeColor:
-                {
-                    auto colors = command.commandData.commandColor;
-                    currentColor = CRGB(colors.red, colors.green, colors.blue);
-                    patternRunner.setCurrentColor(currentColor);
-                }
-                break;
+            case CommandType::ChangeColor: {
+                auto colors = command.commandData.commandColor;
+                currentColor = CRGB(colors.red, colors.green, colors.blue);
+                patternRunner.setCurrentColor(currentColor);
+            } break;
 
             case CommandType::ReadPatternDone:
                 break;
@@ -123,7 +121,7 @@ void loop() {
 
         interrupts();
     }
-    
+
     if (systemOn) {
         patternRunner.update();
     }
