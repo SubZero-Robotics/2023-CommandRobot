@@ -5,10 +5,12 @@
 #include "Commands.h"
 #include "Patterns.h"
 
-// Forward declaration
+// Forward declarations
 void receiveEvent(int);
+void requestEvent(void);
 void parseCommand(uint8_t *, size_t);
-// The function type comes from ExecutePatternCallback in Patterns.h
+// The function signature comes from ExecutePatternCallback in Patterns.h
+// Forward declare new patterns here
 bool executePatternNone(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternSetAll(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternBlink(CRGB *, CRGB, uint16_t, uint16_t);
@@ -16,67 +18,62 @@ bool executePatternRGBFade(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternHackerMode(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternChase(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternWipe(CRGB *, CRGB, uint16_t, uint16_t);
-// Forward declares new patterns here
 
 constexpr uint8_t receiveBufSize = 8;
 constexpr uint8_t slaveAddress = 0x01;
 constexpr uint8_t ledDataOutPin = 2;
 constexpr uint8_t ledBrightness = 100;
 
-static CRGB leds[ledNum];
 // ! The order of these MUST match the order in PatternType!
-// TODO: Fill the rest of these
 static Pattern patterns[patternCount] = {
     {.type = PatternType::None,
      .numStates = 0,
      .changeDelay = 0,
-     .cb = &executePatternNone},
+     .cb = executePatternNone},
     {.type = PatternType::SetAll,
      .numStates = 0,
      .changeDelay = 20000u,
-     .cb = &executePatternSetAll},
+     .cb = executePatternSetAll},
     {.type = PatternType::Blink,
      .numStates = 2,
      .changeDelay = 3000u,
-     .cb = &executePatternBlink},
+     .cb = executePatternBlink},
     {.type = PatternType::RGBFade,
      .numStates = 256,
      .changeDelay = 5u,
-     .cb = &executePatternRGBFade},
+     .cb = executePatternRGBFade},
     {.type = PatternType::HackerMode,
      .numStates = 2,
      .changeDelay = 3000u,
-     .cb = &executePatternHackerMode},
+     .cb = executePatternHackerMode},
     {.type = PatternType::Chase,
      .numStates = ledNum + chaseLEDWidth - 1,
      .changeDelay = 25u,
-     .cb = &executePatternChase},
+     .cb = executePatternChase},
     {.type = PatternType::Wipe,
      .numStates = ledNum,
      .changeDelay = 25u,
-     .cb = &executePatternWipe}};
+     .cb = executePatternWipe}};
 
 static volatile uint8_t receiveBuf[receiveBufSize];
 static volatile bool newData = false;
 static Command command;
 static CRGB currentColor;
+static CRGB leds[ledNum];
 static PatternRunner patternRunner(&FastLED, patterns);
-
-// TODO: Convert this to a pattern callback
-void setAllLEDs(CRGB color) {
-    for (size_t i = 0; i < ledNum; i++) {
-        leds[i] = color;
-    }
-
-    FastLED.show();
-}
+static bool systemOn = true;
 
 void setup() {
     Wire.begin(slaveAddress);      // join i2c bus with address #4
     Wire.onReceive(receiveEvent);  // register event
-    Serial.begin(9600);            // start serial for output
+    Wire.onRequest(requestEvent);
+    Serial.begin(115200);            // start serial for output
     FastLED.addLeds<WS2812B, ledDataOutPin, BGR>(leds, ledNum);
     FastLED.setBrightness(ledBrightness);
+
+    // Initialize all LEDs to black
+    executePatternSetAll(leds, CRGB::Black, 0, ledNum);
+    FastLED.show();
 }
 
 void loop() {
@@ -89,41 +86,64 @@ void loop() {
         newData = false;
         switch (command.commandType) {
             case CommandType::On:
-                // TODO: Go back to the last color and pattern
+                // Go back to running the current color and pattern
+                patternRunner.reset();
+                systemOn = true;
                 break;
 
             case CommandType::Off:
-                // TODO: Replace this with a call to the SetAll pattern
-                setAllLEDs(CRGB::Black);
+                // Set LEDs to black and stop running the pattern
+                executePatternSetAll(leds, CRGB::Black, 0, ledNum);
+                FastLED.show();
+                systemOn = false;
                 break;
 
             case CommandType::Pattern:
                 // To set everything to a certain color, change color then call
                 // the 'set all' pattern
                 patternRunner.setCurrentPattern(
-                    command.commandData.commandPattern.pattern);
+                    command.commandData.commandPattern.pattern,
+                    command.commandData.commandPattern.oneShot);
                 break;
 
             case CommandType::ChangeColor:
-                auto colors = command.commandData.commandColor;
-                currentColor = CRGB(colors.red, colors.green, colors.blue);
-                patternRunner.setCurrentColor(currentColor);
+                {
+                    auto colors = command.commandData.commandColor;
+                    currentColor = CRGB(colors.red, colors.green, colors.blue);
+                    patternRunner.setCurrentColor(currentColor);
+                }
+                break;
+
+            case CommandType::ReadPatternDone:
+                break;
+
+            default:
                 break;
         }
 
         interrupts();
     }
-    // What do we do with the data in command?
-    patternRunner.update();
+    
+    if (systemOn) {
+        patternRunner.update();
+    }
 }
 
-// function to take data from buf and populate command
-
-// function that executes whenever data is received from master
-// this function is registered as an event, see setup()
 void receiveEvent(int howMany) {
     Wire.readBytes((uint8_t *)receiveBuf, howMany);
     newData = true;
+}
+
+void requestEvent() {
+    switch (command.commandType) {
+        case CommandType::ReadPatternDone:
+            Wire.write(patternRunner.patternDone());
+            break;
+
+        default:
+            // Send back 255 (-1 signed) to indicate bad/no data
+            Wire.write(0xff);
+    }
 }
 
 void parseCommand(uint8_t *buf, size_t len) {
@@ -139,11 +159,15 @@ void parseCommand(uint8_t *buf, size_t len) {
             break;
 
         case CommandType::Pattern:
-            command.commandData.commandPattern = {.pattern = buf[1]};
+            memcpy(&command.commandData.commandPattern.pattern, &buf[1], 2);
             break;
 
         case CommandType::ChangeColor:
             memcpy(&command.commandData.commandColor.red, &buf[1], 3);
+            break;
+
+        case CommandType::ReadPatternDone:
+            command.commandData.commandReadPatternDone = {};
             break;
 
         default:
@@ -211,6 +235,7 @@ bool executePatternChase(CRGB *leds, CRGB color, uint16_t state,
     if (state - 1 >= 0) {
         leds[state - 1] = CRGB::Black;
     }
+
     for (size_t i = state; i < state + chaseLEDWidth; i++) {
         if (i < ledCount) {
             leds[i] = color;
@@ -224,5 +249,3 @@ bool executePatternWipe(CRGB *leds, CRGB color, uint16_t state,
     leds[state] = color;
     return true;
 }
-
-// TODO: Implement your pattern callbacks here

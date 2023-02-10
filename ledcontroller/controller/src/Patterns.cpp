@@ -4,8 +4,14 @@ void PatternRunner::update() {
     auto curPattern = currentPattern();
 
     if (shouldUpdate()) {
+        // If we're done, make sure to stop if one shot is set
         if (_curState >= curPattern->numStates) {
-            reset();
+            if (_oneShot) {
+                _doneRunning = true;
+            }
+            else {
+                reset();
+            }
         }
 
         if (curPattern->cb(_fastLed->leds(), _curColor, _curState,
@@ -18,7 +24,7 @@ void PatternRunner::update() {
     }
 }
 
-bool PatternRunner::setCurrentPattern(uint8_t pattern) {
+bool PatternRunner::setCurrentPattern(uint8_t pattern, bool isOneShot=false) {
     if (pattern > patternCount - 1) {
         return false;
     }
@@ -29,8 +35,8 @@ bool PatternRunner::setCurrentPattern(uint8_t pattern) {
     return true;
 }
 
-bool PatternRunner::setCurrentPattern(PatternType type) {
-    return setCurrentPattern((uint8_t)type);
+bool PatternRunner::setCurrentPattern(PatternType type, bool isOneShot=false) {
+    return setCurrentPattern((uint8_t)type, isOneShot);
 }
 
 Pattern* PatternRunner::currentPattern() const {

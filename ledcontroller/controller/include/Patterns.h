@@ -4,6 +4,13 @@
 #include <Arduino.h>
 #include <FastLED.h>
 
+// C++11 constexpr is annoying
+constexpr int32_t ceil(float num) {
+    return (num == static_cast<float>(static_cast<int32_t>(num))) ?
+        static_cast<int32_t>(num) : static_cast<int32_t>(num) +
+        (num > 0 ? 1 : 0);
+}
+
 constexpr uint16_t ledNum = 150;
 
 /**
@@ -42,6 +49,8 @@ class PatternRunner {
           _numPatterns(numPatterns),
           _curPattern(0),
           _curState(0),
+          _oneShot(false),
+          _doneRunning(false),
           _curColor(CRGB::Black),
           _lastUpdate(0) {}
 
@@ -56,13 +65,17 @@ class PatternRunner {
      * Set the current pattern
      * @returns true if successful
      */
-    bool setCurrentPattern(PatternType type);
-    bool setCurrentPattern(uint8_t);
+    bool setCurrentPattern(PatternType, bool);
+    bool setCurrentPattern(uint8_t, bool);
 
     /**
      * Get pointer to the current pattern
      */
     Pattern *currentPattern() const;
+
+    inline bool patternDone() const {
+        return _oneShot && _doneRunning;
+    }
 
     static CRGB Wheel(uint8_t);
 
@@ -73,11 +86,14 @@ class PatternRunner {
     inline void reset() {
         _curState = 0;
         _lastUpdate = millis();
+        _doneRunning = false;
     }
 
    private:
     inline bool shouldUpdate() const {
-        return millis() - _lastUpdate >= currentPattern()->changeDelay;
+        // Only update if enough delay has passed and pattern can be run again
+        return (millis() - _lastUpdate >= currentPattern()->changeDelay) &&
+            (!_oneShot && _doneRunning);
     }
 
     CFastLED *_fastLed;
@@ -85,6 +101,8 @@ class PatternRunner {
     uint8_t _numPatterns;
     uint8_t _curPattern;
     uint16_t _curState;
+    bool _oneShot;
+    bool _doneRunning;
     CRGB _curColor;
     uint32_t _lastUpdate;
 };
