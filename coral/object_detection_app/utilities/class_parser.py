@@ -7,14 +7,16 @@ class DetectionModelClass(object):
         self.id = id
         self.name = name
         self.color = color
-    
+
     def __lt__(self, other) -> bool:
         return self.id < other.id
+
 
 class DetectionModelClassParser:
     def parse(filename: str) -> list[DetectionModelClass]:
         with open(filename, mode='r') as file:
-            csvReader = csv.DictReader(file, delimiter='|', fieldnames=['id', 'name', 'color'])
+            csvReader = csv.DictReader(file, delimiter='|', fieldnames=[
+                                       'id', 'name', 'color'])
             detectionModelClasses: list[DetectionModelClass]
             for row in csvReader:
                 color = [int(i) for i in row['color'].split(',')]
