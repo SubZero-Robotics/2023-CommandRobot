@@ -5,3 +5,6 @@ class Output:
         self.bbox = bbox
 
     def flatten(self) -> list[float]:
+        vals: list[float] = []
+        # TODO: Covert the Output object into a single list of floats
+        return vals

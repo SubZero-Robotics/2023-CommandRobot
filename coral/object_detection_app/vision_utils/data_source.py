@@ -1,5 +1,6 @@
 import cv2 as cv
 import numpy as np
+from output import Output
 
 
 class DataSource:
@@ -12,12 +13,12 @@ class DataSource:
         _, frame = self.src.read()
         return frame
 
-    def preprocessImage(w: int, h: int, frame):
-        frame = cv.resize(frame, (w, h))
+    def preprocessImage(destW: int, destH: int, frame):
+        frame = cv.resize(frame, (destW, destH))
         frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
         return frame
 
-    def drawBoundingBoxes(self, outputs: list, frame, colors):
+    def drawBoundingBoxes(self, outputs: list[Output], frame, colors: list[tuple[int, int, int]]):
         rows, cols = self.imgSize
         for output in outputs:
             bbox = output.bbox
@@ -26,4 +27,5 @@ class DataSource:
             right = bbox[3] * cols
             bottom = bbox[2] * rows
             cv.rectangle(frame, (int(x), int(y)), (int(right), int(
-                bottom)), colors[str(output.classId)], thickness=2)
+                bottom)), colors[output.classId], thickness=2)
+        return frame

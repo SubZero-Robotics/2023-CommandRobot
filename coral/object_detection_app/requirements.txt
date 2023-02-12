@@ -1,0 +1,4 @@
+numpy
+pynetworktables
+python3-opencv
+tflite-runtime==2.11.0
