@@ -6,13 +6,15 @@
 
 #include <frc2/command/button/Trigger.h>
 
-#include "commands/autos/test.h"
+#include "commands/autos/StraightBack.h"
 #include "commands/ExampleCommand.h"
 #include "commands/DefaultDrive.h"
 
 RobotContainer::RobotContainer()
 {
   // Initialize all of your commands and subsystems here
+
+  m_chooser.SetDefaultOption("Straight Back", &m_straightbackAuto);
 
   // Configure the button bindings
   ConfigureBindings();
@@ -35,5 +37,5 @@ void RobotContainer::ConfigureBindings()
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
 {
-  return &m_auto;
+  return NULL;
 }

@@ -13,7 +13,8 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 
-#include "commands/autos/TestAuto.h"
+#include "commands/Autos.h"
+#include "frc/smartdashboard/SendableChooser.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -24,15 +25,6 @@
  */
 class RobotContainer {
  public:
-  RobotContainer() {
-    m_auto = new TestAuto(&m_drive);
-  };
-
-    ~RobotContainer() {
-        if (m_auto) {
-            delete m_auto;
-        }
-    }
 
   frc2::CommandPtr GetAutonomousCommand();
 
@@ -48,8 +40,11 @@ class RobotContainer {
   // Drive subsystem from 2022. We should probably make cross season code easier to reuse.
   DriveSubsystem m_drive;
 
+  // Auto chooser
+  frc::SendableChooser<frc2::Command*> m_chooser;
+
   // Auto command
-  TestAuto *m_auto;
+  StraightBackAuto m_straightbackAuto{&m_drive};
 
   void ConfigureBindings();
 };
