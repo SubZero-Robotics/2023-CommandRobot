@@ -6,5 +6,7 @@ class Output:
 
     def flatten(self) -> list[float]:
         vals: list[float] = []
-        # TODO: Covert the Output object into a single list of floats
+        vals.append(float(self.classId), self.score)
+        for coord in self.bbox:
+            vals.append(coord)
         return vals
