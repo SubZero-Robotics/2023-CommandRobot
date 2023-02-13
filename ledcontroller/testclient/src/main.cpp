@@ -56,11 +56,13 @@ void setup() {
 
 void loop() {
     printMenu();
-    while(!Serial.available());
+    while (!Serial.available())
+        ;
     String input = Serial.readStringUntil('\n');
     input.trim();
     InputOptions option = parseInputOption(input.charAt(0));
-    if (option == InputOptions::Invalid);
+    if (option == InputOptions::Invalid)
+        ;
     else {
         handleInput(option);
     }
@@ -117,7 +119,9 @@ void runMainTests() {
 }
 
 void printMenu() {
-    Serial.println(F("Pick ONE option from the available commands. Send as single character:"));
+    Serial.println(
+        F("Pick ONE option from the available commands. Send as single "
+          "character:"));
     Serial.println(F("\t't' - Run test sequence"));
     Serial.println(F("\t'c' - Set the color"));
     Serial.println(F("\t'Y' - Set to on"));
@@ -153,13 +157,13 @@ InputOptions parseInputOption(char input) {
 }
 
 void handleInput(InputOptions option) {
-    uint8_t optionInt =  (uint8_t)option;
+    uint8_t optionInt = (uint8_t)option;
 
     switch (option) {
         case InputOptions::RunTests:
             handleRunMainTests();
             break;
-        
+
         case InputOptions::SetOn:
         case InputOptions::SetOff:
             handleOnOff(optionInt - 1);
@@ -200,9 +204,12 @@ void handleOnOff(bool val) {
 }
 
 void handleColor() {
-    Serial.println(F("Enter a color in the form of: R,G,B where values are in decimal format"));
+    Serial.println(
+        F("Enter a color in the form of: R,G,B where values are in decimal "
+          "format"));
     Serial.println(F("Example: 50,100,255"));
-    while(!Serial.available());
+    while (!Serial.available())
+        ;
     uint8_t r = Serial.readStringUntil(',').toInt();
     uint8_t g = Serial.readStringUntil(',').toInt();
     uint8_t b = Serial.readStringUntil('\n').toInt();
@@ -239,11 +246,11 @@ void handlePattern() {
         case 'b':
             pattern = PatternType::Blink;
             break;
-        
+
         case 'f':
             pattern = PatternType::RGBFade;
             break;
-        
+
         case 'h':
             pattern = PatternType::HackerMode;
             break;
@@ -251,7 +258,7 @@ void handlePattern() {
         case 'c':
             pattern = PatternType::Chase;
             break;
-        
+
         case 'w':
             pattern = PatternType::Wipe;
             break;
@@ -262,7 +269,8 @@ void handlePattern() {
     }
 
     Serial.print(F("Run once (one-shot)? (Y/N): "));
-    while(!Serial.available());
+    while (!Serial.available())
+        ;
     input = Serial.readStringUntil('\n');
     input.trim();
     uint8_t oneShot = input.charAt(0) == 'Y' ? 1 : 0;
@@ -309,13 +317,13 @@ void writeCommand(CommandType type, uint8_t *data) {
             break;
 
         case CommandType::CommandPattern:
-            Wire.write(data[0]);    // pattern
-            Wire.write(data[1]);    // one-shot
+            Wire.write(data[0]);  // pattern
+            Wire.write(data[1]);  // one-shot
             break;
 
         case CommandType::CommandColor:
             for (uint8_t i = 0; i < 3; i++) {
-                Wire.write(data[i]);    // RGB color bytes
+                Wire.write(data[i]);  // RGB color bytes
             }
             break;
 
