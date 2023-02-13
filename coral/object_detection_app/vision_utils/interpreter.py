@@ -13,7 +13,7 @@ class Interpreter:
         self.input_details = self.model.get_input_details()
         self.output_details = self.model.get_output_details()
 
-    def invoke(self, frame) -> list:
+    def invoke(self, frame) -> list[Output]:
         inp = np.expand_dims(frame, axis=0).astype(np.int8)
         self.model.set_tensor(self.input_details[0]['index'], inp)
         self.model.invoke()
