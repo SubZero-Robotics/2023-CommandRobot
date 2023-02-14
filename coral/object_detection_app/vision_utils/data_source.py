@@ -1,17 +1,31 @@
 import cv2 as cv
 import numpy as np
+import socket
+from cscore import CvSource, VideoMode, MjpegServer
 from output import Output
 
 
 class DataSource:
-    def __init__(self, src: str):
+    def __init__(self, src: int, sourceName: str, port: int = 8082):
         self.src = cv.VideoCapture(src)
         frame = self.getImage()
         self.imgSize = (frame.shape[0], frame.shape[1])
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        self.cvSource = CvSource(sourceName, VideoMode.PixelFormat.kMJPEG, self.imgSize[0], self.imgSize[1], 30)
+        self.cvMjpegServer = MjpegServer("cvhttpserver", port)
+        self.cvMjpegServer.setSource(self.cvSource)
+        
+        print(f"OpenCV output mjpg server listening at http://{ip}:{port}")
 
     def getImage(self):
         _, frame = self.src.read()
         return frame
+    
+    def putImage(self, frame):
+        self.cvSource.putFrame(frame)
 
     def preprocessImage(destW: int, destH: int, frame):
         frame = cv.resize(frame, (destW, destH))

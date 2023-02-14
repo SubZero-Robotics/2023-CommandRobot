@@ -7,9 +7,10 @@ from output import Output
 class Interpreter:
 
     def __init__(self, modelpath: str):
-        self.model = tflite.Interpreter(model_path=self.modelpath,
+        self.model = tflite.Interpreter(model_path=modelpath,
                                         experimental_delegates=[tflite.load_delegate('libedgetpu.so.1')])
         self.model.allocate_tensors()
+        print('Loaded model')
         self.input_details = self.model.get_input_details()
         self.output_details = self.model.get_output_details()
 
