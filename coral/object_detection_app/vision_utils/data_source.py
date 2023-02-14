@@ -14,16 +14,17 @@ class DataSource:
         s.connect(("8.8.8.8", 80))
         ip = s.getsockname()[0]
         s.close()
-        self.cvSource = CvSource(sourceName, VideoMode.PixelFormat.kMJPEG, self.imgSize[0], self.imgSize[1], 30)
+        self.cvSource = CvSource(
+            sourceName, VideoMode.PixelFormat.kMJPEG, self.imgSize[0], self.imgSize[1], 30)
         self.cvMjpegServer = MjpegServer("cvhttpserver", port)
         self.cvMjpegServer.setSource(self.cvSource)
-        
+
         print(f"OpenCV output mjpg server listening at http://{ip}:{port}")
 
     def getImage(self):
         _, frame = self.src.read()
         return frame
-    
+
     def putImage(self, frame):
         self.cvSource.putFrame(frame)
 
