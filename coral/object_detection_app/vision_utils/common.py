@@ -25,6 +25,7 @@ SVG_TEXT = '''
 '''
 SVG_FOOTER = '</svg>'
 
+
 def avg_fps_counter(window_size):
     window = collections.deque(maxlen=window_size)
     prev = time.monotonic()
@@ -36,13 +37,15 @@ def avg_fps_counter(window_size):
         prev = curr
         yield len(window) / sum(window)
 
+
 class SVG:
     def __init__(self, size):
         self.io = io.StringIO()
-        self.io.write(SVG_HEADER.format(w=size[0] , h=size[1]))
+        self.io.write(SVG_HEADER.format(w=size[0], h=size[1]))
 
     def add_rect(self, x, y, w, h, stroke, stroke_width):
-        self.io.write(SVG_RECT.format(x=x, y=y, w=w, h=h, s=stroke, sw=stroke_width))
+        self.io.write(SVG_RECT.format(
+            x=x, y=y, w=w, h=h, s=stroke, sw=stroke_width))
 
     def add_text(self, x, y, text, font_size):
         self.io.write(SVG_TEXT.format(x=x, y=y, t=text, fs=font_size))

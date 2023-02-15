@@ -27,9 +27,11 @@ inputShape = (inputDetails[0]['shape'][1], inputDetails[0]['shape'][2])
 destW, destH = inputShape
 colors = [modelClass.color for modelClass in modelClasses]
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 def detectObjects():
     global outputFrame, lock, dataSource, interpreter, destW, destH, colors
@@ -48,31 +50,35 @@ def detectObjects():
         with lock:
             outputFrame = frame.copy()
         # networking.write(filteredOutputs)
-        
+
+
 def generate():
     global outputFrame, lock
-    
+
     while True:
         with lock:
             if outputFrame is None:
                 continue
-            
+
             flag, encodedImage = cv.imencode('.jpg', outputFrame)
-            
+
             if not flag:
                 continue
-            
-        yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
-			bytearray(encodedImage) + b'\r\n')
-        
+
+        yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
+               bytearray(encodedImage) + b'\r\n')
+
+
 @app.route('/stream')
 def stream():
     return Response(generate(),
-                    mimetype = 'multipart/x-mixed-replace; boundary=frame')
-    
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
 t = threading.Thread(target=detectObjects)
 t.daemon = True
 t.start()
 
 print(f"OpenCV output mjpg server listening at http://0.0.0.0:{5001}")
-app.run(host='0.0.0.0', port=5001, debug=True, threaded=True, use_reloader=False)
+app.run(host='0.0.0.0', port=5001, debug=True,
+        threaded=True, use_reloader=False)
