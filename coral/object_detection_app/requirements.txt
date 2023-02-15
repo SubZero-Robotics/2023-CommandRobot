@@ -1,6 +1,6 @@
 numpy
 # pynetworktables
-python3-opencv
+python-opencv
 tflite-runtime==2.11.0
 # Run export CPPFLAGS=-I/usr/include/opencv4 before installing this package
 robotpy-cscore==2022.0.3
