@@ -92,6 +92,6 @@ t = threading.Thread(target=detectObjects)
 t.daemon = True
 t.start()
 
-print(f"OpenCV output mjpg server listening at http://0.0.0.0:{args[port]}")
-app.run(host='0.0.0.0', port=args[port], debug=True,
+print(f"OpenCV output mjpg server listening at http://0.0.0.0:{args['port']}")
+app.run(host='0.0.0.0', port=args['port'], debug=True,
         threaded=True, use_reloader=False)
