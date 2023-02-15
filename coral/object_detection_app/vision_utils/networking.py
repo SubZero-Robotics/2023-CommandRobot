@@ -1,6 +1,6 @@
 # from networktables import NetworkTables
-import ntcore
-from output import Output
+from .output import Output
+from typing import List
 
 
 class Networking:
@@ -13,8 +13,8 @@ class Networking:
         self.inst.setServerTeam(teamNum)
         self.pub = self.table.getFloatArrayTopic('detections').publish()
 
-    def write(self, outputs: list[Output]) -> list[float]:
-        outputNumArray: list[float] = [len(outputs)]
+    def write(self, outputs: List[Output]) -> List[float]:
+        outputNumArray: List[float] = [len(outputs)]
         flattenedOutputList = [output.flatten() for output in outputs]
         for flattenedOutput in flattenedOutputList:
             for value in flattenedOutput:

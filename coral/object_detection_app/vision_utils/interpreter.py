@@ -1,7 +1,8 @@
 import cv2 as cv
 import tflite_runtime.interpreter as tflite
 import numpy as np
-from output import Output
+from .output import Output
+from typing import List
 
 
 class Interpreter:
@@ -14,7 +15,7 @@ class Interpreter:
         self.input_details = self.model.get_input_details()
         self.output_details = self.model.get_output_details()
 
-    def invoke(self, frame) -> list[Output]:
+    def invoke(self, frame) -> List[Output]:
         inp = np.expand_dims(frame, axis=0).astype(np.int8)
         self.model.set_tensor(self.input_details[0]['index'], inp)
         self.model.invoke()

@@ -1,8 +1,7 @@
 import cv2 as cv
 import numpy as np
-import socket
-from cscore import CvSource, VideoMode, MjpegServer
-from output import Output
+from .output import Output
+from typing import List, Tuple
 
 
 class DataSource:
@@ -10,30 +9,17 @@ class DataSource:
         self.src = cv.VideoCapture(src)
         frame = self.getImage()
         self.imgSize = (frame.shape[0], frame.shape[1])
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        ip = s.getsockname()[0]
-        s.close()
-        self.cvSource = CvSource(
-            sourceName, VideoMode.PixelFormat.kMJPEG, self.imgSize[0], self.imgSize[1], 30)
-        self.cvMjpegServer = MjpegServer("cvhttpserver", port)
-        self.cvMjpegServer.setSource(self.cvSource)
-
-        print(f"OpenCV output mjpg server listening at http://{ip}:{port}")
 
     def getImage(self):
         _, frame = self.src.read()
         return frame
 
-    def putImage(self, frame):
-        self.cvSource.putFrame(frame)
-
     def preprocessImage(destW: int, destH: int, frame):
         frame = cv.resize(frame, (destW, destH))
-        frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+        # frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
         return frame
 
-    def drawBoundingBoxes(self, outputs: list[Output], frame, colors: list[tuple[int, int, int]]):
+    def drawBoundingBoxes(self, outputs: List[Output], frame, colors: List[Tuple[int, int, int]]):
         rows, cols = self.imgSize
         for output in outputs:
             bbox = output.bbox
