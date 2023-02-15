@@ -10,12 +10,12 @@ import time
 import cv2 as cv
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-v', '--verbose', metavar='VERBOSE', help='Print verbose input in terminal',
+parser.add_argument('-v', '--verbose', help='Print verbose input in terminal',
                     action='store_true')
-parser.add_argument('-N', '--no-networking', metavar='NO_NETWORKING', help='Don\'t output data via networktables',
+parser.add_argument('-N', '--no-networking', help='Don\'t output data via networktables',
                     action='store_true')
-parser.add_argument('-t', '--threshold', metavar='THRESHOLD', help='Set object detection threshold', default=0.5)
-parser.add_argument('-p', '--port', metavar='PORT', help='Port for webserver', default=5001)
+parser.add_argument('-t', '--threshold', metavar='THRESHOLD', help='Set object detection threshold', default=0.5, type=float)
+parser.add_argument('-p', '--port', metavar='PORT', help='Port for webserver', default=5001, type=int)
 args = vars(parser.parse_args())
 
 THRESHOLD = args['threshold']
