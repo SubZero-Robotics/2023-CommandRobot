@@ -14,8 +14,10 @@ parser.add_argument('-v', '--verbose', metavar='VERBOSE', help='Print verbose in
                     action='store_true')
 parser.add_argument('-N', '--no-networking', metavar='NO_NETWORKING', help='Don\'t output data via networktables',
                     action='store_true')
-parser.add_argument('-t', '--threshold', metavar='THRESHOLD', help='Set object detection threshold', default=0.5)
-parser.add_argument('-p', '--port', metavar='PORT', help='Port for webserver', default=5001)
+parser.add_argument('-t', '--threshold', metavar='THRESHOLD',
+                    help='Set object detection threshold', default=0.5)
+parser.add_argument('-p', '--port', metavar='PORT',
+                    help='Port for webserver', default=5001)
 args = vars(parser.parse_args())
 
 THRESHOLD = args['threshold']
