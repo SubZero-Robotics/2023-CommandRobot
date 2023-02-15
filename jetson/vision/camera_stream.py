@@ -7,10 +7,11 @@ import sys
 import cv2 as cv
 
 
-PLATFORM  = sys.platform
+PLATFORM = sys.platform
 CAM_COUNT = 2
 CAM_BASE = '{}' if PLATFORM == 'win32' else '/dev/video{}'
-cams = [i for i in range(CAM_COUNT)] if PLATFORM == 'win32' else [CAM_BASE.format(i) for i in range(CAM_COUNT)]
+cams = [i for i in range(CAM_COUNT)] if PLATFORM == 'win32' else [
+    CAM_BASE.format(i) for i in range(CAM_COUNT)]
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', '--port', metavar='PORT',
@@ -29,24 +30,27 @@ for index, cap in enumerate(caps):
     if type(frame) == type(None):
         print(f'ERROR: Unable to read image from camera {cams[index]}')
         sys.exit(-1)
-        
+
 
 app = Flask(__name__)
+
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
 def getFrames():
     global outputFrames, lock, cliArgs, caps
-    
+
     while True:
         for index, cap in enumerate(caps):
             _, frame = cap.read()
             frame = cv.resize(frame, cliArgs['size'])
             with lock:
                 outputFrames[index] = frame.copy()
-        
+
+
 def generateFrame(idx: int):
     global outputFrames, lock
 
@@ -54,7 +58,7 @@ def generateFrame(idx: int):
         with lock:
             if outputFrames[idx] is None:
                 continue
-            
+
             frame = outputFrames[idx]
 
             flag, encodedImage = cv.imencode('.jpg', frame)
@@ -65,14 +69,17 @@ def generateFrame(idx: int):
         yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
                bytearray(encodedImage) + b'\r\n')
 
+
 @app.route('/stream/<index>')
 def stream(index):
     index = int(index)
     return Response(generateFrame(index),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
-    
+
+
 t = threading.Thread(target=getFrames)
 t.daemon = True
 t.start()
 
-app.run(host='0.0.0.0', port=cliArgs['port'], debug=True, threaded=True, use_reloader=False)
+app.run(host='0.0.0.0', port=cliArgs['port'],
+        debug=True, threaded=True, use_reloader=False)
