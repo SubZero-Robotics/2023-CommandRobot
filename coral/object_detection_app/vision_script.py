@@ -9,8 +9,16 @@ import imutils
 import time
 import cv2 as cv
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-v', '--verbose', metavar='VERBOSE', help='Print verbose input in terminal',
+                    action='store_true')
+parser.add_argument('-N', '--no-networking', metavar='NO_NETWORKING', help='Don\'t output data via networktables',
+                    action='store_true')
+parser.add_argument('-t', '--threshold', metavar='THRESHOLD', help='Set object detection threshold', default=0.5)
+parser.add_argument('-p', '--port', metavar='PORT', help='Port for webserver', default=5001)
+args = vars(parser.parse_args())
 
-THRESHOLD = 0.50
+THRESHOLD = args['threshold']
 
 outputFrame = None
 lock = threading.Lock()
@@ -20,7 +28,8 @@ app = Flask(__name__)
 dataSource = DataSource(1, 'cvsource')
 interpreter = Interpreter('../models/object_int8_edgetpu.tflite')
 modelClasses = DetectionModelClassParser.parse('../models/classes.csv')
-# networking = Networking('5690', 'default')
+if not args['no-networking']:
+    networking = Networking('5690', 'default')
 
 inputDetails = interpreter.input_details
 inputShape = (inputDetails[0]['shape'][1], inputDetails[0]['shape'][2])
@@ -44,12 +53,14 @@ def detectObjects():
         for output in outputs:
             if output.score >= THRESHOLD:
                 filteredOutputs.append(output)
-                print('Found: ', output)
+                if args['verbose']:
+                    print('Found: ', output)
         frame = dataSource.drawBoundingBoxes(filteredOutputs, frame, colors)
         print()
         with lock:
             outputFrame = frame.copy()
-        # networking.write(filteredOutputs)
+        if not args['no-networking']:
+            networking.write(filteredOutputs)
 
 
 def generate():
