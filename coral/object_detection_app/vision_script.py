@@ -58,7 +58,8 @@ def detectObjects():
                 if args['verbose']:
                     print('Found: ', output)
         frame = dataSource.drawBoundingBoxes(filteredOutputs, frame, colors)
-        print()
+        if args['verbose']:
+            print()
         with lock:
             outputFrame = frame.copy()
         if not args['no_networking']:
