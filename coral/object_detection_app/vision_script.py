@@ -10,7 +10,7 @@ import time
 import cv2 as cv
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-v', '--verbose', help='Print verbose input in terminal',
+parser.add_argument('-v', '--verbose', help='Print verbose output in terminal',
                     action='store_true')
 parser.add_argument('-N', '--no-networking', help='Don\'t output data via networktables',
                     action='store_true')
@@ -30,7 +30,7 @@ app = Flask(__name__)
 dataSource = DataSource(1, 'cvsource')
 interpreter = Interpreter('../models/object_int8_edgetpu.tflite')
 modelClasses = DetectionModelClassParser.parse('../models/classes.csv')
-if not args['no-networking']:
+if not args['no_networking']:
     networking = Networking('5690', 'default')
 
 inputDetails = interpreter.input_details
@@ -61,7 +61,7 @@ def detectObjects():
         print()
         with lock:
             outputFrame = frame.copy()
-        if not args['no-networking']:
+        if not args['no_networking']:
             networking.write(filteredOutputs)
 
 
@@ -92,6 +92,6 @@ t = threading.Thread(target=detectObjects)
 t.daemon = True
 t.start()
 
-print(f"OpenCV output mjpg server listening at http://0.0.0.0:{5001}")
-app.run(host='0.0.0.0', port=5001, debug=True,
+print(f"OpenCV output mjpg server listening at http://0.0.0.0:{args[port]}")
+app.run(host='0.0.0.0', port=args[port], debug=True,
         threaded=True, use_reloader=False)
