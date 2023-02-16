@@ -21,21 +21,21 @@
  */
 class DefaultDrive
     : public frc2::CommandHelper<frc2::CommandBase, DefaultDrive> {
- public:
-  /**
-   * Creates a new DefaultDrive.
-   *
-   * @param subsystem The drive subsystem this command will run on.
-   * @param forward The control input for driving forwards/backwards
-   * @param rotation The control input for turning
-   */
-  DefaultDrive(DriveSubsystem* subsystem, std::function<double()> forward,
-               std::function<double()> rotation);
+   public:
+    /**
+     * Creates a new DefaultDrive.
+     *
+     * @param subsystem The drive subsystem this command will run on.
+     * @param forward The control input for driving forwards/backwards
+     * @param rotation The control input for turning
+     */
+    DefaultDrive(DriveSubsystem* subsystem, std::function<double()> forward,
+                 std::function<double()> rotation);
 
-  void Execute() override;
+    void Execute() override;
 
- private:
-  DriveSubsystem* m_drive;
-  std::function<double()> m_forward;
-  std::function<double()> m_rotation;
+   private:
+    DriveSubsystem* m_drive;
+    std::function<double()> m_forward;
+    std::function<double()> m_rotation;
 };
