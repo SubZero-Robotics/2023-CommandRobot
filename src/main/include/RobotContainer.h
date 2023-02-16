@@ -21,10 +21,10 @@
  * commands, and trigger mappings) should be declared here.
  */
 class RobotContainer {
- public:
-  RobotContainer();
+   public:
+    RobotContainer();
 
-  frc2::CommandPtr GetAutonomousCommand();
+    frc2::CommandPtr GetAutonomousCommand();
 
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
