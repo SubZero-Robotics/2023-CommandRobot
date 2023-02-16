@@ -16,7 +16,10 @@ RobotContainer::RobotContainer()
 
   // Configure the button bindings
   ConfigureBindings();
+}
 
+void RobotContainer::ConfigureBindings()
+{
   // Default drive command.  This will be run in teleop and when no other command is running.
   m_drive.SetDefaultCommand(DefaultDrive(
       &m_drive,
@@ -24,13 +27,6 @@ RobotContainer::RobotContainer()
       { return Xbox.GetLeftY(); },
       [this]
       { return Xbox.GetLeftX(); }));
-}
-
-void RobotContainer::ConfigureBindings()
-{
-  // Configure your trigger bindings here
-  // This is a fun change from 2022. Button bindings as we knew them are gone.
-  // We now have triggers.
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand()
