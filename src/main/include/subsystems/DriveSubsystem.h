@@ -136,11 +136,11 @@ private:
     // declared private and exposed only through public methods.
 
     // right motor controllers
-    WPI_TalonFX RightLead{12};
-    WPI_TalonFX RightFollow{13};
+    WPI_TalonFX RightLead{8};
+    WPI_TalonFX RightFollow{7};
     // left motor controllers
-    WPI_TalonFX LeftLead{10};
-    WPI_TalonFX LeftFollow{11};
+    WPI_TalonFX LeftLead{6};
+    WPI_TalonFX LeftFollow{5};
 
     frc::DifferentialDrive m_drive{RightLead, LeftLead};
 
