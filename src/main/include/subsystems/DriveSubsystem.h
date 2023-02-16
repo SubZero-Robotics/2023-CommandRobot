@@ -4,32 +4,27 @@
 
 #pragma once
 
-#include <frc2/command/CommandPtr.h>
-#include <frc2/command/SubsystemBase.h>
-
 #include <ctre/Phoenix.h>
 #include <frc/AnalogInput.h>
-#include <networktables/NetworkTable.h>
-#include <networktables/NetworkTableInstance.h>
-#include <networktables/NetworkTableEntry.h>
 #include <frc/DriverStation.h>
-
 #include <frc/drive/DifferentialDrive.h>
+#include <frc/filter/SlewRateLimiter.h>
+#include <frc/geometry/Pose2d.h>
+#include <frc/kinematics/DifferentialDriveOdometry.h>
+#include <frc/trajectory/TrajectoryGenerator.h>
+#include <frc2/command/CommandPtr.h>
+#include <frc2/command/InstantCommand.h>
+#include <frc2/command/RamseteCommand.h>
+#include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/SubsystemBase.h>
+#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableEntry.h>
+#include <networktables/NetworkTableInstance.h>
 
 #include "Constants.h"
 
-#include <frc/geometry/Pose2d.h>
-#include <frc/kinematics/DifferentialDriveOdometry.h>
-
-#include <frc/trajectory/TrajectoryGenerator.h>
-#include <frc/filter/SlewRateLimiter.h>
-#include <frc2/command/RamseteCommand.h>
-#include <frc2/command/InstantCommand.h>
-#include <frc2/command/SequentialCommandGroup.h>
-
-class DriveSubsystem : public frc2::SubsystemBase
-{
-public:
+class DriveSubsystem : public frc2::SubsystemBase {
+   public:
     DriveSubsystem();
 
     void DisabledInit();
@@ -88,7 +83,8 @@ public:
      * Sets the max output of the drive.  Useful for scaling the drive to drive
      * more slowly.
      *
-     * @param maxOutput the maximum output to which the drive will be constrained
+     * @param maxOutput the maximum output to which the drive will be
+     * constrained
      */
     void SetMaxOutput(double maxOutput);
 
@@ -131,7 +127,7 @@ public:
      */
     void ConfigureMotor(WPI_TalonFX *_talon);
 
-private:
+   private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
 
@@ -157,14 +153,15 @@ private:
     double previousPercentage = 0.0;
 
     // Odometry class for tracking robot pose
-    frc::Rotation2d currentrobotAngle; // is zeroed by default
-    frc::Pose2d currentRobotPose;      // is also zeroed by default
+    frc::Rotation2d currentrobotAngle;  // is zeroed by default
+    frc::Pose2d currentRobotPose;       // is also zeroed by default
     // so now use those to initialize odemetry at zero too
-    frc::DifferentialDriveOdometry m_odometry{currentrobotAngle, 0_m, 0_m, currentRobotPose};
+    frc::DifferentialDriveOdometry m_odometry{currentrobotAngle, 0_m, 0_m,
+                                              currentRobotPose};
 
     // navx
-    double gyroAngle = 0.0; // What is the angle (degrees) from the gyro?
-    double gyroRate = 0.0;  // What is angle change (deg/sec)
+    double gyroAngle = 0.0;  // What is the angle (degrees) from the gyro?
+    double gyroRate = 0.0;   // What is angle change (deg/sec)
 
     // TurnToAnglePID
     frc2::PIDController TurnToAngle{0.0396, 0.132, 0.00297};
