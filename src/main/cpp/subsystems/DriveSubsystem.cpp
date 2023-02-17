@@ -174,8 +174,7 @@ void DriveSubsystem::ConfigureMotor(WPI_TalonFX &talon) {
 
     // Choose the sensor we're using for PID 0 to be the built-in encoders
     // This should be the default anyway, but we'll be sure
-    talon.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, 0,
-                                        10);
+    talon.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, 0, 10);
 
     talon.SetNeutralMode(Brake);
 
