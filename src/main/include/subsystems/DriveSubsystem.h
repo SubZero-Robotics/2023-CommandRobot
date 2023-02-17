@@ -159,6 +159,13 @@ class DriveSubsystem : public frc2::SubsystemBase {
      */
     static units::meters_per_second_t AverageEncoderVelocity(Encoders);
 
+    /**
+     * @brief Inverts a side
+     * 
+     * @param Encoders The side to invert
+     */
+    static void InvertSide(Encoders);
+
     // right motor controllers
     WPI_TalonFX RightLead{8};
     WPI_TalonFX RightFollow{7};
@@ -179,8 +186,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     double AverageEncoderDistance = 0.0;
 
-    frc::SlewRateLimiter<units::scalar> decelfilter{2 / 1_s};
-    frc::SlewRateLimiter<units::scalar> accelfilter{3 / 1_s};
+    frc::SlewRateLimiter<units::scalar> decelfilter{ 2_s };
+    frc::SlewRateLimiter<units::scalar> accelfilter{ 3_s };
     double previousPercentage = 0.0;
 
     // Odometry class for tracking robot pose
@@ -195,7 +202,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
     double gyroRate = 0.0;   // What is angle change (deg/sec)
 
     // TurnToAnglePID
-    frc2::PIDController TurnToAngle{0.0396, 0.132, 0.00297};
+    frc2::PIDController TurnToAngle{kTurnP, kTurnI, kTurnD};
 
     // pointer to network tables for limelight stuff
     std::shared_ptr<nt::NetworkTable> table;

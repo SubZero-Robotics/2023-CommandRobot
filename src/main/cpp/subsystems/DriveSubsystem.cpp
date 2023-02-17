@@ -26,9 +26,7 @@ DriveSubsystem::DriveSubsystem() {
     rightEncoders = {.lead = &RightLead, .follow = &RightFollow};
     leftEncoders = {.lead = &LeftLead, .follow = &LeftFollow};
 
-    // Invert left side, since DifferentialDrive no longer does it for us
-    LeftLead.SetInverted(true);
-    LeftFollow.SetInverted(true);
+    InvertSide(leftEncoders);
 
     // Drive train motor grouping start
     RightFollow.Follow(RightLead);
@@ -206,4 +204,9 @@ units::meters_per_second_t DriveSubsystem::AverageEncoderVelocity(
     auto velocitySum = -(scaledLead + scaledFollow);
 
     return units::meters_per_second_t(velocitySum / 2.0);
+}
+
+void DriveSubsystem::InvertSide(Encoders encoders) {
+    encoders.lead->SetInverted(true);
+    encoders.follow->SetInverted(true);
 }

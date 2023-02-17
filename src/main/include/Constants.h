@@ -66,10 +66,9 @@ constexpr double kStabilizationI =
 constexpr double kStabilizationD =
     0.01;  // Finaly tune this to fix final error  .01
 
-constexpr double kTurnP =
-    0.10;  // tune This to start oscillating.  0.2 made 0.667s periods .12
-constexpr double kTurnI = 0.30;  // Then tune this to stop the osolating .36
-constexpr double kTurnD = 0.01;  // Finaly tune this to fix final error  .01
+constexpr double kTurnP = 0.0396;  // tune This to start oscillating.  0.2 made 0.667s periods .12
+constexpr double kTurnI = 0.132;  // Then tune this to stop the osolating .36
+constexpr double kTurnD = 0.00297;  // Finaly tune this to fix final error  .01
 
 constexpr auto kTurnTolerance = 5_deg;
 constexpr auto kTurnRateTolerance = 10_deg_per_s;
