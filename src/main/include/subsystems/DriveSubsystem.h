@@ -23,6 +23,11 @@
 
 #include "Constants.h"
 
+struct Encoders {
+    WPI_TalonFX *lead;
+    WPI_TalonFX *follow;
+};
+
 class DriveSubsystem : public frc2::SubsystemBase {
    public:
     DriveSubsystem();
@@ -43,10 +48,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
     /**
      * Drives the robot using arcade controls.
      *
-     * @param fwd the commanded forward movement
-     * @param rot the commanded rotation
+     * @param currentPercentage the commanded forward movement
+     * @param rotation the commanded rotation
      */
-    void ArcadeDrive(double fwd, double rot);
+    void ArcadeDrive(double, double);
 
     /**
      * Controls each side of the drive directly with a voltage.
@@ -131,12 +136,38 @@ class DriveSubsystem : public frc2::SubsystemBase {
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
 
+    /**
+     * @brief Gets the Average of two encoder positions
+     * @param encoders The encoders
+     * @return double The average position
+     */
+    static double AverageEncoderPosition(Encoders);
+
+    /**
+     * @brief Get the Average of the encoders minus an offset
+     * 
+     * @param encoders
+     * @param offset The offset used to correct the average
+     * @return double The corrected encoder position
+     */
+    static double GetEncoder(Encoders, double);
+
+    /**
+     * @brief Get the average velocity of the encodes
+     * 
+     * @return double velocity in m/s
+     */
+    static units::meters_per_second_t AverageEncoderVelocity(Encoders);
+
     // right motor controllers
     WPI_TalonFX RightLead{8};
     WPI_TalonFX RightFollow{7};
+    Encoders rightEncoders;
+
     // left motor controllers
     WPI_TalonFX LeftLead{6};
     WPI_TalonFX LeftFollow{5};
+    Encoders leftEncoders;
 
     frc::DifferentialDrive m_drive{RightLead, LeftLead};
 
@@ -174,5 +205,4 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     // State transition variables
     bool EnteredEnabled = false;
-    bool EnteredDisabled = false;
 };

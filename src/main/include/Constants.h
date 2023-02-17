@@ -33,8 +33,10 @@
 namespace DriveConstants {
 constexpr auto kTrackWidth = 0.6096_m;
 constexpr int kEncoderCPR = 29860.57;  // Counts Per Rotation. TalonFX is 2048
+constexpr float kVelocityScalingFactor = 10;
 constexpr double kWheelDiameterMeters = 0.15875;
 constexpr double kEncoderDistancePerPulse = 0.00001699323;
+constexpr double kPulsesPerMeter = 1/kEncoderDistancePerPulse;
 
 // These characterization values MUST be determined either experimentally or
 // theoretically for *your* robot's drive. The Robot Characterization

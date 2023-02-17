@@ -26,6 +26,9 @@ DriveSubsystem::DriveSubsystem() {
     ConfigureMotor(&LeftLead);
     ConfigureMotor(&LeftFollow);
 
+    rightEncoders = { .lead = &RightLead, .follow = &RightFollow};
+    leftEncoders = { .lead = &LeftLead, .follow = &LeftFollow};
+
     // Invert left side, since DifferentialDrive no longer does it for us
     LeftLead.SetInverted(true);
     LeftFollow.SetInverted(true);
@@ -49,8 +52,6 @@ DriveSubsystem::DriveSubsystem() {
     trajectoryConfig->SetKinematics(DriveConstants::kDriveKinematics);
     // Apply the voltage constraint
     trajectoryConfig->AddConstraint(autoVoltageConstraint);
-
-    frc::SmartDashboard::PutNumber("KpDistance", -2);
 }
 
 void DriveSubsystem::DisabledInit() {}
@@ -75,10 +76,9 @@ void DriveSubsystem::Periodic() {
                       units::meter_t(rEncoder * kEncoderDistancePerPulse));
 
     // Do things when first enabled or disabled
-    if (frc::DriverStation::IsDisabled() != true &&
-        frc::DriverStation::IsAutonomousEnabled() == false) {
-        if (!EnteredDisabled) {
-            EnteredDisabled = true;
+    if (!frc::DriverStation::IsDisabled() &&
+        !frc::DriverStation::IsAutonomousEnabled()) {
+        if (EnteredEnabled) {
             EnteredEnabled = false;
             // set coast since we are disabled and not in auto
             DisabledInit();  // yep!
@@ -87,21 +87,19 @@ void DriveSubsystem::Periodic() {
         if (!EnteredEnabled) {
             // we are enabled or in auto, so set brake mode
             EnteredEnabled = true;
-            EnteredDisabled = false;
             TeleopInit();
         }
     }
 }
 
-void DriveSubsystem::ArcadeDrive(double fwd, double rot) {
-    double currentPercentage = fwd;
+void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
     if (abs(currentPercentage) >
         previousPercentage) {  // speeding up, accel filter
-        m_drive.ArcadeDrive(accelfilter.Calculate(currentPercentage), rot,
+        m_drive.ArcadeDrive(accelfilter.Calculate(currentPercentage), rotation,
                             true);
         decelfilter.Calculate(currentPercentage);
     } else {  // slowing down, decel filter
-        m_drive.ArcadeDrive(decelfilter.Calculate(currentPercentage), rot,
+        m_drive.ArcadeDrive(decelfilter.Calculate(currentPercentage), rotation,
                             true);
         accelfilter.Calculate(currentPercentage);
     }
@@ -115,29 +113,19 @@ void DriveSubsystem::TankDriveVolts(units::volt_t left, units::volt_t right) {
 }
 
 void DriveSubsystem::ResetEncoders() {
-    LOffset = -((LeftLead.GetSelectedSensorPosition() +
-                 LeftFollow.GetSelectedSensorPosition()) /
-                2.0);
-    ROffset = -((RightLead.GetSelectedSensorPosition() +
-                 RightFollow.GetSelectedSensorPosition()) /
-                2.0);
+    LOffset = -AverageEncoderPosition(leftEncoders);
+    ROffset = -AverageEncoderPosition(rightEncoders);
 }
 
 // return the average of the two left encoders
 double DriveSubsystem::GetLeftEncoder() {
-    return (-((LeftLead.GetSelectedSensorPosition() +
-               LeftFollow.GetSelectedSensorPosition()) /
-              2.0) -
-            LOffset);
+    return GetEncoder(leftEncoders, LOffset);
 }
 
 // return the NEGATIVE average of the two right encoders
 // Because it's inverted.  Maybe not needed?
 double DriveSubsystem::GetRightEncoder() {
-    return (-((RightLead.GetSelectedSensorPosition() +
-               RightFollow.GetSelectedSensorPosition()) /
-              2.0) -
-            ROffset);
+    return GetEncoder(rightEncoders, ROffset);
 }
 
 // return the average of left and right encoder sets, in feet
@@ -163,16 +151,9 @@ frc::Pose2d DriveSubsystem::GetPose() { return m_odometry.GetPose(); }
 
 frc::DifferentialDriveWheelSpeeds DriveSubsystem::GetWheelSpeeds() {
     return {
-        units::meters_per_second_t(-(RightLead.GetSelectedSensorVelocity() *
-                                         10 * kEncoderDistancePerPulse +
-                                     RightFollow.GetSelectedSensorVelocity() *
-                                         10 * kEncoderDistancePerPulse) /
-                                   2.0),
-        units::meters_per_second_t(-(LeftLead.GetSelectedSensorVelocity() * 10 *
-                                         kEncoderDistancePerPulse +
-                                     LeftFollow.GetSelectedSensorVelocity() *
-                                         10 * kEncoderDistancePerPulse) /
-                                   2.0)};
+        AverageEncoderVelocity(rightEncoders),
+        AverageEncoderVelocity(leftEncoders)
+    };
 }
 
 void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
@@ -204,4 +185,27 @@ void DriveSubsystem::ConfigureMotor(WPI_TalonFX *_talon) {
 
     /* Zero the sensor */
     _talon->SetSelectedSensorPosition(0, 0, 10);
+}
+
+double DriveSubsystem::AverageEncoderPosition(Encoders encoders) {
+    auto encoderSum = encoders.lead->GetSelectedSensorPosition() +
+        encoders.follow->GetSelectedSensorPosition();
+
+    return encoderSum / 2.0;
+}
+
+double DriveSubsystem::GetEncoder(Encoders encoders, double offset) {
+    auto average = -AverageEncoderPosition(encoders);
+
+    return average - offset;
+}
+
+units::meters_per_second_t DriveSubsystem::AverageEncoderVelocity(Encoders encoders) {
+
+    auto scaledLead = encoders.lead->GetSelectedSensorVelocity() * kVelocityScalingFactor * kEncoderDistancePerPulse;
+    auto scaledFollow = encoders.follow->GetSelectedSensorVelocity() * kVelocityScalingFactor * kEncoderDistancePerPulse;
+
+    auto velocitySum = -(scaledLead + scaledFollow);
+
+    return units::meters_per_second_t(velocitySum / 2.0);
 }
