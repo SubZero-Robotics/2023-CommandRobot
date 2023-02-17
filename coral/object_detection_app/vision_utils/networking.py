@@ -1,4 +1,4 @@
-# from networktables import NetworkTables
+from networktables import NetworkTables
 from .output import Output
 from typing import List
 
@@ -6,12 +6,10 @@ from typing import List
 class Networking:
 
     def __init__(self, teamNum: str, table: str):
+        NetworkTables.initialize(server='roborio-XXX-frc.local')
         self.teamNum = teamNum
-        self.inst = ntcore.NetworkTableInstance.getDefault()
-        self.table = self.inst.getTable(table)
-        self.inst.startClient4('coral client')
-        self.inst.setServerTeam(teamNum)
-        self.pub = self.table.getFloatArrayTopic('detections').publish()
+        self.table = NetworkTables.getTable(table)
+
 
     def write(self, outputs: List[Output]) -> List[float]:
         outputNumArray: List[float] = [len(outputs)]
@@ -19,5 +17,5 @@ class Networking:
         for flattenedOutput in flattenedOutputList:
             for value in flattenedOutput:
                 outputNumArray.append(value)
-        self.pub.set(outputNumArray)
+        self.table.putNumberArray('detections', outputNumArray)
         return outputNumArray
