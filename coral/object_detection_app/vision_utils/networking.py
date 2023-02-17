@@ -10,7 +10,6 @@ class Networking:
         self.teamNum = teamNum
         self.table = NetworkTables.getTable(table)
 
-
     def write(self, outputs: List[Output]) -> List[float]:
         outputNumArray: List[float] = [len(outputs)]
         flattenedOutputList = [output.flatten() for output in outputs]
