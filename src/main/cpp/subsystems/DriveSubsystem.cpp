@@ -21,10 +21,7 @@ DriveSubsystem::DriveSubsystem() {
 
     // Initialize each motor with MotionMagic settings
     // Made this a function since we do the same thing four times
-    ConfigureMotor(&RightLead);
-    ConfigureMotor(&RightFollow);
-    ConfigureMotor(&LeftLead);
-    ConfigureMotor(&LeftFollow);
+    TeleopInit();
 
     rightEncoders = {.lead = &RightLead, .follow = &RightFollow};
     leftEncoders = {.lead = &LeftLead, .follow = &LeftFollow};
@@ -57,10 +54,10 @@ DriveSubsystem::DriveSubsystem() {
 void DriveSubsystem::DisabledInit() {}
 
 void DriveSubsystem::TeleopInit() {
-    ConfigureMotor(&RightLead);
-    ConfigureMotor(&RightFollow);
-    ConfigureMotor(&LeftLead);
-    ConfigureMotor(&LeftFollow);
+    ConfigureMotor(RightLead);
+    ConfigureMotor(RightFollow);
+    ConfigureMotor(LeftLead);
+    ConfigureMotor(LeftFollow);
 }
 
 void DriveSubsystem::SetCoast(WPI_TalonFX *_talon) {
@@ -160,7 +157,7 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
     m_odometry.ResetPosition(currentrobotAngle, 0_m, 0_m, pose);
 }
 
-void DriveSubsystem::ConfigureMotor(WPI_TalonFX *_talon) {
+void DriveSubsystem::ConfigureMotor(WPI_TalonFX &_talon) {
     // Looking at this example:
     // https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/C%2B%2B%20Talon%20FX%20(Falcon%20500)/MotionMagic/src/main/cpp/Robot.cpp
     // Sets up MotionMagic parameters inside the motor
@@ -173,17 +170,17 @@ void DriveSubsystem::ConfigureMotor(WPI_TalonFX *_talon) {
 
     // set motor to factory default each time the robot starts,
     // so that we don't have unexpected things left over
-    _talon->ConfigFactoryDefault();
+    _talon.ConfigFactoryDefault();
 
     // Choose the sensor we're using for PID 0 to be the built-in encoders
     // This should be the default anyway, but we'll be sure
-    _talon->ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, 0,
+    _talon.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, 0,
                                          10);
 
-    _talon->SetNeutralMode(Brake);
+    _talon.SetNeutralMode(Brake);
 
     /* Zero the sensor */
-    _talon->SetSelectedSensorPosition(0, 0, 10);
+    _talon.SetSelectedSensorPosition(0, 0, 10);
 }
 
 double DriveSubsystem::AverageEncoderPosition(Encoders encoders) {
