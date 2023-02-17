@@ -135,6 +135,7 @@ double DriveSubsystem::GetAverageEncoderDistance() {
 }
 
 void DriveSubsystem::SetMaxOutput(double maxOutput) {
+    if (maxOutput < 0 || maxOutput > 100) return;
     m_drive.SetMaxOutput(maxOutput);
 }
 
