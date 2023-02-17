@@ -60,8 +60,8 @@ void DriveSubsystem::TeleopInit() {
     ConfigureMotor(LeftFollow);
 }
 
-void DriveSubsystem::SetCoast(WPI_TalonFX *_talon) {
-    _talon->SetNeutralMode(Coast);
+void DriveSubsystem::SetCoast(WPI_TalonFX *talon) {
+    talon->SetNeutralMode(Coast);
 }
 
 void DriveSubsystem::Periodic() {
@@ -157,7 +157,7 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
     m_odometry.ResetPosition(currentrobotAngle, 0_m, 0_m, pose);
 }
 
-void DriveSubsystem::ConfigureMotor(WPI_TalonFX &_talon) {
+void DriveSubsystem::ConfigureMotor(WPI_TalonFX &talon) {
     // Looking at this example:
     // https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/C%2B%2B%20Talon%20FX%20(Falcon%20500)/MotionMagic/src/main/cpp/Robot.cpp
     // Sets up MotionMagic parameters inside the motor
@@ -166,21 +166,21 @@ void DriveSubsystem::ConfigureMotor(WPI_TalonFX &_talon) {
     // case we do later
 
     // A reference to all the methods you could call in these motors is:
-    // https://store.ctr-electronics.com/content/api/cpp/html/classctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_talon_f_x.html
+    // https://store.ctr-electronics.com/content/api/cpp/html/classctre_1_1phoenix_1_1motorcontrol_1_1can_1_1talon_f_x.html
 
     // set motor to factory default each time the robot starts,
     // so that we don't have unexpected things left over
-    _talon.ConfigFactoryDefault();
+    talon.ConfigFactoryDefault();
 
     // Choose the sensor we're using for PID 0 to be the built-in encoders
     // This should be the default anyway, but we'll be sure
-    _talon.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, 0,
+    talon.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, 0,
                                         10);
 
-    _talon.SetNeutralMode(Brake);
+    talon.SetNeutralMode(Brake);
 
     /* Zero the sensor */
-    _talon.SetSelectedSensorPosition(0, 0, 10);
+    talon.SetSelectedSensorPosition(0, 0, 10);
 }
 
 double DriveSubsystem::AverageEncoderPosition(Encoders encoders) {

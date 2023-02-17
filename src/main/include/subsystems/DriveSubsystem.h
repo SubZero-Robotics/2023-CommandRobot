@@ -36,7 +36,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     void TeleopInit();
 
-    void SetCoast(WPI_TalonFX *_talon);
+    void SetCoast(WPI_TalonFX *talon);
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
@@ -130,7 +130,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
     /**
      * set up a motor.  Call this in Init for each motor
      */
-    void ConfigureMotor(WPI_TalonFX &_talon);
+    void ConfigureMotor(WPI_TalonFX &talon);
 
    private:
     // Components (e.g. motor controllers and sensors) should generally be
