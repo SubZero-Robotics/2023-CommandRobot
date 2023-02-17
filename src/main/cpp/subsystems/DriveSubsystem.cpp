@@ -26,8 +26,8 @@ DriveSubsystem::DriveSubsystem() {
     ConfigureMotor(&LeftLead);
     ConfigureMotor(&LeftFollow);
 
-    rightEncoders = { .lead = &RightLead, .follow = &RightFollow};
-    leftEncoders = { .lead = &LeftLead, .follow = &LeftFollow};
+    rightEncoders = {.lead = &RightLead, .follow = &RightFollow};
+    leftEncoders = {.lead = &LeftLead, .follow = &LeftFollow};
 
     // Invert left side, since DifferentialDrive no longer does it for us
     LeftLead.SetInverted(true);
@@ -151,10 +151,8 @@ double DriveSubsystem::GetTurnRate() {
 frc::Pose2d DriveSubsystem::GetPose() { return m_odometry.GetPose(); }
 
 frc::DifferentialDriveWheelSpeeds DriveSubsystem::GetWheelSpeeds() {
-    return {
-        AverageEncoderVelocity(rightEncoders),
-        AverageEncoderVelocity(leftEncoders)
-    };
+    return {AverageEncoderVelocity(rightEncoders),
+            AverageEncoderVelocity(leftEncoders)};
 }
 
 void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
@@ -190,7 +188,7 @@ void DriveSubsystem::ConfigureMotor(WPI_TalonFX *_talon) {
 
 double DriveSubsystem::AverageEncoderPosition(Encoders encoders) {
     auto encoderSum = encoders.lead->GetSelectedSensorPosition() +
-        encoders.follow->GetSelectedSensorPosition();
+                      encoders.follow->GetSelectedSensorPosition();
 
     return encoderSum / 2.0;
 }
@@ -201,10 +199,12 @@ double DriveSubsystem::GetEncoder(Encoders encoders, double offset) {
     return average - offset;
 }
 
-units::meters_per_second_t DriveSubsystem::AverageEncoderVelocity(Encoders encoders) {
-
-    auto scaledLead = encoders.lead->GetSelectedSensorVelocity() * kVelocityScalingFactor * kEncoderDistancePerPulse;
-    auto scaledFollow = encoders.follow->GetSelectedSensorVelocity() * kVelocityScalingFactor * kEncoderDistancePerPulse;
+units::meters_per_second_t DriveSubsystem::AverageEncoderVelocity(
+    Encoders encoders) {
+    auto scaledLead = encoders.lead->GetSelectedSensorVelocity() *
+                      kVelocityScalingFactor * kEncoderDistancePerPulse;
+    auto scaledFollow = encoders.follow->GetSelectedSensorVelocity() *
+                        kVelocityScalingFactor * kEncoderDistancePerPulse;
 
     auto velocitySum = -(scaledLead + scaledFollow);
 
