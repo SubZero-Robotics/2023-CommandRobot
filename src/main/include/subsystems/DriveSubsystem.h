@@ -145,7 +145,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     /**
      * @brief Get the Average of the encoders minus an offset
-     * 
+     *
      * @param encoders
      * @param offset The offset used to correct the average
      * @return double The corrected encoder position
@@ -154,7 +154,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     /**
      * @brief Get the average velocity of the encodes
-     * 
+     *
      * @return double velocity in m/s
      */
     static units::meters_per_second_t AverageEncoderVelocity(Encoders);
