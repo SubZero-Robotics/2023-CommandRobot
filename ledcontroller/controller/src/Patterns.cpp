@@ -6,11 +6,12 @@ void PatternRunner::update() {
     if (shouldUpdate()) {
         // If we're done, make sure to stop if one shot is set
         if (_curState >= curPattern->numStates) {
-            if (_oneShot) {
+            /**if (_oneShot) {
                 _doneRunning = true;
             } else {
                 reset();
-            }
+            }*/
+            reset();
         }
 
         if (curPattern->cb(_fastLed->leds(), _curColor, _curState,
@@ -29,7 +30,11 @@ bool PatternRunner::setCurrentPattern(uint8_t pattern, bool isOneShot = false) {
     }
 
     _curPattern = pattern;
+    _oneShot = isOneShot;
     reset();
+
+    Serial.print("Set pattern to ");
+    Serial.println(pattern);
 
     return true;
 }
