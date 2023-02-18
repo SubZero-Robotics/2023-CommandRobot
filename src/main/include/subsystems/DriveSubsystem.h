@@ -161,7 +161,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     /**
      * @brief Inverts a side
-     * 
+     *
      * @param Encoders The side to invert
      */
     static void InvertSide(Encoders);
