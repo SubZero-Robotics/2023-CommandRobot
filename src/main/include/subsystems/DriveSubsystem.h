@@ -186,8 +186,9 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     double AverageEncoderDistance = 0.0;
 
-    frc::SlewRateLimiter<units::scalar> decelfilter{ 2_s };
-    frc::SlewRateLimiter<units::scalar> accelfilter{ 3_s };
+    // We can't use 2 or 3 seconds directly so we multiply by 2 or 3 to achieve the same thing
+    frc::SlewRateLimiter<units::scalar> decelfilter{ 2 / 1_s };
+    frc::SlewRateLimiter<units::scalar> accelfilter{ 3 / 1_s };
     double previousPercentage = 0.0;
 
     // Odometry class for tracking robot pose
