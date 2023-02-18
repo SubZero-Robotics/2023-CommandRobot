@@ -66,8 +66,9 @@ void loop() {
         handleInput(option);
     }
     Serial.println();
-    while (Serial.available());
-        Serial.read();
+    while (Serial.available())
+        ;
+    Serial.read();
 }
 
 void runMainTests() {
@@ -238,7 +239,8 @@ void handlePattern() {
     Serial.println(F("\t'c' - Chase"));
     Serial.println(F("\t'w' - Wipe"));
 
-    while (!Serial.available());
+    while (!Serial.available())
+        ;
 
     PatternType pattern = PatternType::None;
     char option = Serial.read();
@@ -273,7 +275,7 @@ void handlePattern() {
             pattern = PatternType::None;
     }
 
-    Serial.println((uint8_t) pattern);
+    Serial.println((uint8_t)pattern);
     Serial.print(F("Run once (one-shot)? (Y/N): "));
     while (!Serial.available())
         ;
@@ -318,12 +320,11 @@ void writeCommand(CommandType type, uint8_t *data) {
     Serial.print("sending command: ");
     Serial.print((uint8_t)type);
 
-    for (size_t i = 0; i < 4; i++)
-    {
+    for (size_t i = 0; i < 4; i++) {
         Serial.print(data[i], 16);
         Serial.print(' ');
     }
-    
+
     Serial.println();
 
     switch (type) {
