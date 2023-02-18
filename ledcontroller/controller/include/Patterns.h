@@ -11,7 +11,7 @@ constexpr int32_t ceil(float num) {
                : static_cast<int32_t>(num) + (num > 0 ? 1 : 0);
 }
 
-constexpr uint16_t ledNum = 150;
+constexpr uint16_t ledNum = 10;
 
 /**
  * Will be called after set delay has passed
@@ -59,7 +59,10 @@ class PatternRunner {
      */
     void update();
 
-    void setCurrentColor(CRGB color) { _curColor = color; }
+    void setCurrentColor(CRGB color) { 
+        _curColor = color;
+        reset();
+    }
 
     /**
      * Set the current pattern
@@ -91,7 +94,7 @@ class PatternRunner {
     inline bool shouldUpdate() const {
         // Only update if enough delay has passed and pattern can be run again
         return (millis() - _lastUpdate >= currentPattern()->changeDelay) &&
-               (!_oneShot && _doneRunning);
+               !(_oneShot && _doneRunning);
     }
 
     CFastLED *_fastLed;
