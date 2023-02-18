@@ -59,7 +59,7 @@ class PatternRunner {
      */
     void update();
 
-    void setCurrentColor(CRGB color) { 
+    void setCurrentColor(CRGB color) {
         _curColor = color;
         reset();
     }
