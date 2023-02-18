@@ -80,6 +80,12 @@ constexpr auto kMaxAcceleration = 3_mps_sq;
 constexpr auto kMaxTurnRate = 70_deg_per_s;
 constexpr auto kMaxTurnAcceleration = 200_deg_per_s / 1_s;
 
+namespace AutoConstants {
+constexpr double kAutoDriveDistanceInches = 60;
+constexpr double kAutoBackupDistanceInches = 20;
+constexpr double kAutoDriveSpeed = 0.5;
+}
+
 // XboxController enums.  Since the Trigger stuff works on the base Joystick
 // class, not the Xbox extension, these are undefined where we want to use them.
 // So, flat-out copied them here for reference
