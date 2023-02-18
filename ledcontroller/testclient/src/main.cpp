@@ -2,7 +2,7 @@
 #include <FastLED.h>
 #include <Wire.h>
 
-constexpr uint8_t slaveAddr = 0x08;
+constexpr uint8_t slaveAddr = 0x01;
 constexpr uint16_t commandDelayMs = 200;
 
 enum class InputOptions {
@@ -58,15 +58,16 @@ void loop() {
     printMenu();
     while (!Serial.available())
         ;
-    String input = Serial.readStringUntil('\n');
-    input.trim();
-    InputOptions option = parseInputOption(input.charAt(0));
+    char input = Serial.read();
+    InputOptions option = parseInputOption(input);
     if (option == InputOptions::Invalid)
         ;
     else {
         handleInput(option);
     }
     Serial.println();
+    while (Serial.available());
+        Serial.read();
 }
 
 void runMainTests() {
@@ -76,12 +77,14 @@ void runMainTests() {
     Serial.println(F("Setting to on"));
     setOnOff(true);
     delay(1000);
+    setPattern(PatternType::SetAll, false);
+    delay(5000);
     Serial.println(F("Setting color to purple"));
     setColor(CRGB::Purple);
-    delay(1000);
+    delay(5000);
     Serial.println(F("Setting color to yellow"));
     setColor(CRGB::Yellow);
-    delay(1000);
+    delay(5000);
     Serial.println(F("Setting to off"));
     setOnOff(false);
     // Should maintain yellow color
@@ -213,6 +216,7 @@ void handleColor() {
     uint8_t r = Serial.readStringUntil(',').toInt();
     uint8_t g = Serial.readStringUntil(',').toInt();
     uint8_t b = Serial.readStringUntil('\n').toInt();
+    Serial.read();
     Serial.print(F("Writing color: "));
     Serial.print(r);
     Serial.print(',');
@@ -234,10 +238,11 @@ void handlePattern() {
     Serial.println(F("\t'c' - Chase"));
     Serial.println(F("\t'w' - Wipe"));
 
+    while (!Serial.available());
+
     PatternType pattern = PatternType::None;
-    String input = Serial.readStringUntil('\n');
-    input.trim();
-    char option = input.charAt(0);
+    char option = Serial.read();
+    Serial.println(option);
     switch (option) {
         case 'a':
             pattern = PatternType::SetAll;
@@ -268,12 +273,12 @@ void handlePattern() {
             pattern = PatternType::None;
     }
 
+    Serial.println((uint8_t) pattern);
     Serial.print(F("Run once (one-shot)? (Y/N): "));
     while (!Serial.available())
         ;
-    input = Serial.readStringUntil('\n');
-    input.trim();
-    uint8_t oneShot = input.charAt(0) == 'Y' ? 1 : 0;
+    option = Serial.read();
+    uint8_t oneShot = option == 'Y' ? 1 : 0;
     setPattern(pattern, oneShot);
 }
 
@@ -310,6 +315,16 @@ void setOnOff(bool isOn) {
 void writeCommand(CommandType type, uint8_t *data) {
     Wire.beginTransmission(slaveAddr);
     Wire.write((uint8_t)type);
+    Serial.print("sending command: ");
+    Serial.print((uint8_t)type);
+
+    for (size_t i = 0; i < 4; i++)
+    {
+        Serial.print(data[i], 16);
+        Serial.print(' ');
+    }
+    
+    Serial.println();
 
     switch (type) {
         case CommandType::CommandOn:
