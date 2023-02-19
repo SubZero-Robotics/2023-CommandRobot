@@ -31,12 +31,12 @@ static Pattern patterns[patternCount] = {
      .changeDelay = 0,
      .cb = executePatternNone},
     {.type = PatternType::SetAll,
-     .numStates = 0,
-     .changeDelay = 20000u,
+     .numStates = 1,
+     .changeDelay = 750u,
      .cb = executePatternSetAll},
     {.type = PatternType::Blink,
      .numStates = 2,
-     .changeDelay = 3000u,
+     .changeDelay = 200u,
      .cb = executePatternBlink},
     {.type = PatternType::RGBFade,
      .numStates = 256,
@@ -44,15 +44,15 @@ static Pattern patterns[patternCount] = {
      .cb = executePatternRGBFade},
     {.type = PatternType::HackerMode,
      .numStates = 2,
-     .changeDelay = 3000u,
+     .changeDelay = 100u,
      .cb = executePatternHackerMode},
     {.type = PatternType::Chase,
      .numStates = ledNum + chaseLEDWidth - 1,
-     .changeDelay = 25u,
+     .changeDelay = 500u,
      .cb = executePatternChase},
     {.type = PatternType::Wipe,
      .numStates = ledNum,
-     .changeDelay = 25u,
+     .changeDelay = 500u,
      .cb = executePatternWipe}};
 
 static volatile uint8_t receiveBuf[receiveBufSize];
@@ -68,7 +68,7 @@ void setup() {
     Wire.onReceive(receiveEvent);  // register event
     Wire.onRequest(requestEvent);
     Serial.begin(115200);  // start serial for output
-    FastLED.addLeds<WS2812B, ledDataOutPin, BGR>(leds, ledNum);
+    FastLED.addLeds<WS2812B, ledDataOutPin, GRB>(leds, ledNum);
     FastLED.setBrightness(ledBrightness);
 
     // Initialize all LEDs to black
@@ -119,6 +119,9 @@ void loop() {
                 break;
         }
 
+        Serial.print(F("ON="));
+        Serial.println(systemOn);
+
         interrupts();
     }
 
@@ -146,6 +149,8 @@ void requestEvent() {
 
 void parseCommand(uint8_t *buf, size_t len) {
     auto type = (CommandType)buf[0];
+    Serial.print("Received command type=");
+    Serial.println(buf[0]);
     command.commandType = type;
     switch (type) {
         case CommandType::On:
@@ -183,6 +188,7 @@ bool executePatternSetAll(CRGB *leds, CRGB color, uint16_t state,
     for (size_t i = 0; i < ledCount; i++) {
         leds[i] = color;
     }
+
     return true;
 }
 
