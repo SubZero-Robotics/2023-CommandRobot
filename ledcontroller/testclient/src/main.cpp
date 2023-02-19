@@ -205,14 +205,14 @@ void handleOnOff(bool val) {
 
 void handleColor() {
     Serial.println(
-        F("Enter a color in the form of: R,G,B where values are in decimal "
-          "format"));
-    Serial.println(F("Example: 50,100,255"));
+        F("Enter a color in the form of: R,G,B; where values are in decimal "
+          "format. Don't forget the semicolon at the end!"));
+    Serial.println(F("Example: 50,100,255;"));
     while (!Serial.available())
         ;
     uint8_t r = Serial.readStringUntil(',').toInt();
     uint8_t g = Serial.readStringUntil(',').toInt();
-    uint8_t b = Serial.readStringUntil('\n').toInt();
+    uint8_t b = Serial.readStringUntil(';').toInt();
     Serial.print(F("Writing color: "));
     Serial.print(r);
     Serial.print(',');
