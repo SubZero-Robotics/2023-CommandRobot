@@ -56,8 +56,10 @@ class PatternRunner {
 
     /**
      * Call this every in every iteration of loop
+     * 
+     * @param forceUpdate update even if not enough delay has passed
      */
-    void update();
+    void update(bool forceUpdate = false);
 
     void setCurrentColor(CRGB color) {
         _curColor = color;
@@ -96,6 +98,8 @@ class PatternRunner {
         return (millis() - _lastUpdate >= currentPattern()->changeDelay) &&
                !(_oneShot && _doneRunning);
     }
+
+    void incrementState(Pattern*);
 
     CFastLED *_fastLed;
     Pattern *_patternArr;

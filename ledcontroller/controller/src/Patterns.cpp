@@ -1,27 +1,37 @@
 #include "Patterns.h"
 
-void PatternRunner::update() {
+void PatternRunner::update(bool forceUpdate = false) {
     auto curPattern = currentPattern();
+
+    if (forceUpdate) {
+        incrementState(curPattern);
+
+        return;
+    }
 
     if (shouldUpdate()) {
         // If we're done, make sure to stop if one shot is set
         if (_curState >= curPattern->numStates) {
-            /**if (_oneShot) {
+            if (_oneShot) {
                 _doneRunning = true;
+                return;
             } else {
                 reset();
-            }*/
-            reset();
+            }
         }
 
-        if (curPattern->cb(_fastLed->leds(), _curColor, _curState,
-                           _fastLed->size())) {
-            _fastLed->show();
-        }
-
-        _curState++;
-        _lastUpdate = millis();
+        incrementState(curPattern);
     }
+}
+
+void PatternRunner::incrementState(Pattern *curPattern) {
+    if (curPattern->cb(_fastLed->leds(), _curColor, _curState,
+                        _fastLed->size())) {
+        _fastLed->show();
+    }
+
+    _curState++;
+    _lastUpdate = millis();
 }
 
 bool PatternRunner::setCurrentPattern(uint8_t pattern, bool isOneShot = false) {
@@ -34,7 +44,12 @@ bool PatternRunner::setCurrentPattern(uint8_t pattern, bool isOneShot = false) {
     reset();
 
     Serial.print("Set pattern to ");
-    Serial.println(pattern);
+    Serial.print(pattern);
+    Serial.print(" | one-shot=");
+    Serial.println(_oneShot);
+
+    // Force the newly set pattern to run immediately
+    update(true);
 
     return true;
 }

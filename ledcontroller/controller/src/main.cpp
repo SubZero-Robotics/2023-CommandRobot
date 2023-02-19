@@ -20,6 +20,7 @@ bool executePatternChase(CRGB *, CRGB, uint16_t, uint16_t);
 bool executePatternWipe(CRGB *, CRGB, uint16_t, uint16_t);
 
 constexpr uint8_t receiveBufSize = 8;
+// Make sure this is unique on the bus
 constexpr uint8_t slaveAddress = 0x01;
 constexpr uint8_t ledDataOutPin = 2;
 constexpr uint8_t ledBrightness = 100;
@@ -32,15 +33,15 @@ static Pattern patterns[patternCount] = {
      .cb = executePatternNone},
     {.type = PatternType::SetAll,
      .numStates = 1,
-     .changeDelay = 750u,
+     .changeDelay = 500u,
      .cb = executePatternSetAll},
     {.type = PatternType::Blink,
      .numStates = 2,
-     .changeDelay = 200u,
+     .changeDelay = 100u,
      .cb = executePatternBlink},
     {.type = PatternType::RGBFade,
      .numStates = 256,
-     .changeDelay = 5u,
+     .changeDelay = 10u,
      .cb = executePatternRGBFade},
     {.type = PatternType::HackerMode,
      .numStates = 2,
