@@ -1,5 +1,5 @@
 import cv2
-from mjpeg.client import MJPEGClient #py-mjpeg
+from mjpeg.client import MJPEGClient  # py-mjpeg
 import numpy as np
 import sys
 
