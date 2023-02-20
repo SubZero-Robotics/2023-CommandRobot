@@ -15,7 +15,8 @@
 
 using namespace DriveConstants;
 
-DriveSubsystem::DriveSubsystem() {
+DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow, WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow) :
+    RightLead(rightLead), RightFollow(rightFollow), LeftLead(leftLead), LeftFollow(leftFollow), RightLeadSim(rightLead.GetSimCollection()), LeftLeadSim(leftLead.GetSimCollection()) {
     // Implementation of subsystem constructor goes here.
     // Stuff you want to happen once, when robot code starts running
 
@@ -49,6 +50,13 @@ DriveSubsystem::DriveSubsystem() {
     trajectoryConfig->AddConstraint(autoVoltageConstraint);
 }
 
+/**
+ * Returns a 2D representation of the game field for dashboards.
+ */
+frc::Field2d& DriveSubsystem::GetField() {
+	return field;
+}
+
 void DriveSubsystem::DisabledInit() {}
 
 void DriveSubsystem::TeleopInit() {
@@ -66,9 +74,26 @@ void DriveSubsystem::Periodic() {
     // Implementation of subsystem periodic method goes here.
     // Things that happen while robot is running */
 
+    static long long counter = 0;
+
+    currentrobotAngle = Get2dAngle();
+
+    gyroAngle = ahrs.GetYaw();
+    frc::SmartDashboard::PutNumber("gyroAngle", gyroAngle);
+
+    gyroRate = ahrs.GetRate();
+    frc::SmartDashboard::PutNumber("gyroRate", gyroRate);
+    
+    rEncoder = GetRightEncoder();
+    lEncoder = GetLeftEncoder();
+
     m_odometry.Update(currentrobotAngle,
                       units::meter_t(lEncoder * kEncoderDistancePerPulse),
                       units::meter_t(rEncoder * kEncoderDistancePerPulse));
+
+    frc::SmartDashboard::PutNumber("Pose X", (double)m_odometry.GetPose().X());
+    frc::SmartDashboard::PutNumber("Pose Y", (double)m_odometry.GetPose().Y());
+    frc::SmartDashboard::PutNumber("Pose Degrees", (double)m_odometry.GetPose().Rotation().Degrees());
 
     // Do things when first enabled or disabled
     if (!frc::DriverStation::IsDisabled() &&
@@ -85,6 +110,8 @@ void DriveSubsystem::Periodic() {
             TeleopInit();
         }
     }
+    counter++;
+    frc::SmartDashboard::PutNumber("counter", counter);
 }
 
 void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
@@ -125,8 +152,14 @@ double DriveSubsystem::GetRightEncoder() {
 
 // return the average of left and right encoder sets, in feet
 double DriveSubsystem::GetAverageEncoderDistance() {
+    double leftEncoder = GetLeftEncoder();
+    double rightEncoder = GetRightEncoder();
+
+    frc::SmartDashboard::PutNumber("left", leftEncoder);
+    frc::SmartDashboard::PutNumber("right", rightEncoder);
+
     return kEncoderDistancePerPulse *
-           ((GetLeftEncoder() + GetRightEncoder()) / 2.0);
+           ((leftEncoder + rightEncoder) / 2.0);
 }
 
 void DriveSubsystem::SetMaxOutput(double maxOutput) {
@@ -208,4 +241,8 @@ units::meters_per_second_t DriveSubsystem::AverageEncoderVelocity(
 void DriveSubsystem::InvertSide(Encoders encoders) {
     encoders.lead->SetInverted(true);
     encoders.follow->SetInverted(true);
+}
+
+units::degree_t DriveSubsystem::Get2dAngle() {
+  return -(units::degree_t)ahrs.GetAngle();
 }

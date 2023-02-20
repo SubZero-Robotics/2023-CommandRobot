@@ -18,6 +18,7 @@
 #include <units/time.h>
 #include <units/velocity.h>
 #include <units/voltage.h>
+#include <numbers>
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -32,22 +33,23 @@
 // The deadzone for the joystick
 namespace DriveConstants {
 constexpr auto kTrackWidth = 0.6096_m;
-constexpr int kEncoderCPR = 29860.57;  // Counts Per Rotation. TalonFX is 2048
+constexpr int kEncoderCPR = 22241.28;  // Counts Per Rotation. 2048 (talonfx cpr) multiplied by gear ratio (10.86)
 constexpr float kVelocityScalingFactor = 10;
 constexpr double kWheelDiameterMeters = 0.15875;
-constexpr double kEncoderDistancePerPulse = 0.00001699323;
+constexpr double kWheelCircumfrenceMeters = kWheelDiameterMeters * std::numbers::pi;
+constexpr double kEncoderDistancePerPulse = kWheelCircumfrenceMeters / kEncoderCPR;
 constexpr double kPulsesPerMeter = 1 / kEncoderDistancePerPulse;
 
 // These characterization values MUST be determined either experimentally or
 // theoretically for *your* robot's drive. The Robot Characterization
 // Toolsuite provides a convenient tool for obtaining these values for your
 // robot.
-constexpr auto ks = 0.6416_V;
-constexpr auto kv = 3.1057 * 1_V * 1_s / 1_m;
-constexpr auto ka = 0.29699 * 1_V * 1_s * 1_s / 1_m;
+constexpr auto ks = 0.073724_V;
+constexpr auto kv = 2.4311 * 1_V * 1_s / 1_m;
+constexpr auto ka = 0.24865 * 1_V * 1_s * 1_s / 1_m;
 inline const frc::DifferentialDriveKinematics kDriveKinematics(kTrackWidth);
 
-constexpr double kPDriveVel = 1.6686;
+constexpr double kPDriveVel = 2.9104;
 
 constexpr double kRamseteB = 2.0;
 constexpr double kRamseteZeta = 0.7;

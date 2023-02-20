@@ -5,6 +5,7 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
+#include <AHRS.h>
 #include <frc/AnalogInput.h>
 #include <frc/DriverStation.h>
 #include <frc/drive/DifferentialDrive.h>
@@ -20,6 +21,8 @@
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableEntry.h>
 #include <networktables/NetworkTableInstance.h>
+#include <frc/simulation/EncoderSim.h>
+#include <frc/smartdashboard/Field2d.h>
 
 #include "Constants.h"
 
@@ -30,7 +33,7 @@ struct Encoders {
 
 class DriveSubsystem : public frc2::SubsystemBase {
    public:
-    DriveSubsystem();
+    DriveSubsystem(WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&);
 
     void DisabledInit();
 
@@ -101,6 +104,13 @@ class DriveSubsystem : public frc2::SubsystemBase {
     units::degree_t GetHeading();
 
     /**
+    * Translate NavX into Rotation2D values.
+    *
+    * @return the robot's heading in degrees, coninuous vectorization from 360 to 361
+    */
+    units::degree_t Get2dAngle();
+
+    /**
      * Returns the turn rate of the robot.
      *
      * @return The turn rate of the robot, in degrees per second
@@ -131,6 +141,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
      * set up a motor.  Call this in Init for each motor
      */
     void ConfigureMotor(WPI_TalonFX &talon);
+
+    frc::Field2d& GetField();
 
    private:
     // Components (e.g. motor controllers and sensors) should generally be
@@ -166,14 +178,18 @@ class DriveSubsystem : public frc2::SubsystemBase {
      */
     static void InvertSide(Encoders);
 
+    frc::Field2d field;
+
     // right motor controllers
-    WPI_TalonFX RightLead{8};
-    WPI_TalonFX RightFollow{7};
+    WPI_TalonFX& RightLead;
+    WPI_TalonFX& RightFollow;
+    TalonFXSimCollection& RightLeadSim;
     Encoders rightEncoders;
 
     // left motor controllers
-    WPI_TalonFX LeftLead{6};
-    WPI_TalonFX LeftFollow{5};
+    WPI_TalonFX& LeftLead;
+    WPI_TalonFX& LeftFollow;
+    TalonFXSimCollection& LeftLeadSim;
     Encoders leftEncoders;
 
     frc::DifferentialDrive m_drive{RightLead, LeftLead};
@@ -202,6 +218,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
     // navx
     double gyroAngle = 0.0;  // What is the angle (degrees) from the gyro?
     double gyroRate = 0.0;   // What is angle change (deg/sec)
+    AHRS ahrs{frc::SPI::Port::kMXP};
 
     // TurnToAnglePID
     frc2::PIDController TurnToAngle{kTurnP, kTurnI, kTurnD};

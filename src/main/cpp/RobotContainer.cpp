@@ -15,17 +15,20 @@ RobotContainer::RobotContainer() {
 
     // Configure the button bindings
     ConfigureBindings();
+
+    drive = std::make_unique<DriveSubsystem>(RightLead, RightFollow, LeftLead, LeftFollow);
+    m_drive = drive.get();
 }
 
 void RobotContainer::ConfigureBindings() {
     // Default drive command.  This will be run in teleop and when no other
     // command is running.
-    m_drive.SetDefaultCommand(DefaultDrive(
-        &m_drive, [this] { return Xbox.GetLeftY(); },
+    m_drive->SetDefaultCommand(DefaultDrive(
+        m_drive, [this] { return Xbox.GetLeftY(); },
         [this] { return Xbox.GetLeftX(); }));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
-    return autos::StraightBack(&m_drive);
+    return autos::StraightBack(m_drive);
 }
