@@ -24,9 +24,9 @@ void PatternRunner::update(bool forceUpdate = false) {
     }
 }
 
-void PatternRunner::incrementState(Pattern *curPattern) {
+void PatternRunner::incrementState(Pattern* curPattern) {
     if (curPattern->cb(_fastLed->leds(), _curColor, _curState,
-                        _fastLed->size())) {
+                       _fastLed->size())) {
         _fastLed->show();
     }
 

@@ -56,7 +56,7 @@ class PatternRunner {
 
     /**
      * Call this every in every iteration of loop
-     * 
+     *
      * @param forceUpdate update even if not enough delay has passed
      */
     void update(bool forceUpdate = false);
@@ -99,7 +99,7 @@ class PatternRunner {
                !(_oneShot && _doneRunning);
     }
 
-    void incrementState(Pattern*);
+    void incrementState(Pattern *);
 
     CFastLED *_fastLed;
     Pattern *_patternArr;
