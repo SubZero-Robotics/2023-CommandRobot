@@ -20,6 +20,9 @@
 #include <units/voltage.h>
 #include <numbers>
 
+// uncomment this for simulation
+#define IS_SIMULATION
+
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants.  This should not be used for any other
@@ -36,6 +39,8 @@ constexpr auto kTrackWidth = 0.6096_m;
 constexpr int kEncoderCPR = 22241.28;  // Counts Per Rotation. 2048 (talonfx cpr) multiplied by gear ratio (10.86)
 constexpr float kVelocityScalingFactor = 10;
 constexpr double kWheelDiameterMeters = 0.15875;
+constexpr auto kWheelRadiusInches = 6_in;
+constexpr double kSensorGearRatio = 10.86;
 constexpr double kWheelCircumfrenceMeters = kWheelDiameterMeters * std::numbers::pi;
 constexpr double kEncoderDistancePerPulse = kWheelCircumfrenceMeters / kEncoderCPR;
 constexpr double kPulsesPerMeter = 1 / kEncoderDistancePerPulse;

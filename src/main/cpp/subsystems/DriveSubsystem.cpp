@@ -10,6 +10,7 @@
 #include <frc/kinematics/DifferentialDriveWheelSpeeds.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/trajectory/constraint/DifferentialDriveVoltageConstraint.h>
+#include <units/constants.h>
 
 #include "Constants.h"
 
@@ -245,4 +246,60 @@ void DriveSubsystem::InvertSide(Encoders encoders) {
 
 units::degree_t DriveSubsystem::Get2dAngle() {
   return -(units::degree_t)ahrs.GetAngle();
+}
+
+void DriveSubsystem::SimulationPeriodic() {
+    LeftLeadSim.SetBusVoltage(frc::RobotController::GetInputVoltage());
+    RightLeadSim.SetBusVoltage(frc::RobotController::GetInputVoltage());
+
+    driveSim.SetInputs(-LeftLeadSim.GetMotorOutputLeadVoltage() * 1_V,
+     RightLeadSim.GetMotorOutputLeadVoltage() * 1_V );
+
+    driveSim.Update(20_ms);
+
+    LeftLeadSim.SetIntegratedSensorRawPosition(
+					DistanceToNativeUnits(
+					    driveSim.GetLeftPosition()
+                    ));
+	LeftLeadSim.SetIntegratedSensorVelocity(
+					VelocityToNativeUnits(
+					    driveSim.GetLeftVelocity()
+                    ));
+	RightLeadSim.SetIntegratedSensorRawPosition(
+					DistanceToNativeUnits(
+					    -driveSim.GetRightPosition()
+                    ));
+	RightLeadSim.SetIntegratedSensorVelocity(
+					VelocityToNativeUnits(
+					    -driveSim.GetRightVelocity()
+                    ));
+
+    #ifdef IS_SIMULATION
+    m_odometry.Update((frc::Rotation2d(units::degree_t(m_gyroSim.GetAngle()))), NativeUnitsToDistanceMeters(LeftLead.GetSelectedSensorPosition()), NativeUnitsToDistanceMeters(LeftLead.GetSelectedSensorPosition()));
+    field.SetRobotPose(m_odometry.GetPose());
+    #endif
+}
+
+// Helper methods to convert between meters and native units
+
+int DriveSubsystem::DistanceToNativeUnits(units::meter_t position){
+	double wheelRotations = position/(2 * units::constants::pi * DriveConstants::kWheelRadiusInches);
+	double motorRotations = wheelRotations * DriveConstants::kSensorGearRatio;
+	int sensorCounts = (int)(motorRotations * DriveConstants::kEncoderCPR);
+	return sensorCounts;
+}
+
+int DriveSubsystem::VelocityToNativeUnits(units::meters_per_second_t velocity){
+	auto wheelRotationsPerSecond = velocity/(2 * units::constants::pi * DriveConstants::kWheelRadiusInches);
+	auto motorRotationsPerSecond = wheelRotationsPerSecond * DriveConstants::kSensorGearRatio;
+	double motorRotationsPer100ms = motorRotationsPerSecond * 1_s / 10;
+	int sensorCountsPer100ms = (int)(motorRotationsPer100ms * DriveConstants::kEncoderCPR);
+	return sensorCountsPer100ms;
+}
+
+units::meter_t DriveSubsystem::NativeUnitsToDistanceMeters(double sensorCounts){
+	double motorRotations = (double)sensorCounts / DriveConstants::kEncoderCPR;
+	double wheelRotations = motorRotations / DriveConstants::kSensorGearRatio;
+	units::meter_t position = wheelRotations * (2 * units::constants::pi * DriveConstants::kWheelRadiusInches);
+	return position;
 }

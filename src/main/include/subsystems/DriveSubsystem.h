@@ -23,6 +23,10 @@
 #include <networktables/NetworkTableInstance.h>
 #include <frc/simulation/EncoderSim.h>
 #include <frc/smartdashboard/Field2d.h>
+#include <frc/simulation/DifferentialDrivetrainSim.h>
+#include <frc/RobotController.h>
+#include <frc/AnalogGyro.h>
+#include <frc/simulation/AnalogGyroSim.h>
 
 #include "Constants.h"
 
@@ -45,6 +49,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
      * Will be called periodically whenever the CommandScheduler runs.
      */
     void Periodic() override;
+
+    void SimulationPeriodic() override;
 
     // Subsystem methods go here.
 
@@ -202,6 +208,21 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     double AverageEncoderDistance = 0.0;
 
+    frc::sim::DifferentialDrivetrainSim driveSim{
+        
+        frc::DCMotor::Falcon500(2),  //2 Falcon 500s on each side of the drivetrain.
+        10.86,                  //Standard AndyMark Gearing reduction.
+		2.1_kg_sq_m,                 //MOI of 2.1 kg m^2 (from CAD model).
+		26.5_kg,                     //Mass of the robot is 26.5 kg.
+		DriveConstants::kWheelRadiusInches,          //Robot uses 3" radius (6" diameter) wheels.
+		0.546_m,                     //Distance between wheels is _ meters.
+    };
+
+    // Helper methods to convert between meters and native units
+	static int DistanceToNativeUnits(units::meter_t position);
+	static int VelocityToNativeUnits(units::meters_per_second_t velocity);
+	static units::meter_t NativeUnitsToDistanceMeters(double sensorCounts);
+
     // We can't use 2 or 3 seconds directly so we multiply by 2 or 3 to achieve
     // the same thing
     frc::SlewRateLimiter<units::scalar> decelfilter{2 / 1_s};
@@ -219,6 +240,11 @@ class DriveSubsystem : public frc2::SubsystemBase {
     double gyroAngle = 0.0;  // What is the angle (degrees) from the gyro?
     double gyroRate = 0.0;   // What is angle change (deg/sec)
     AHRS ahrs{frc::SPI::Port::kMXP};
+    
+    #ifdef IS_SIMULATION
+    frc::AnalogGyro m_gyro{1};
+    frc::sim::AnalogGyroSim m_gyroSim{m_gyro};
+    #endif
 
     // TurnToAnglePID
     frc2::PIDController TurnToAngle{kTurnP, kTurnI, kTurnD};
