@@ -5,42 +5,29 @@ LEDController::LEDController(uint8_t slaveAddress, frc::I2C::Port port) :
     _lastCommand(LEDController::CommandType::Off),
     _lastPattern(LEDController::PatternType::None) {
 
-}
-
-bool LEDController::initialize() {
-    return !_i2c->AddressOnly();
-}
+bool LEDController::initialize() { return !_i2c->AddressOnly(); }
 
 bool LEDController::setOn() {
     _lastCommand = LEDController::CommandType::On;
-    uint8_t buf[1] = { (uint8_t)_lastCommand };
+    uint8_t buf[1] = {(uint8_t)_lastCommand};
     return !_i2c->WriteBulk(buf, 1);
 }
 
 bool LEDController::setOff() {
     _lastCommand = LEDController::CommandType::Off;
-    uint8_t buf[1] = { (uint8_t)_lastCommand };
+    uint8_t buf[1] = {(uint8_t)_lastCommand};
     return !_i2c->WriteBulk(buf, 1);
 }
 
 bool LEDController::setPattern(LEDController::PatternType pattern, bool oneShot) {
     _lastCommand = LEDController::CommandType::Pattern;
-    uint8_t buf[3] = {
-        (uint8_t)_lastCommand,
-        (uint8_t)pattern,
-        oneShot
-    };
+    uint8_t buf[3] = {(uint8_t)_lastCommand, (uint8_t)pattern, oneShot};
     return !_i2c->WriteBulk(buf, 3);
 }
 
 bool LEDController::setColor(uint8_t red, uint8_t green, uint8_t blue) {
     _lastCommand = LEDController::CommandType::ChangeColor;
-    uint8_t buf[4] = {
-        (uint8_t)_lastCommand,
-        red,
-        green,
-        blue
-    };
+    uint8_t buf[4] = {(uint8_t)_lastCommand, red, green, blue};
     return !_i2c->WriteBulk(buf, 4);
 }
 
