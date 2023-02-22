@@ -24,7 +24,7 @@ class LEDController {
             Wipe = 6
         };
 
-        LEDController(uint8_t slaveAddress, I2C::Port port = I2C::kOnboard);
+        LEDController(uint8_t slaveAddress, frc::I2C::Port port = frc::I2C::kOnboard);
 
         /**
          * @brief Start communication with the LED controller
@@ -86,7 +86,7 @@ class LEDController {
         bool getPatternDone();
 
     private:
-        std::unique_ptr<I2C> _i2c;
+        std::unique_ptr<frc::I2C> _i2c;
         uint8_t _slaveAddress;
         CommandType _lastCommand;
         PatternType _lastPattern;

@@ -1,7 +1,7 @@
 #include "subsystems/LEDController.h"
 
-LEDController(uint8_t slaveAddress, I2C::Port port = I2C::kOnboard) :
-    _i2c = std::make_unique<I2C>(port, slaveAddress), _slaveAddress(slaveAddress),
+LEDController::LEDController(uint8_t slaveAddress, frc::I2C::Port port) :
+    _i2c = std::make_unique<frc::I2C>(port, slaveAddress), _slaveAddress(slaveAddress),
     _lastCommand(LEDController::CommandType::Off),
     _lastPattern(LEDController::PatternType::None) {
 
@@ -23,7 +23,7 @@ bool LEDController::setOff() {
     return !_i2c->WriteBulk(buf, 1);
 }
 
-bool LEDController::setPattern(LEDController::PatternType pattern, bool oneShot = false) {
+bool LEDController::setPattern(LEDController::PatternType pattern, bool oneShot) {
     _lastCommand = LEDController::CommandType::Pattern;
     uint8_t buf[3] = {
         (uint8_t)_lastCommand,
