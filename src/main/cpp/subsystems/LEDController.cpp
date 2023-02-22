@@ -1,9 +1,9 @@
 #include "subsystems/LEDController.h"
 
 LEDController::LEDController(uint8_t slaveAddress, frc::I2C::Port port) :
-    _i2c = std::make_unique<frc::I2C>(port, slaveAddress), _slaveAddress(slaveAddress),
+    _i2c(std::make_unique<frc::I2C>(port, slaveAddress)), _slaveAddress(slaveAddress),
     _lastCommand(LEDController::CommandType::Off),
-    _lastPattern(LEDController::PatternType::None) {
+    _lastPattern(LEDController::PatternType::None) { }
 
 bool LEDController::initialize() { return !_i2c->AddressOnly(); }
 
