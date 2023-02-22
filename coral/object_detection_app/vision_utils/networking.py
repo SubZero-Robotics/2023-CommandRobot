@@ -16,7 +16,7 @@ class Networking:
         url = f'mjpeg:http://{ipAddress}:{port}'
         ntPath = '/CameraPublisher/coral/streams'
         print(f'Placing NT stream URL {url} under {ntPath}')
-        self.table.putStringArray(ntPath, [ url ])
+        self.table.putStringArray(ntPath, [url])
 
     def write(self, outputs: List[Output]) -> List[float]:
         outputNumArray: List[float] = [len(outputs)]
