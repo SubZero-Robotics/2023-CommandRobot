@@ -29,7 +29,7 @@ dataSource = DataSource(1, 'cvsource')
 interpreter = Interpreter('../models/object_int8_edgetpu.tflite')
 modelClasses = DetectionModelClassParser.parse('../models/classes.csv')
 if not args['no_networking']:
-    networking = Networking('5690', 'default')
+    networking = Networking('5690', 'shuffleboard', args['port'])
 
 inputDetails = interpreter.input_details
 inputShape = (inputDetails[0]['shape'][1], inputDetails[0]['shape'][2])

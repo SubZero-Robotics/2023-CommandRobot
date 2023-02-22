@@ -1,14 +1,22 @@
 from networktables import NetworkTables
 from .output import Output
 from typing import List
+import socket
 
 
 class Networking:
 
-    def __init__(self, teamNum: str, table: str):
+    def __init__(self, teamNum: str, table: str, port: int):
+        # TODO: Change server
         NetworkTables.initialize(server='roborio-XXX-frc.local')
         self.teamNum = teamNum
         self.table = NetworkTables.getTable(table)
+        hostname = socket.gethostname()
+        ipAddress = socket.gethostbyname(hostname)
+        url = f'mjpeg:http://{ipAddress}:{port}'
+        ntPath = '/CameraPublisher/coral/streams'
+        print(f'Placing NT stream URL {url} under {ntPath}')
+        self.table.putStringArray(ntPath, [ url ])
 
     def write(self, outputs: List[Output]) -> List[float]:
         outputNumArray: List[float] = [len(outputs)]

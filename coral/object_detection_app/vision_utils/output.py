@@ -11,8 +11,7 @@ class Output:
         return f"Output: class={self.classId}|score={self.score}|bbox={self.bbox}"
 
     def flatten(self) -> List[float]:
-        vals: List[float] = []
-        vals.append(float(self.classId), self.score)
+        vals: List[float] = [float(self.classId), self.score]
         for coord in self.bbox:
             vals.append(coord)
         return vals
