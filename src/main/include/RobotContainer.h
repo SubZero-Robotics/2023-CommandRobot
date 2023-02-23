@@ -31,9 +31,10 @@ class RobotContainer {
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
     frc2::CommandXboxController Xbox{0};
+    // TODO: Second Xbox controller
 
     frc::Compressor phCompressor{0, frc::PneumaticsModuleType::REVPH};
-    
+
     WPI_TalonFX RightLead{8};
     WPI_TalonFX RightFollow{7};
 

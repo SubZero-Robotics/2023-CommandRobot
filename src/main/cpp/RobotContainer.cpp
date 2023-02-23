@@ -28,6 +28,8 @@ void RobotContainer::ConfigureBindings() {
     m_drive->SetDefaultCommand(DefaultDrive(
         m_drive, [this] { return Xbox.GetLeftY(); },
         [this] { return Xbox.GetLeftX(); }));
+
+    // TODO: bind buttons for calling commands
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

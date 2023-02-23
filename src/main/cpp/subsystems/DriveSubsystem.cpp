@@ -116,8 +116,6 @@ void DriveSubsystem::Periodic() {
             TeleopInit();
         }
     }
-    counter++;
-    frc::SmartDashboard::PutNumber("counter", counter);
 }
 
 void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
