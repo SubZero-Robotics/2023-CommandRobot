@@ -4,13 +4,20 @@
 
 #pragma once
 
+#include <AHRS.h>
 #include <ctre/Phoenix.h>
+#include <frc/AnalogGyro.h>
 #include <frc/AnalogInput.h>
 #include <frc/DriverStation.h>
+#include <frc/RobotController.h>
 #include <frc/drive/DifferentialDrive.h>
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
+#include <frc/simulation/AnalogGyroSim.h>
+#include <frc/simulation/DifferentialDrivetrainSim.h>
+#include <frc/simulation/EncoderSim.h>
+#include <frc/smartdashboard/Field2d.h>
 #include <frc/trajectory/TrajectoryGenerator.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/InstantCommand.h>
@@ -24,24 +31,26 @@
 #include "Constants.h"
 
 struct Encoders {
-    WPI_TalonFX *lead;
-    WPI_TalonFX *follow;
+    WPI_TalonFX* lead;
+    WPI_TalonFX* follow;
 };
 
 class DriveSubsystem : public frc2::SubsystemBase {
    public:
-    DriveSubsystem();
+    DriveSubsystem(WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&);
 
     void DisabledInit();
 
     void TeleopInit();
 
-    void SetCoast(WPI_TalonFX *talon);
+    void SetCoast(WPI_TalonFX* talon);
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
      */
     void Periodic() override;
+
+    void SimulationPeriodic() override;
 
     // Subsystem methods go here.
 
@@ -101,6 +110,14 @@ class DriveSubsystem : public frc2::SubsystemBase {
     units::degree_t GetHeading();
 
     /**
+     * Translate NavX into Rotation2D values.
+     *
+     * @return the robot's heading in degrees, coninuous vectorization from 360
+     * to 361
+     */
+    units::degree_t Get2dAngle();
+
+    /**
      * Returns the turn rate of the robot.
      *
      * @return The turn rate of the robot, in degrees per second
@@ -130,7 +147,9 @@ class DriveSubsystem : public frc2::SubsystemBase {
     /**
      * set up a motor.  Call this in Init for each motor
      */
-    void ConfigureMotor(WPI_TalonFX &talon);
+    void ConfigureMotor(WPI_TalonFX& talon);
+
+    frc::Field2d& GetField();
 
    private:
     // Components (e.g. motor controllers and sensors) should generally be
@@ -166,14 +185,18 @@ class DriveSubsystem : public frc2::SubsystemBase {
      */
     static void InvertSide(Encoders);
 
+    frc::Field2d field;
+
     // right motor controllers
-    WPI_TalonFX RightLead{8};
-    WPI_TalonFX RightFollow{7};
+    WPI_TalonFX& RightLead;
+    WPI_TalonFX& RightFollow;
+    TalonFXSimCollection& RightLeadSim;
     Encoders rightEncoders;
 
     // left motor controllers
-    WPI_TalonFX LeftLead{6};
-    WPI_TalonFX LeftFollow{5};
+    WPI_TalonFX& LeftLead;
+    WPI_TalonFX& LeftFollow;
+    TalonFXSimCollection& LeftLeadSim;
     Encoders leftEncoders;
 
     frc::DifferentialDrive m_drive{RightLead, LeftLead};
@@ -185,6 +208,23 @@ class DriveSubsystem : public frc2::SubsystemBase {
     double LOffset = 0.0;
 
     double AverageEncoderDistance = 0.0;
+
+    frc::sim::DifferentialDrivetrainSim driveSim{
+
+        frc::DCMotor::Falcon500(
+            2),       // 2 Falcon 500s on each side of the drivetrain.
+        10.86,        // Standard AndyMark Gearing reduction.
+        2.1_kg_sq_m,  // MOI of 2.1 kg m^2 (from CAD model).
+        26.5_kg,      // Mass of the robot is 26.5 kg.
+        DriveConstants::kWheelRadiusInches,  // Robot uses 3" radius (6"
+                                             // diameter) wheels.
+        0.546_m,  // Distance between wheels is _ meters.
+    };
+
+    // Helper methods to convert between meters and native units
+    static int DistanceToNativeUnits(units::meter_t position);
+    static int VelocityToNativeUnits(units::meters_per_second_t velocity);
+    static units::meter_t NativeUnitsToDistanceMeters(double sensorCounts);
 
     // We can't use 2 or 3 seconds directly so we multiply by 2 or 3 to achieve
     // the same thing
@@ -202,6 +242,12 @@ class DriveSubsystem : public frc2::SubsystemBase {
     // navx
     double gyroAngle = 0.0;  // What is the angle (degrees) from the gyro?
     double gyroRate = 0.0;   // What is angle change (deg/sec)
+    AHRS ahrs{frc::SPI::Port::kMXP};
+
+#ifdef IS_SIMULATION
+    frc::AnalogGyro m_gyro{1};
+    frc::sim::AnalogGyroSim m_gyroSim{m_gyro};
+#endif
 
     // TurnToAnglePID
     frc2::PIDController TurnToAngle{kTurnP, kTurnI, kTurnD};
@@ -210,7 +256,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
     std::shared_ptr<nt::NetworkTable> table;
 
     // The drive's config for trajectory
-    frc::TrajectoryConfig *trajectoryConfig;
+    frc::TrajectoryConfig* trajectoryConfig;
 
     // State transition variables
     bool EnteredEnabled = false;
