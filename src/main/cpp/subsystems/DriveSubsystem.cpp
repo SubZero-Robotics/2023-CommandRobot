@@ -16,8 +16,14 @@
 
 using namespace DriveConstants;
 
-DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow, WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow) :
-    RightLead(rightLead), RightFollow(rightFollow), LeftLead(leftLead), LeftFollow(leftFollow), RightLeadSim(rightLead.GetSimCollection()), LeftLeadSim(leftLead.GetSimCollection()) {
+DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
+                               WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow)
+    : RightLead(rightLead),
+      RightFollow(rightFollow),
+      LeftLead(leftLead),
+      LeftFollow(leftFollow),
+      RightLeadSim(rightLead.GetSimCollection()),
+      LeftLeadSim(leftLead.GetSimCollection()) {
     // Implementation of subsystem constructor goes here.
     // Stuff you want to happen once, when robot code starts running
 
@@ -54,9 +60,7 @@ DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
 /**
  * Returns a 2D representation of the game field for dashboards.
  */
-frc::Field2d& DriveSubsystem::GetField() {
-	return field;
-}
+frc::Field2d& DriveSubsystem::GetField() { return field; }
 
 void DriveSubsystem::DisabledInit() {}
 
@@ -67,7 +71,7 @@ void DriveSubsystem::TeleopInit() {
     ConfigureMotor(LeftFollow);
 }
 
-void DriveSubsystem::SetCoast(WPI_TalonFX *talon) {
+void DriveSubsystem::SetCoast(WPI_TalonFX* talon) {
     talon->SetNeutralMode(Coast);
 }
 
@@ -84,7 +88,7 @@ void DriveSubsystem::Periodic() {
 
     gyroRate = ahrs.GetRate();
     frc::SmartDashboard::PutNumber("gyroRate", gyroRate);
-    
+
     rEncoder = GetRightEncoder();
     lEncoder = GetLeftEncoder();
 
@@ -94,7 +98,8 @@ void DriveSubsystem::Periodic() {
 
     frc::SmartDashboard::PutNumber("Pose X", (double)m_odometry.GetPose().X());
     frc::SmartDashboard::PutNumber("Pose Y", (double)m_odometry.GetPose().Y());
-    frc::SmartDashboard::PutNumber("Pose Degrees", (double)m_odometry.GetPose().Rotation().Degrees());
+    frc::SmartDashboard::PutNumber(
+        "Pose Degrees", (double)m_odometry.GetPose().Rotation().Degrees());
 
     // Do things when first enabled or disabled
     if (!frc::DriverStation::IsDisabled() &&
@@ -159,8 +164,7 @@ double DriveSubsystem::GetAverageEncoderDistance() {
     frc::SmartDashboard::PutNumber("left", leftEncoder);
     frc::SmartDashboard::PutNumber("right", rightEncoder);
 
-    return kEncoderDistancePerPulse *
-           ((leftEncoder + rightEncoder) / 2.0);
+    return kEncoderDistancePerPulse * ((leftEncoder + rightEncoder) / 2.0);
 }
 
 void DriveSubsystem::SetMaxOutput(double maxOutput) {
@@ -189,7 +193,7 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
     m_odometry.ResetPosition(currentrobotAngle, 0_m, 0_m, pose);
 }
 
-void DriveSubsystem::ConfigureMotor(WPI_TalonFX &talon) {
+void DriveSubsystem::ConfigureMotor(WPI_TalonFX& talon) {
     // Looking at this example:
     // https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/C%2B%2B%20Talon%20FX%20(Falcon%20500)/MotionMagic/src/main/cpp/Robot.cpp
     // Sets up MotionMagic parameters inside the motor
@@ -245,7 +249,7 @@ void DriveSubsystem::InvertSide(Encoders encoders) {
 }
 
 units::degree_t DriveSubsystem::Get2dAngle() {
-  return -(units::degree_t)ahrs.GetAngle();
+    return -(units::degree_t)ahrs.GetAngle();
 }
 
 void DriveSubsystem::SimulationPeriodic() {
@@ -253,53 +257,56 @@ void DriveSubsystem::SimulationPeriodic() {
     RightLeadSim.SetBusVoltage(frc::RobotController::GetInputVoltage());
 
     driveSim.SetInputs(-LeftLeadSim.GetMotorOutputLeadVoltage() * 1_V,
-     RightLeadSim.GetMotorOutputLeadVoltage() * 1_V );
+                       RightLeadSim.GetMotorOutputLeadVoltage() * 1_V);
 
     driveSim.Update(20_ms);
 
     LeftLeadSim.SetIntegratedSensorRawPosition(
-					DistanceToNativeUnits(
-					    driveSim.GetLeftPosition()
-                    ));
-	LeftLeadSim.SetIntegratedSensorVelocity(
-					VelocityToNativeUnits(
-					    driveSim.GetLeftVelocity()
-                    ));
-	RightLeadSim.SetIntegratedSensorRawPosition(
-					DistanceToNativeUnits(
-					    -driveSim.GetRightPosition()
-                    ));
-	RightLeadSim.SetIntegratedSensorVelocity(
-					VelocityToNativeUnits(
-					    -driveSim.GetRightVelocity()
-                    ));
+        DistanceToNativeUnits(driveSim.GetLeftPosition()));
+    LeftLeadSim.SetIntegratedSensorVelocity(
+        VelocityToNativeUnits(driveSim.GetLeftVelocity()));
+    RightLeadSim.SetIntegratedSensorRawPosition(
+        DistanceToNativeUnits(-driveSim.GetRightPosition()));
+    RightLeadSim.SetIntegratedSensorVelocity(
+        VelocityToNativeUnits(-driveSim.GetRightVelocity()));
 
-    #ifdef IS_SIMULATION
-    m_odometry.Update((frc::Rotation2d(units::degree_t(m_gyroSim.GetAngle()))), NativeUnitsToDistanceMeters(LeftLead.GetSelectedSensorPosition()), NativeUnitsToDistanceMeters(LeftLead.GetSelectedSensorPosition()));
+#ifdef IS_SIMULATION
+    m_odometry.Update(
+        (frc::Rotation2d(units::degree_t(m_gyroSim.GetAngle()))),
+        NativeUnitsToDistanceMeters(LeftLead.GetSelectedSensorPosition()),
+        NativeUnitsToDistanceMeters(LeftLead.GetSelectedSensorPosition()));
     field.SetRobotPose(m_odometry.GetPose());
-    #endif
+#endif
 }
 
 // Helper methods to convert between meters and native units
 
-int DriveSubsystem::DistanceToNativeUnits(units::meter_t position){
-	double wheelRotations = position/(2 * units::constants::pi * DriveConstants::kWheelRadiusInches);
-	double motorRotations = wheelRotations * DriveConstants::kSensorGearRatio;
-	int sensorCounts = (int)(motorRotations * DriveConstants::kEncoderCPR);
-	return sensorCounts;
+int DriveSubsystem::DistanceToNativeUnits(units::meter_t position) {
+    double wheelRotations = position / (2 * units::constants::pi *
+                                        DriveConstants::kWheelRadiusInches);
+    double motorRotations = wheelRotations * DriveConstants::kSensorGearRatio;
+    int sensorCounts = (int)(motorRotations * DriveConstants::kEncoderCPR);
+    return sensorCounts;
 }
 
-int DriveSubsystem::VelocityToNativeUnits(units::meters_per_second_t velocity){
-	auto wheelRotationsPerSecond = velocity/(2 * units::constants::pi * DriveConstants::kWheelRadiusInches);
-	auto motorRotationsPerSecond = wheelRotationsPerSecond * DriveConstants::kSensorGearRatio;
-	double motorRotationsPer100ms = motorRotationsPerSecond * 1_s / 10;
-	int sensorCountsPer100ms = (int)(motorRotationsPer100ms * DriveConstants::kEncoderCPR);
-	return sensorCountsPer100ms;
+int DriveSubsystem::VelocityToNativeUnits(units::meters_per_second_t velocity) {
+    auto wheelRotationsPerSecond =
+        velocity /
+        (2 * units::constants::pi * DriveConstants::kWheelRadiusInches);
+    auto motorRotationsPerSecond =
+        wheelRotationsPerSecond * DriveConstants::kSensorGearRatio;
+    double motorRotationsPer100ms = motorRotationsPerSecond * 1_s / 10;
+    int sensorCountsPer100ms =
+        (int)(motorRotationsPer100ms * DriveConstants::kEncoderCPR);
+    return sensorCountsPer100ms;
 }
 
-units::meter_t DriveSubsystem::NativeUnitsToDistanceMeters(double sensorCounts){
-	double motorRotations = (double)sensorCounts / DriveConstants::kEncoderCPR;
-	double wheelRotations = motorRotations / DriveConstants::kSensorGearRatio;
-	units::meter_t position = wheelRotations * (2 * units::constants::pi * DriveConstants::kWheelRadiusInches);
-	return position;
+units::meter_t DriveSubsystem::NativeUnitsToDistanceMeters(
+    double sensorCounts) {
+    double motorRotations = (double)sensorCounts / DriveConstants::kEncoderCPR;
+    double wheelRotations = motorRotations / DriveConstants::kSensorGearRatio;
+    units::meter_t position =
+        wheelRotations *
+        (2 * units::constants::pi * DriveConstants::kWheelRadiusInches);
+    return position;
 }

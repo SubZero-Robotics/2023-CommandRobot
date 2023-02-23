@@ -18,6 +18,7 @@
 #include <units/time.h>
 #include <units/velocity.h>
 #include <units/voltage.h>
+
 #include <numbers>
 
 // uncomment this for simulation
@@ -36,13 +37,16 @@
 // The deadzone for the joystick
 namespace DriveConstants {
 constexpr auto kTrackWidth = 0.6096_m;
-constexpr int kEncoderCPR = 22241.28;  // Counts Per Rotation. 2048 (talonfx cpr) multiplied by gear ratio (10.86)
+constexpr int kEncoderCPR = 22241.28;  // Counts Per Rotation. 2048 (talonfx
+                                       // cpr) multiplied by gear ratio (10.86)
 constexpr float kVelocityScalingFactor = 10;
 constexpr double kWheelDiameterMeters = 0.15875;
 constexpr auto kWheelRadiusInches = 6_in;
 constexpr double kSensorGearRatio = 10.86;
-constexpr double kWheelCircumfrenceMeters = kWheelDiameterMeters * std::numbers::pi;
-constexpr double kEncoderDistancePerPulse = kWheelCircumfrenceMeters / kEncoderCPR;
+constexpr double kWheelCircumfrenceMeters =
+    kWheelDiameterMeters * std::numbers::pi;
+constexpr double kEncoderDistancePerPulse =
+    kWheelCircumfrenceMeters / kEncoderCPR;
 constexpr double kPulsesPerMeter = 1 / kEncoderDistancePerPulse;
 
 // These characterization values MUST be determined either experimentally or
@@ -91,7 +95,7 @@ namespace AutoConstants {
 constexpr double kAutoDriveDistanceInches = 10;
 constexpr double kAutoBackupDistanceInches = 20;
 constexpr double kAutoDriveSpeed = 0.5;
-}
+}  // namespace AutoConstants
 
 // XboxController enums.  Since the Trigger stuff works on the base Joystick
 // class, not the Xbox extension, these are undefined where we want to use them.

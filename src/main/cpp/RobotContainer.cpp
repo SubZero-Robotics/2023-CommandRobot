@@ -6,14 +6,16 @@
 
 #include <frc2/command/button/Trigger.h>
 
+#include <iostream>
+
 #include "commands/Autos.h"
 #include "commands/DefaultDrive.h"
 #include "commands/ExampleCommand.h"
-#include <iostream>
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
-    drive = std::make_unique<DriveSubsystem>(RightLead, RightFollow, LeftLead, LeftFollow);
+    drive = std::make_unique<DriveSubsystem>(RightLead, RightFollow, LeftLead,
+                                             LeftFollow);
     m_drive = drive.get();
 
     // Configure the button bindings
