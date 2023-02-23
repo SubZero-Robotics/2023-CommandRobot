@@ -9,6 +9,8 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc/Compressor.h>
 
+#include <memory>
+
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
@@ -31,6 +33,12 @@ class RobotContainer {
     frc2::CommandXboxController Xbox{0};
 
     frc::Compressor phCompressor{0, frc::PneumaticsModuleType::REVPH};
+    
+    WPI_TalonFX RightLead{8};
+    WPI_TalonFX RightFollow{7};
+
+    WPI_TalonFX LeftLead{6};
+    WPI_TalonFX LeftFollow{5};
 
     // The robot's subsystems are defined here...
 
@@ -40,7 +48,8 @@ class RobotContainer {
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
-    DriveSubsystem m_drive;
+    std::unique_ptr<DriveSubsystem> drive;
+    DriveSubsystem *m_drive;
 
     void ConfigureBindings();
 };
