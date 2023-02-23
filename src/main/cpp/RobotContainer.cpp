@@ -11,6 +11,7 @@
 #include "commands/Autos.h"
 #include "commands/DefaultDrive.h"
 #include "commands/ExampleCommand.h"
+#include "commands/MoveArm.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -30,6 +31,10 @@ void RobotContainer::ConfigureBindings() {
         [this] { return Xbox.GetLeftX(); }));
 
     // TODO: bind buttons for calling commands
+
+    m_effector.SetDefaultCommand(MoveArm(
+        &m_effector, [this] { return Xbox.GetRightY(); }
+    ));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

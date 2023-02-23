@@ -14,6 +14,7 @@
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
+#include "subsystems/EffectorSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -33,7 +34,7 @@ class RobotContainer {
     frc2::CommandXboxController Xbox{0};
     // TODO: Second Xbox controller
 
-    frc::Compressor phCompressor{0, frc::PneumaticsModuleType::REVPH};
+    frc::Compressor phCompressor{4, frc::PneumaticsModuleType::REVPH};
 
     WPI_TalonFX RightLead{8};
     WPI_TalonFX RightFollow{7};
@@ -46,6 +47,9 @@ class RobotContainer {
     // This is the default wpilib example subsystem, it's only here until we
     // build an actual autonomous
     ExampleSubsystem m_subsystem;
+
+    // Arm Subsystem
+    EffectorSubsystem m_effector;
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.

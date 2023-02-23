@@ -2,6 +2,7 @@
 
 EffectorSubsystem::EffectorSubsystem() {
     // Implementation of subsystem constructor goes here.
+    m_followRotationMotor.Follow(m_leadRotationMotor);
 }
 
 void EffectorSubsystem::Periodic() {
@@ -12,4 +13,8 @@ void EffectorSubsystem::Periodic() {
 
 void EffectorSubsystem::SimulationPeriodic() {
     
+}
+
+void EffectorSubsystem::PercentOutput(double output) {
+    m_leadRotationMotor.Set(output);
 }
