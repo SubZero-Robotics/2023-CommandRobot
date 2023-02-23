@@ -5,11 +5,10 @@ This PR ...
 ## List of changes
 
 - Change 1
-- Change 2
 
 ## Link to issue
 
-Closes `(replace this with "#<issue_number>" without the double-quotes)`
+Closes #X
 
 ## Before you merge
 
@@ -17,4 +16,3 @@ Closes `(replace this with "#<issue_number>" without the double-quotes)`
 - [ ] Unit tests pass
 - [ ] Tested on the robot
 - [ ] Tested locally by another member
-- [ ] Code changes approved by another member
