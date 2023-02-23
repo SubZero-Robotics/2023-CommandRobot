@@ -7,6 +7,7 @@
 #include <frc/XboxController.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc/Compressor.h>
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
@@ -28,6 +29,8 @@ class RobotContainer {
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
     frc2::CommandXboxController Xbox{0};
+
+    frc::Compressor phCompressor{0, frc::PneumaticsModuleType::REVPH};
 
     // The robot's subsystems are defined here...
 
