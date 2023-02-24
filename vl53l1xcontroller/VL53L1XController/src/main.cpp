@@ -16,7 +16,7 @@ void setup()
   Wire.begin();
   Wire.setClock(400000); // use 400 kHz I2C
   pinMode(outputPin, OUTPUT);
-  digitalWrite(outputPin, LOW);
+  digitalWrite(outputPin, HIGH);
 
   sensor.setTimeout(500);
   if (!sensor.init())
@@ -59,9 +59,9 @@ void loop()
     if (sensor.ranging_data.range_status == VL53L1X::RangeValid) {
         auto range = sensor.ranging_data.range_mm;
         if (range >= minRangeMM && range <= maxRangeMM) {
-            digitalWrite(outputPin, HIGH);
-        } else {
             digitalWrite(outputPin, LOW);
+        } else {
+            digitalWrite(outputPin, HIGH);
         }
     }
 }

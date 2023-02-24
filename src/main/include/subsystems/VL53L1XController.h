@@ -9,7 +9,8 @@ class VL53L1XController {
     VL53L1XController(uint8_t inputPin);
 
     /**
-     * @brief Get if lidar distance is in valid range
+     * @brief Get if lidar distance is in valid range.
+     * ! Valid when signal is LOW (active low logic)
      * 
      * @return bool true if valid
      */
