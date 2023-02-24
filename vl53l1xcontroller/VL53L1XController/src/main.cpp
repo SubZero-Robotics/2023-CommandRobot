@@ -11,13 +11,12 @@ constexpr uint16_t maxRangeMM = 150;
 
 VL53L1X sensor;
 
-void setup()
-{
-  Serial.begin(115200);
-  Wire.begin();
-  Wire.setClock(400000); // use 400 kHz I2C
-  pinMode(outputPin, OUTPUT);
-  digitalWrite(outputPin, HIGH);
+void setup() {
+    Serial.begin(115200);
+    Wire.begin();
+    Wire.setClock(400000);  // use 400 kHz I2C
+    pinMode(outputPin, OUTPUT);
+    digitalWrite(outputPin, HIGH);
 
     sensor.setTimeout(500);
     if (!sensor.init()) {
