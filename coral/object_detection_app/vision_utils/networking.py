@@ -7,8 +7,7 @@ import socket
 class Networking:
 
     def __init__(self, teamNum: str, table: str, port: int):
-        # TODO: Change server
-        NetworkTables.initialize(server='roborio-XXX-frc.local')
+        NetworkTables.initialize(server=f'10.{teamNum}.2')
         self.teamNum = teamNum
         self.table = NetworkTables.getTable(table)
         hostname = socket.gethostname()
