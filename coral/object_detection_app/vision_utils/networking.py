@@ -11,7 +11,8 @@ class Networking:
         self.teamNum = teamNum
         self.table = NetworkTables.getTable(table)
         self.streamTable = NetworkTables.getTable('CameraPublisher')
-        url = f'mjpeg:http://10.{teamNum}.4:{port}'
+        # TODO: Pass last IP digits as arg from CLI
+        url = f'mjpg:http://10.{teamNum}.24:{port}/stream'
         ntPath = '/coral/streams'
         print(f'Placing NT stream URL {url} under {ntPath}')
         self.streamTable.putStringArray(ntPath, [url])
