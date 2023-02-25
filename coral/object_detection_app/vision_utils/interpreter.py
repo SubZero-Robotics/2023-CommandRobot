@@ -30,8 +30,9 @@ class Interpreter:
             bbox = self.createBbox([float(v) for v in boxes[i]])
             outputlist.append(Output(bbox, classId, score))
         return outputlist
-    
+
     def createBbox(self, boxes):
-        inputShape = (self.input_details[0]['shape'][1], self.input_details[0]['shape'][2])
+        inputShape = (self.input_details[0]['shape']
+                      [1], self.input_details[0]['shape'][2])
         rows, cols = inputShape
         return [boxes[0] * rows, boxes[1] * cols, boxes[2] * rows, boxes[3] * cols]
