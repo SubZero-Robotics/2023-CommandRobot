@@ -29,7 +29,7 @@ dataSource = DataSource(1, 'cvsource')
 interpreter = Interpreter('../models/conesandcubes_b1.tflite')
 modelClasses = DetectionModelClassParser.parse('../models/classes.csv')
 if not args['no_networking']:
-    networking = Networking('56.90', 'shuffleboard', args['port'])
+    networking = Networking('56.90', 'CameraPublisher', args['port'])
 
 inputDetails = interpreter.input_details
 inputShape = (inputDetails[0]['shape'][1], inputDetails[0]['shape'][2])

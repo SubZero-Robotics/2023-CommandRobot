@@ -13,7 +13,7 @@ class Networking:
         hostname = socket.gethostname()
         ipAddress = socket.gethostbyname(hostname)
         url = f'mjpeg:http://{ipAddress}:{port}'
-        ntPath = '/CameraPublisher/coral/streams'
+        ntPath = '/coral/streams'
         print(f'Placing NT stream URL {url} under {ntPath}')
         self.table.putStringArray(ntPath, [url])
 
