@@ -5,6 +5,8 @@
 
 #include "commands/MoveArm.h"
 
+#include <iostream>
+
 MoveArm::MoveArm(EffectorSubsystem* subsystem, std::function<double()> rotation)
     : m_effector{subsystem}, m_rotation{rotation} {
     // Register that this command requires the subsystem.
@@ -14,6 +16,8 @@ MoveArm::MoveArm(EffectorSubsystem* subsystem, std::function<double()> rotation)
 
 void MoveArm::Execute() {
     double rotation = m_rotation();
+
+    std::cout << "value of rotation is: " << rotation;
 
     m_effector->PercentOutput(rotation);
 }

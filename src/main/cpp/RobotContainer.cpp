@@ -4,14 +4,14 @@
 
 #include "RobotContainer.h"
 
-#include <frc2/command/button/Trigger.h>
-
 #include <iostream>
 
 #include "commands/Autos.h"
 #include "commands/DefaultDrive.h"
 #include "commands/ExampleCommand.h"
 #include "commands/MoveArm.h"
+#include "commands/Extender.h"
+#include "commands/ExtenderStop.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -35,6 +35,16 @@ void RobotContainer::ConfigureBindings() {
     m_effector.SetDefaultCommand(MoveArm(
         &m_effector, [this] { return Xbox.GetRightY(); }
     ));
+
+    m_extender.SetDefaultCommand(ExtenderStop(&m_extender));
+
+    Xbox.LeftBumper().OnTrue(Extender(
+        &m_extender, [this] { return 1.0; }
+    ).ToPtr());
+
+    Xbox.RightBumper().OnTrue(Extender(
+        &m_extender, [this] { return -1.0; }
+    ).ToPtr());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

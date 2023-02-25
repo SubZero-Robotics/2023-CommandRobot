@@ -8,6 +8,7 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc/Compressor.h>
+#include <frc2/command/button/Trigger.h>
 
 #include <memory>
 
@@ -15,6 +16,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/EffectorSubsystem.h"
+#include "subsystems/ExtensionSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -32,6 +34,7 @@ class RobotContainer {
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
     frc2::CommandXboxController Xbox{0};
+    frc2::Trigger LeftBumper = Xbox.LeftBumper();
     // TODO: Second Xbox controller
 
     frc::Compressor phCompressor{4, frc::PneumaticsModuleType::REVPH};
@@ -50,6 +53,7 @@ class RobotContainer {
 
     // Arm Subsystem
     EffectorSubsystem m_effector;
+    ExtensionSubsystem m_extender;
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
