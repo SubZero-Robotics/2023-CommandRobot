@@ -16,7 +16,7 @@ class Interpreter:
         self.output_details = self.model.get_output_details()
 
     def invoke(self, frame) -> List[Output]:
-        inp = np.expand_dims(frame, axis=0).astype(np.int8)
+        inp = np.expand_dims(frame, axis=0).astype(np.uint8)
         self.model.set_tensor(self.input_details[0]['index'], inp)
         self.model.invoke()
         scores = self.model.get_tensor(self.output_details[0]['index'])[0]
