@@ -10,12 +10,11 @@ class Networking:
         NetworkTables.initialize(server=f'10.{teamNum}.2')
         self.teamNum = teamNum
         self.table = NetworkTables.getTable(table)
-        hostname = socket.gethostname()
-        ipAddress = socket.gethostbyname(hostname)
-        url = f'mjpeg:http://{ipAddress}:{port}'
+        self.streamTable = NetworkTables.getTable('CameraPublisher')
+        url = f'mjpeg:http://10.{teamNum}.4:{port}'
         ntPath = '/coral/streams'
         print(f'Placing NT stream URL {url} under {ntPath}')
-        self.table.putStringArray(ntPath, [url])
+        self.streamTable.putStringArray(ntPath, [url])
 
     def write(self, outputs: List[Output]) -> List[float]:
         outputNumArray: List[float] = [len(outputs)]
