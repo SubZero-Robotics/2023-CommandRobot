@@ -8,25 +8,23 @@ class DataSource:
     def __init__(self, src: int, sourceName: str, port: int = 8082):
         self.src = cv.VideoCapture(src)
         frame = self.getImage()
-        self.imgSize = (frame.shape[0], frame.shape[1])
 
     def getImage(self):
         _, frame = self.src.read()
         return frame
 
-    def preprocessImage(destW: int, destH: int, frame):
+    def preprocessImage(self, destW: int, destH: int, frame):
         frame = cv.resize(frame, (destW, destH))
-        # frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+        # frame = cv.cvtColor(frame, cv.COLOR_RGB2GRAY)
         return frame
 
     def drawBoundingBoxes(self, outputs: List[Output], frame, colors: List[Tuple[int, int, int]]):
-        rows, cols = self.imgSize
         for output in outputs:
             bbox = output.bbox
-            x = bbox[1] * cols
-            y = bbox[0] * rows
-            right = bbox[3] * cols
-            bottom = bbox[2] * rows
+            x = bbox[1]
+            y = bbox[0]
+            right = bbox[3]
+            bottom = bbox[2]
             cv.rectangle(frame, (int(x), int(y)), (int(right), int(
                 bottom)), colors[output.classId], thickness=2)
         return frame

@@ -47,7 +47,7 @@ def detectObjects():
 
     while True:
         frame = dataSource.getImage()
-        frame = DataSource.preprocessImage(destW, destH, frame)
+        frame = dataSource.preprocessImage(destW, destH, frame)
         outputs = interpreter.invoke(frame)
         filteredOutputs = []
         for output in outputs:
