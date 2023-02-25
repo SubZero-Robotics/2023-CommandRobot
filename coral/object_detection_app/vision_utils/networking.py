@@ -13,9 +13,14 @@ class Networking:
         self.streamTable = NetworkTables.getTable('CameraPublisher')
         # TODO: Pass last IP digits as arg from CLI
         url = f'mjpg:http://10.{teamNum}.24:{port}/stream'
-        ntPath = '/coral/streams'
+        ntPath = '/coral'
         print(f'Placing NT stream URL {url} under {ntPath}')
-        self.streamTable.putStringArray(ntPath, [url])
+        self.streamTable.putStringArray(ntPath + '/streams', [url])
+        self.streamTable.putString(ntPath + '/description', 'coral')
+        self.streamTable.putString(ntPath + '/mode', '320x240 MJPEG 22fps')
+        self.streamTable.putStringArray(ntPath + '/modes', ['320x240 MJPEG 22fps'])
+        self.streamTable.putString(ntPath + '/source', f'ip:http://10.{teamNum}.24:{port}/stream')
+        self.streamTable.putString(ntPath + '/', '')
 
     def write(self, outputs: List[Output]) -> List[float]:
         outputNumArray: List[float] = [len(outputs)]
