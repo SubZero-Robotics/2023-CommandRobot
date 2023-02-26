@@ -1,12 +1,11 @@
 #pragma once
 
+#include <frc/AnalogInput.h>
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc/AnalogInput.h>
+
 #include "Constants.h"
-
 #include "subsystems/ExtensionSubsystem.h"
-
 
 class Extender : public frc2::CommandHelper<frc2::CommandBase, Extender> {
    public:
@@ -25,5 +24,5 @@ class Extender : public frc2::CommandHelper<frc2::CommandBase, Extender> {
     ExtensionSubsystem* m_extension;
     std::function<double()> m_outExtent;
     std::function<double()> m_inExtent;
-    frc::AnalogInput extenderMagneticStop {extenderMagneticStopPort};
+    frc::AnalogInput extenderMagneticStop{extenderMagneticStopPort};
 };

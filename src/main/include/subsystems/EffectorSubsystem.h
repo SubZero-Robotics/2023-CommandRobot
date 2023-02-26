@@ -2,8 +2,8 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-#include "constants.h"
 
+#include "constants.h"
 #include "rev/CANSparkMax.h"
 
 class EffectorSubsystem : public frc2::SubsystemBase {
@@ -28,7 +28,9 @@ class EffectorSubsystem : public frc2::SubsystemBase {
     // declared private and exposed only through public methods.
 
     rev::CANSparkMax m_leadRotationMotor{
-        CANSparkMaxConstants::kLeadRotationMotorID, rev::CANSparkMax::MotorType::kBrushless};
+        CANSparkMaxConstants::kLeadRotationMotorID,
+        rev::CANSparkMax::MotorType::kBrushless};
     rev::CANSparkMax m_followRotationMotor{
-        CANSparkMaxConstants::kFollowRotationMotorID, rev::CANSparkMax::MotorType::kBrushless};
+        CANSparkMaxConstants::kFollowRotationMotorID,
+        rev::CANSparkMax::MotorType::kBrushless};
 };
