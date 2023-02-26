@@ -6,20 +6,19 @@
 #include "Constants.h"
 #include "subsystems/ExtensionSubsystem.h"
 
-class ExtenderHome : public frc2::CommandHelper<frc2::CommandBase, ExtenderHome> {
+class ExtenderHome
+    : public frc2::CommandHelper<frc2::CommandBase, ExtenderHome> {
    public:
     /**
      * Creates a new Extender.
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit ExtenderHome(ExtensionSubsystem* subsystem) :
-    m_extension(subsystem) {
-    };
+    explicit ExtenderHome(ExtensionSubsystem* subsystem)
+        : m_extension(subsystem){};
 
     void Execute() override {
-        while (!m_extension->AtLimit())
-        {
+        while (!m_extension->AtLimit()) {
             m_extension->RunMotorHoming(.1);
         }
 

@@ -48,6 +48,7 @@ namespace CANSparkMaxConstants {
 constexpr int kExtensionMotorID = 50;
 constexpr int kLeadRotationMotorID = 1;
 constexpr int kFollowRotationMotorID = 3;
+constexpr int kIntakeSpinnyBoyID = 0;
 }  // namespace CANSparkMaxConstants
 
 // Limit Switch IDs
@@ -55,7 +56,7 @@ constexpr int kFollowRotationMotorID = 3;
 namespace LimitSwitchConstants {
 constexpr int kExtenderMagneticStopPort = 0;
 constexpr int kExtenderLimitSwitchThreshold = 3000;
-}
+}  // namespace LimitSwitchConstants
 
 // The deadzone for the joystick
 namespace DriveConstants {

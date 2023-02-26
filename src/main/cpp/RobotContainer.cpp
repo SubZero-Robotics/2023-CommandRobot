@@ -10,6 +10,7 @@
 #include "commands/DefaultDrive.h"
 #include "commands/ExampleCommand.h"
 #include "commands/Extender.h"
+#include "commands/ExtenderHome.h"
 #include "commands/ExtenderStop.h"
 #include "commands/GripperGrip.h"
 #include "commands/GripperStop.h"

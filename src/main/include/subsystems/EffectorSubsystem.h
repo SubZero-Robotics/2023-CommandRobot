@@ -1,9 +1,9 @@
 #pragma once
 
+#include <frc/AnalogInput.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
-#include <frc/AnalogInput.h>
 #include "constants.h"
 #include "rev/CANSparkMax.h"
 
