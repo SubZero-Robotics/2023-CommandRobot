@@ -9,8 +9,8 @@
 
 class EffectorSubsystem : public frc2::SubsystemBase {
    public:
-    EffectorSubsystem();
 
+    EffectorSubsystem();
     /**
      * Will be called periodically whenever the CommandScheduler runs.
      */
@@ -34,4 +34,9 @@ class EffectorSubsystem : public frc2::SubsystemBase {
     rev::CANSparkMax m_followRotationMotor{
         CANSparkMaxConstants::kFollowRotationMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
+
+    rev::SparkMaxRelativeEncoder m_encoder = m_leadRotationMotor.GetEncoder(rev::SparkMaxRelativeEncoder::Type::kQuadrature, 4096);
+
+    frc::AnalogInput m_limitswitch{kRotationMagneticStopPort};
+
 };

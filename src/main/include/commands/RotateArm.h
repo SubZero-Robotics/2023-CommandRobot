@@ -5,14 +5,14 @@
 
 #include "subsystems/EffectorSubsystem.h"
 
-class MoveArm : public frc2::CommandHelper<frc2::CommandBase, MoveArm> {
+class RotateArm : public frc2::CommandHelper<frc2::CommandBase, RotateArm> {
    public:
     /**
-     * Creates a new MoveArm.
+     * Creates a new RotateArm.
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit MoveArm(EffectorSubsystem* subsystem,
+    explicit RotateArm(EffectorSubsystem* subsystem,
                      std::function<double()> m_rotation);
 
     void Execute() override;
