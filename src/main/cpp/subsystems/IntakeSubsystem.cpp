@@ -2,7 +2,6 @@
 
 IntakeSubsystem::IntakeSubsystem() {
     // Implementation of subsystem constructor goes here.
-    exampleDoublePH.Set(frc::DoubleSolenoid::Value::kForward);
 }
 
 void IntakeSubsystem::Periodic() {}
@@ -10,9 +9,9 @@ void IntakeSubsystem::Periodic() {}
 void IntakeSubsystem::SimulationPeriodic() {}
 
 void IntakeSubsystem::Out() {
-    exampleDoublePH.Set(frc::DoubleSolenoid::Value::kForward);
+    m_intakeSpinnyBoy.Set(-1.0);
 }
 
 void IntakeSubsystem::In() {
-    exampleDoublePH.Set(frc::DoubleSolenoid::Value::kReverse);
+    m_intakeSpinnyBoy.Set(1.0);
 }

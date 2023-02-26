@@ -43,6 +43,7 @@ namespace CANSparkMaxConstants {
 constexpr int kExtensionMotorID = 50;
 constexpr int kLeadRotationMotorID = 1;
 constexpr int kFollowRotationMotorID = 3;
+constexpr int kIntakeSpinnyBoyID = 0;
 }  // namespace CANSparkMaxConstants
 
 // Limit Switch IDs
