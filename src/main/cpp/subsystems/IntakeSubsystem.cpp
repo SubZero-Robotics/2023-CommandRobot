@@ -8,10 +8,6 @@ void IntakeSubsystem::Periodic() {}
 
 void IntakeSubsystem::SimulationPeriodic() {}
 
-void IntakeSubsystem::Out() {
-    m_intakeSpinnyBoy.Set(-1.0);
-}
+void IntakeSubsystem::Out() { m_intakeSpinnyBoy.Set(-1.0); }
 
-void IntakeSubsystem::In() {
-    m_intakeSpinnyBoy.Set(1.0);
-}
+void IntakeSubsystem::In() { m_intakeSpinnyBoy.Set(1.0); }
