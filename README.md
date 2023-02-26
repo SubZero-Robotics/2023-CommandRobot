@@ -15,6 +15,7 @@
       - [Pushing commits](#pushing-commits)
       - [Pulling branches](#pulling-branches)
       - [Pull requests](#pull-requests)
+  - [Network Map](#network-map)
   - [Contact](#contact)
 
 ## About
@@ -76,6 +77,15 @@ The reviewer is responsible for looking over the PR, testing the changes themsel
 - Approve (PR is good; required to merge and should be done by a mentor or team lead)
 - Disapprove (PR needs changes before it can be merged; please address the comments, click `Resolve` under each comment once fixed, then re-request a review)
 - Comment (simply add a comment(s) without approving or disapproving)
+
+## Network Map
+
+Device | Address
+|:---:|:---:|
+Gateway|10.56.90.1
+RIO|10.56.90.2
+Coral|10.56.90.4
+LimeLight|10.56.90.11
 
 ## Contact
 
