@@ -9,6 +9,9 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc/Compressor.h>
 #include <frc2/command/button/Trigger.h>
+#include <pathplanner/lib/auto/RamseteAutoBuilder.h>
+#include <pathplanner/lib/PathPlanner.h>
+#include <frc/controller/RamseteController.h>
 
 #include <memory>
 
@@ -63,6 +66,17 @@ class RobotContainer {
     // easier to reuse.
     std::unique_ptr<DriveSubsystem> drive;
     DriveSubsystem *m_drive;
+
+    // Auto Builder
+    std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
+    pathplanner::RamseteAutoBuilder autoBuilder {
+        [this]() { return m_drive->GetPose(); }, 
+        [this](frc::Pose2d initPose) { 
+        m_drive->ResetOdometry(initPose); 
+        }, frc::RamseteController(), DriveConstants::kDriveKinematics,
+        [this] { m_drive->GetWheelSpeeds(); }, pathplanner::PIDConstants(5.0, 0.0, 0.0), [this] { m_drive->TankDriveVolts(); },
+        eventMap, {&m_drive}, true
+    };
 
     void ConfigureBindings();
 };

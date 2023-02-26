@@ -7,8 +7,11 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 #include <frc2/command/FunctionalCommand.h>
+#include <pathplanner/lib/auto/RamseteAutoBuilder.h>
+#include <pathplanner/lib/PathPlanner.h>
 
 using namespace AutoConstants;
+using namespace pathplanner;
 
 // This is taken from the hatchbotinlined wpilib example
 frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive) {
@@ -36,4 +39,10 @@ frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive) {
                // Requires the drive subsystem
                {m_drive})
         .ToPtr();
+}
+
+std::vector<PathPlannerTrajectory> pathGroup = PathPlanner::loadPathGroup("Test", {PathConstraints(4_mps, 3_mps_sq)});
+
+frc2::CommandPtr autos::Test(DriveSubsystem* m_drive) {
+
 }
