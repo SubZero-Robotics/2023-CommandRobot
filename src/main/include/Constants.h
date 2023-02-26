@@ -48,6 +48,7 @@ constexpr double kWheelCircumfrenceMeters =
 constexpr double kEncoderDistancePerPulse =
     kWheelCircumfrenceMeters / kEncoderCPR;
 constexpr double kPulsesPerMeter = 1 / kEncoderDistancePerPulse;
+constexpr double kCurbRotation = 0.70;
 
 // These characterization values MUST be determined either experimentally or
 // theoretically for *your* robot's drive. The Robot Characterization
@@ -97,6 +98,8 @@ constexpr double kAutoDriveDistanceInches = 36;
 constexpr double kAutoBackupDistanceInches = 20;
 constexpr double kAutoDriveSpeed = 0.5;
 }  // namespace AutoConstants
+
+constexpr uint8_t kLEDCotrollerSlaveAddress = 1;
 
 // XboxController enums.  Since the Trigger stuff works on the base Joystick
 // class, not the Xbox extension, these are undefined where we want to use them.

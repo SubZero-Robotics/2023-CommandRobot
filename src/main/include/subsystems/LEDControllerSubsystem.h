@@ -5,7 +5,7 @@
 
 #include <memory>
 
-class LEDController {
+class LEDControllerSubsystem {
    public:
     enum class CommandType {
         On = 0,
@@ -25,7 +25,7 @@ class LEDController {
         Wipe = 6
     };
 
-    LEDController(uint8_t slaveAddress,
+    LEDControllerSubsystem(uint8_t slaveAddress,
                   frc::I2C::Port port = frc::I2C::kOnboard);
 
     /**

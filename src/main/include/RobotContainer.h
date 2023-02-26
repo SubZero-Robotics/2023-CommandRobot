@@ -19,6 +19,7 @@
 #include "subsystems/ExtensionSubsystem.h"
 #include "subsystems/GripperSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/LEDControllerSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -35,9 +36,9 @@ class RobotContainer {
 
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    frc2::CommandXboxController Xbox{0};
+    frc2::CommandXboxController DriverXbox{0};
     // TODO: Second Xbox controller
-    frc2::CommandXboxController Xbox2{1};
+    frc2::CommandXboxController ArmXbox{1};
 
     frc::Compressor phCompressor{4, frc::PneumaticsModuleType::REVPH};
 
@@ -58,6 +59,8 @@ class RobotContainer {
     ExtensionSubsystem m_extender;
     GripperSubsystem m_gripper;
     IntakeSubsystem m_intake;
+    LEDControllerSubsystem m_leds{ kLEDCotrollerSlaveAddress};
+    
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.

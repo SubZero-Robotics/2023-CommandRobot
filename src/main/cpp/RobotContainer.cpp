@@ -16,6 +16,8 @@
 #include "commands/GripperStop.h"
 #include "commands/IntakeIn.h"
 #include "commands/IntakeOut.h"
+#include "commands/LEDPurple.h"
+#include "commands/LEDYellow.h"
 
 
 RobotContainer::RobotContainer() {
@@ -26,37 +28,41 @@ RobotContainer::RobotContainer() {
 
     // Configure the button bindings
     ConfigureBindings();
+
+    m_leds.setOn();
 }
 
 void RobotContainer::ConfigureBindings() {
     // Default drive command.  This will be run in teleop and when no other
     // command is running.
     m_drive->SetDefaultCommand(DefaultDrive(
-        m_drive, [this] { return Xbox.GetLeftY(); },
-        [this] { return -Xbox.GetLeftX() * 0.70; }));
+        m_drive, [this] { return DriverXbox.GetLeftY(); },
+        [this] { return -DriverXbox.GetLeftX() * DriveConstants::kCurbRotation; }));
 
     // TODO: bind buttons for calling commands
 
     m_effector.SetDefaultCommand(MoveArm(
-        &m_effector, [this] { return Xbox2.GetLeftY(); }
+        &m_effector, [this] { return ArmXbox.GetLeftY(); }
     ));
 
-    m_extender.SetDefaultCommand(Extender(&m_extender, [this] { return Xbox2.GetLeftY();}));
+    m_extender.SetDefaultCommand(Extender(&m_extender, 
+    [this] { return ArmXbox.GetRightTriggerAxis();},
+    [this] { return ArmXbox.GetLeftTriggerAxis();}));
 
-    Xbox2.A().OnTrue(GripperStop(
-        &m_gripper
-    ).ToPtr());
-
-    Xbox2.A().OnFalse(Gripper(
-        &m_gripper
-    ).ToPtr());
-
-    Xbox2.X().OnTrue(IntakeOut(
+    ArmXbox.A().OnTrue(IntakeOut(
         &m_intake
     ).ToPtr());
 
-    Xbox2.X().OnFalse(IntakeIn(
+    ArmXbox.B().OnFalse(IntakeIn(
         &m_intake
+    ).ToPtr());
+
+    ArmXbox.LeftBumper().ToggleOnTrue(LEDYellow(
+        &m_leds
+    ).ToPtr());
+
+    ArmXbox.RightBumper().ToggleOnTrue(LEDPurple(
+        &m_leds
     ).ToPtr());
 }
 
