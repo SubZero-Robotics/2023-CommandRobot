@@ -1,16 +1,16 @@
 #pragma once
 
+#include <frc/AnalogInput.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-#include <frc/AnalogInput.h>
 
 #include "Constants.h"
 #include "rev/CANSparkMax.h"
 
 class ExtensionSubsystem : public frc2::SubsystemBase {
    public:
-
-    frc::AnalogInput m_limitSwitch{LimitSwitchConstants::kExtenderMagneticStopPort};
+    frc::AnalogInput m_limitSwitch{
+        LimitSwitchConstants::kExtenderMagneticStopPort};
 
     ExtensionSubsystem();
 
@@ -27,22 +27,19 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
 
     void PercentOutput(double);
 
-   bool AtLimit() {
-      return m_limitSwitch.GetValue() >= LimitSwitchConstants::kExtenderLimitSwitchThreshold;
-   }
+    bool AtLimit() {
+        return m_limitSwitch.GetValue() >=
+               LimitSwitchConstants::kExtenderLimitSwitchThreshold;
+    }
 
-   void ResetEncoder() {
-      m_encoder.SetPosition(0);
-   }
+    void ResetEncoder() { m_encoder.SetPosition(0); }
 
-   void RunMotorHoming(double speed) {
-      // todo check direction for speed
-      m_extensionMotor.Set(speed);
-   }
+    void RunMotorHoming(double speed) {
+        // todo check direction for speed
+        m_extensionMotor.Set(speed);
+    }
 
-   float ExtederDistanceCm() {
-      m_encoder.GetPosition() * kTicksPerCm;
-   }
+    float ExtederDistanceCm() { m_encoder.GetPosition() * kTicksPerCm; }
 
    private:
     // Components (e.g. motor controllers and sensors) should generally be
@@ -53,5 +50,6 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
     rev::CANSparkMax m_extensionMotor{CANSparkMaxConstants::kExtensionMotorID,
                                       rev::CANSparkMax::MotorType::kBrushless};
 
-   rev::SparkMaxRelativeEncoder m_encoder = m_extensionMotor.GetEncoder(rev::SparkMaxRelativeEncoder::Type::kQuadrature, 4096);
+    rev::SparkMaxRelativeEncoder m_encoder = m_extensionMotor.GetEncoder(
+        rev::SparkMaxRelativeEncoder::Type::kQuadrature, 4096);
 };

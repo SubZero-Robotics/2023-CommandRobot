@@ -10,6 +10,7 @@
 #include "commands/DefaultDrive.h"
 #include "commands/ExampleCommand.h"
 #include "commands/Extender.h"
+#include "commands/ExtenderHome.h"
 #include "commands/ExtenderStop.h"
 #include "commands/GripperGrip.h"
 #include "commands/GripperStop.h"
@@ -18,7 +19,6 @@
 #include "commands/LEDPurple.h"
 #include "commands/LEDYellow.h"
 #include "commands/MoveArm.h"
-#include "commands/ExtenderHome.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here

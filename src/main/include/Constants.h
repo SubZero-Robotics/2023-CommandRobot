@@ -53,7 +53,7 @@ constexpr int kFollowRotationMotorID = 3;
 namespace LimitSwitchConstants {
 constexpr int kExtenderMagneticStopPort = 0;
 constexpr int kExtenderLimitSwitchThreshold = 3000;
-}
+}  // namespace LimitSwitchConstants
 
 // The deadzone for the joystick
 namespace DriveConstants {
