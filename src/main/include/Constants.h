@@ -34,9 +34,12 @@
  * they are needed.
  */
 
-// Arm Constants
+// Arm Extension Constants
 constexpr int kTicksPerCm = 500;
 constexpr int kMaxArmDistance = 35;
+
+// Arm Rotation Constants
+constexpr double kArmTicksPerDegree = 7;
 
 // Motor IDs
 namespace CANSparkMaxConstants {
@@ -48,7 +51,10 @@ constexpr int kIntakeSpinnyBoyID = 0;
 
 // Limit Switch IDs
 
-constexpr int extenderMagneticStopPort = 0;
+namespace LimitSwitchConstants {
+constexpr int kExtenderMagneticStopPort = 0;
+constexpr int kExtenderLimitSwitchThreshold = 3000;
+}  // namespace LimitSwitchConstants
 
 // The deadzone for the joystick
 namespace DriveConstants {
