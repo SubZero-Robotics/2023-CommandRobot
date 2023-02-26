@@ -62,5 +62,5 @@ void RobotContainer::ConfigureBindings() {
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
-    return autos::Test(m_drive);
+    return autos::Test(autoBuilder, m_drive);
 }

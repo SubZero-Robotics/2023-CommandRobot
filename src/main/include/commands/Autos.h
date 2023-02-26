@@ -6,6 +6,9 @@
 
 #include <frc2/command/CommandPtr.h>
 
+#include <pathplanner/lib/auto/RamseteAutoBuilder.h>
+#include <pathplanner/lib/PathPlanner.h>
+
 #include "subsystems/DriveSubsystem.h"
 
 namespace autos {
