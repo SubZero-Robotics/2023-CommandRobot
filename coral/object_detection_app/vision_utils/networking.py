@@ -20,7 +20,7 @@ class Networking:
 
         self.dashboardTable.putString('coral_stream', url)
 
-        self.streamTable.putStringArray(ntPath + '/streams', [ url ])
+        self.streamTable.putStringArray(ntPath + '/streams', [url])
         self.streamTable.putString(ntPath + '/description', 'coral')
         self.streamTable.putString(ntPath + '/mode', '300x300 MJPEG 22fps')
         self.streamTable.putStringArray(
