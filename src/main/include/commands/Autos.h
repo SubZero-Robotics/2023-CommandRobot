@@ -13,7 +13,7 @@ namespace autos {
  * Example static factory for an autonomous command.
  */
 frc2::CommandPtr StraightBack(DriveSubsystem* m_drive);
-frc2::CommandPtr Test(DriveSubsystem* m_drive);
+frc2::CommandPtr Test(pathplanner::RamseteAutoBuilder &autoBuilder, DriveSubsystem* m_drive);
 }  // namespace autos
 
 
