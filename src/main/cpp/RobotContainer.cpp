@@ -18,6 +18,7 @@
 #include "commands/LEDPurple.h"
 #include "commands/LEDYellow.h"
 #include "commands/MoveArm.h"
+#include "commands/ExtenderHome.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -48,6 +49,8 @@ void RobotContainer::ConfigureBindings() {
     m_extender.SetDefaultCommand(Extender(
         &m_extender, [this] { return ArmXbox.GetRightTriggerAxis(); },
         [this] { return ArmXbox.GetLeftTriggerAxis(); }));
+
+    ArmXbox.X().ToggleOnTrue(ExtenderHome(&m_extender).ToPtr());
 
     ArmXbox.A().OnTrue(IntakeOut(&m_intake).ToPtr());
 

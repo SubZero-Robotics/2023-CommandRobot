@@ -7,7 +7,6 @@
 #include <AHRS.h>
 #include <ctre/Phoenix.h>
 #include <frc/AnalogGyro.h>
-#include <frc/AnalogInput.h>
 #include <frc/DriverStation.h>
 #include <frc/RobotController.h>
 #include <frc/drive/DifferentialDrive.h>
@@ -261,5 +260,4 @@ class DriveSubsystem : public frc2::SubsystemBase {
     // State transition variables
     bool EnteredEnabled = false;
 
-    frc::AnalogInput extenderMagneticStop{extenderMagneticStopPort};
 };
