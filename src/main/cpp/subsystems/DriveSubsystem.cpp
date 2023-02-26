@@ -133,7 +133,8 @@ void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
     previousPercentage = abs(currentPercentage);
 }
 
-void DriveSubsystem::TankDrive(units::meters_per_second_t left, units::meters_per_second_t right) {
+void DriveSubsystem::TankDrive(units::meters_per_second_t left,
+                               units::meters_per_second_t right) {
     m_drive.TankDrive(left / (3 * 1_mps), right / (3 * 1_mps));
 }
 

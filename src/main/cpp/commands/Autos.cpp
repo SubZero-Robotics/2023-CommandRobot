@@ -38,8 +38,10 @@ frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive) {
         .ToPtr();
 }
 
-std::vector<PathPlannerTrajectory> pathGroup = PathPlanner::loadPathGroup("Test", {PathConstraints(4_mps, 3_mps_sq)});
+std::vector<PathPlannerTrajectory> pathGroup =
+    PathPlanner::loadPathGroup("Test", {PathConstraints(4_mps, 3_mps_sq)});
 
-frc2::CommandPtr autos::Test(RamseteAutoBuilder &autoBuilder, DriveSubsystem* m_drive) {
+frc2::CommandPtr autos::Test(RamseteAutoBuilder& autoBuilder,
+                             DriveSubsystem* m_drive) {
     return autoBuilder.fullAuto(pathGroup);
 }
