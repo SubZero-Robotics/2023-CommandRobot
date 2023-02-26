@@ -5,8 +5,7 @@
 
 #include "subsystems/IntakeSubsystem.h"
 
-class IntakeIn
-    : public frc2::CommandHelper<frc2::CommandBase, IntakeIn> {
+class IntakeIn : public frc2::CommandHelper<frc2::CommandBase, IntakeIn> {
    public:
     /**
      * Creates a new Intake.

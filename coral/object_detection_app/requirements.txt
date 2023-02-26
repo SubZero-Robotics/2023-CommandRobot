@@ -1,0 +1,5 @@
+numpy
+pynetworktables
+python-opencv
+tflite-runtime==2.11.0
+flask

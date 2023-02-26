@@ -9,6 +9,7 @@
 #include <frc2/command/FunctionalCommand.h>
 
 using namespace AutoConstants;
+using namespace pathplanner;
 
 // This is taken from the hatchbotinlined wpilib example
 frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive) {
@@ -24,16 +25,23 @@ frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive) {
                // End the command when the robot's driven distance exceeds the
                // desired value
                [m_drive] {
-                   frc::SmartDashboard::PutNumber(
-                       "Left Encoder",
-                       m_drive->GetLeftEncoder());
-                    frc::SmartDashboard::PutNumber(
-                       "Right Encoder",
-                       m_drive->GetRightEncoder());
+                   frc::SmartDashboard::PutNumber("Left Encoder",
+                                                  m_drive->GetLeftEncoder());
+                   frc::SmartDashboard::PutNumber("Right Encoder",
+                                                  m_drive->GetRightEncoder());
                    return abs(m_drive->GetAverageEncoderDistance()) >=
-                          AutoConstants::kAutoDriveDistanceInches / kMagicalAutoNumber;
+                          AutoConstants::kAutoDriveDistanceInches /
+                              kMagicalAutoNumber;
                },
                // Requires the drive subsystem
                {m_drive})
         .ToPtr();
+}
+
+std::vector<PathPlannerTrajectory> pathGroup =
+    PathPlanner::loadPathGroup("Test", {PathConstraints(4_mps, 3_mps_sq)});
+
+frc2::CommandPtr autos::Test(RamseteAutoBuilder& autoBuilder,
+                             DriveSubsystem* m_drive) {
+    return autoBuilder.fullAuto(pathGroup);
 }

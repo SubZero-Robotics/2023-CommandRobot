@@ -1,13 +1,13 @@
 #pragma once
 
-#include <frc2/command/CommandPtr.h>
-#include <frc2/command/SubsystemBase.h>
 #include <frc/Compressor.h>
 #include <frc/DoubleSolenoid.h>
+#include <frc2/command/CommandPtr.h>
+#include <frc2/command/SubsystemBase.h>
 
 class GripperSubsystem : public frc2::SubsystemBase {
-    public:
-        GripperSubsystem();
+   public:
+    GripperSubsystem();
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
@@ -28,5 +28,6 @@ class GripperSubsystem : public frc2::SubsystemBase {
     // declared private and exposed only through public methods.
 
     frc::Compressor m_compressor{9, frc::PneumaticsModuleType::CTREPCM};
-    frc::DoubleSolenoid exampleDoublePH{9, frc::PneumaticsModuleType::CTREPCM, 0, 3};
+    frc::DoubleSolenoid exampleDoublePH{9, frc::PneumaticsModuleType::CTREPCM,
+                                        0, 3};
 };

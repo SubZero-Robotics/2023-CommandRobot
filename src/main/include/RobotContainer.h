@@ -4,21 +4,25 @@
 
 #pragma once
 
+#include <frc/Compressor.h>
 #include <frc/XboxController.h>
+#include <frc/controller/RamseteController.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
-#include <frc/Compressor.h>
 #include <frc2/command/button/Trigger.h>
+#include <pathplanner/lib/PathPlanner.h>
+#include <pathplanner/lib/auto/RamseteAutoBuilder.h>
 
 #include <memory>
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/ExampleSubsystem.h"
 #include "subsystems/EffectorSubsystem.h"
+#include "subsystems/ExampleSubsystem.h"
 #include "subsystems/ExtensionSubsystem.h"
 #include "subsystems/GripperSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/LEDControllerSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -35,9 +39,9 @@ class RobotContainer {
 
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    frc2::CommandXboxController Xbox{0};
+    frc2::CommandXboxController DriverXbox{0};
     // TODO: Second Xbox controller
-    frc2::CommandXboxController Xbox2{1};
+    frc2::CommandXboxController ArmXbox{1};
 
     frc::Compressor phCompressor{4, frc::PneumaticsModuleType::REVPH};
 
@@ -58,11 +62,27 @@ class RobotContainer {
     ExtensionSubsystem m_extender;
     GripperSubsystem m_gripper;
     IntakeSubsystem m_intake;
+    LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
     std::unique_ptr<DriveSubsystem> drive;
     DriveSubsystem *m_drive;
+
+    // Auto Builder
+    std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
+    pathplanner::RamseteAutoBuilder autoBuilder{
+        [this]() { return m_drive->GetPose(); },
+        [this](frc::Pose2d initPose) { m_drive->ResetOdometry(initPose); },
+        frc::RamseteController(),
+        (frc::DifferentialDriveKinematics)DriveConstants::kDriveKinematics,
+        [this](units::meters_per_second_t left,
+               units::meters_per_second_t right) {
+            m_drive->TankDrive(left, right);
+        },
+        eventMap,
+        {m_drive},
+        true};
 
     void ConfigureBindings();
 };

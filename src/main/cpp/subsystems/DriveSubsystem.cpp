@@ -79,8 +79,6 @@ void DriveSubsystem::Periodic() {
     // Implementation of subsystem periodic method goes here.
     // Things that happen while robot is running */
 
-    static long long counter = 0;
-
     currentrobotAngle = Get2dAngle();
 
     gyroAngle = ahrs.GetYaw();
@@ -130,6 +128,11 @@ void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
         accelfilter.Calculate(currentPercentage);
     }
     previousPercentage = abs(currentPercentage);
+}
+
+void DriveSubsystem::TankDrive(units::meters_per_second_t left,
+                               units::meters_per_second_t right) {
+    m_drive.TankDrive(left / (3 * 1_mps), right / (3 * 1_mps));
 }
 
 void DriveSubsystem::TankDriveVolts(units::volt_t left, units::volt_t right) {

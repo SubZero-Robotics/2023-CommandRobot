@@ -1,13 +1,16 @@
 #pragma once
 
+#include <ctre\Phoenix.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-#include <frc/Compressor.h>
-#include <frc/DoubleSolenoid.h>
+
+#include "constants.h"
+
+using namespace CANSparkMaxConstants;
 
 class IntakeSubsystem : public frc2::SubsystemBase {
-    public:
-        IntakeSubsystem();
+   public:
+    IntakeSubsystem();
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
@@ -27,5 +30,5 @@ class IntakeSubsystem : public frc2::SubsystemBase {
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
 
-    frc::DoubleSolenoid exampleDoublePH{9, frc::PneumaticsModuleType::CTREPCM, 7, 6};
+    WPI_TalonSRX m_intakeSpinnyBoy{kIntakeSpinnyBoyID};
 };

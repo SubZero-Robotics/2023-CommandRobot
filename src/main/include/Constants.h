@@ -34,6 +34,30 @@
  * they are needed.
  */
 
+// Arm Extension Constants
+constexpr int kTicksPerCm = 500;
+constexpr int kMaxArmDistance = 35;
+
+// Arm Rotation Constants
+constexpr double kArmTicksPerDegree = 7;
+constexpr int kRotationMagneticStopPort = 1;
+constexpr int kRotationLimitSwitchThreshold = 3000;
+
+// Motor IDs
+namespace CANSparkMaxConstants {
+constexpr int kExtensionMotorID = 50;
+constexpr int kLeadRotationMotorID = 1;
+constexpr int kFollowRotationMotorID = 3;
+constexpr int kIntakeSpinnyBoyID = 0;
+}  // namespace CANSparkMaxConstants
+
+// Limit Switch IDs
+
+namespace LimitSwitchConstants {
+constexpr int kExtenderMagneticStopPort = 0;
+constexpr int kExtenderLimitSwitchThreshold = 3000;
+}  // namespace LimitSwitchConstants
+
 // The deadzone for the joystick
 namespace DriveConstants {
 constexpr auto kTrackWidth = 0.6096_m;
@@ -48,6 +72,7 @@ constexpr double kWheelCircumfrenceMeters =
 constexpr double kEncoderDistancePerPulse =
     kWheelCircumfrenceMeters / kEncoderCPR;
 constexpr double kPulsesPerMeter = 1 / kEncoderDistancePerPulse;
+constexpr double kCurbRotation = 0.70;
 
 // These characterization values MUST be determined either experimentally or
 // theoretically for *your* robot's drive. The Robot Characterization
@@ -93,10 +118,12 @@ constexpr auto kMaxTurnAcceleration = 200_deg_per_s / 1_s;
 
 namespace AutoConstants {
 constexpr double kMagicalAutoNumber = 44.95;
-constexpr double kAutoDriveDistanceInches = 36;
+constexpr double kAutoDriveDistanceInches = 66;
 constexpr double kAutoBackupDistanceInches = 20;
 constexpr double kAutoDriveSpeed = 0.5;
 }  // namespace AutoConstants
+
+constexpr uint8_t kLEDCotrollerSlaveAddress = 1;
 
 // XboxController enums.  Since the Trigger stuff works on the base Joystick
 // class, not the Xbox extension, these are undefined where we want to use them.

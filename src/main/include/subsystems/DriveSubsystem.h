@@ -7,7 +7,6 @@
 #include <AHRS.h>
 #include <ctre/Phoenix.h>
 #include <frc/AnalogGyro.h>
-#include <frc/AnalogInput.h>
 #include <frc/DriverStation.h>
 #include <frc/RobotController.h>
 #include <frc/drive/DifferentialDrive.h>
@@ -61,6 +60,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
      * @param rotation the commanded rotation
      */
     void ArcadeDrive(double, double);
+
+    void TankDrive(units::meters_per_second_t, units::meters_per_second_t);
 
     /**
      * Controls each side of the drive directly with a voltage.

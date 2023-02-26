@@ -9,14 +9,16 @@
 #include "commands/Autos.h"
 #include "commands/DefaultDrive.h"
 #include "commands/ExampleCommand.h"
-#include "commands/MoveArm.h"
 #include "commands/Extender.h"
+#include "commands/ExtenderHome.h"
 #include "commands/ExtenderStop.h"
 #include "commands/GripperGrip.h"
 #include "commands/GripperStop.h"
 #include "commands/IntakeIn.h"
 #include "commands/IntakeOut.h"
-
+#include "commands/LEDPurple.h"
+#include "commands/LEDYellow.h"
+#include "commands/RotateArm.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -26,6 +28,8 @@ RobotContainer::RobotContainer() {
 
     // Configure the button bindings
     ConfigureBindings();
+
+    m_leds.setOn();
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -33,34 +37,31 @@ void RobotContainer::ConfigureBindings() {
     // command is running.
     m_drive->SetDefaultCommand(DefaultDrive(
         m_drive, [this] { return DriverXbox.GetLeftY(); },
-        [this] { return -DriverXbox.GetLeftX() * 0.70; }));
+        [this] {
+            return -DriverXbox.GetLeftX() * DriveConstants::kCurbRotation;
+        }));
 
     // TODO: bind buttons for calling commands
 
-    m_effector.SetDefaultCommand(MoveArm(
-        &m_effector, [this] { return ArmXbox.GetLeftY(); }
-    ));
+    m_effector.SetDefaultCommand(
+        RotateArm(&m_effector, [this] { return ArmXbox.GetLeftY(); }));
 
-    m_extender.SetDefaultCommand(Extender(&m_extender, [this] { return ArmXbox.GetLeftY();}));
+    m_extender.SetDefaultCommand(Extender(
+        &m_extender, [this] { return ArmXbox.GetRightTriggerAxis(); },
+        [this] { return ArmXbox.GetLeftTriggerAxis(); }));
 
-    ArmXbox.A().OnTrue(GripperStop(
-        &m_gripper
-    ).ToPtr());
+    ArmXbox.X().ToggleOnTrue(ExtenderHome(&m_extender).ToPtr());
 
-    ArmXbox.A().OnFalse(Gripper(
-        &m_gripper
-    ).ToPtr());
+    ArmXbox.A().OnTrue(IntakeOut(&m_intake).ToPtr());
 
-    ArmXbox.X().OnTrue(IntakeOut(
-        &m_intake
-    ).ToPtr());
+    ArmXbox.B().OnFalse(IntakeIn(&m_intake).ToPtr());
 
-    ArmXbox.X().OnFalse(IntakeIn(
-        &m_intake
-    ).ToPtr());
+    ArmXbox.LeftBumper().ToggleOnTrue(LEDYellow(&m_leds).ToPtr());
+
+    ArmXbox.RightBumper().ToggleOnTrue(LEDPurple(&m_leds).ToPtr());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
-    return autos::StraightBack(m_drive);
+    return autos::Test(autoBuilder, m_drive);
 }

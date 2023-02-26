@@ -5,15 +5,34 @@
 
 #include "commands/Extender.h"
 
-Extender::Extender(ExtensionSubsystem* subsystem, std::function<double()> rotation)
-    : m_extension{subsystem}, m_rotation{rotation} {
+#include <frc/smartdashboard/SmartDashboard.h>
+
+Extender::Extender(ExtensionSubsystem* subsystem,
+                   std::function<double()> outExtent,
+                   std::function<double()> inExtent)
+    : m_extension{subsystem},
+      m_outExtent{outExtent},
+      m_inExtent{inExtent}
+
+{
     // Register that this command requires the subsystem.
     AddRequirements(m_extension);
     Execute();
 }
 
 void Extender::Execute() {
-    double rotation = m_rotation();
+    double outExtent = m_outExtent();
+    double inExtent = m_inExtent();
+    auto rotation = outExtent >= inExtent ? outExtent : -inExtent;
+
+    if (m_extension->AtLimit() ||
+        m_extension->ExtederDistanceCm() >= kMaxArmDistance) {
+        m_extension->PercentOutput(0);
+        return;
+    }
+
+    frc::SmartDashboard::PutNumber("MAG VAL: ",
+                                   m_extension->m_limitSwitch.GetValue());
 
     m_extension->PercentOutput(rotation);
 }
