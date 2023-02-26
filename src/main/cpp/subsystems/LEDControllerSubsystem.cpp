@@ -1,6 +1,7 @@
 #include "subsystems/LEDControllerSubsystem.h"
 
-LEDControllerSubsystem::LEDControllerSubsystem(uint8_t slaveAddress, frc::I2C::Port port)
+LEDControllerSubsystem::LEDControllerSubsystem(uint8_t slaveAddress,
+                                               frc::I2C::Port port)
     : _i2c(std::make_unique<frc::I2C>(port, slaveAddress)),
       _slaveAddress(slaveAddress),
       _lastCommand(LEDControllerSubsystem::CommandType::Off),
@@ -20,14 +21,15 @@ bool LEDControllerSubsystem::setOff() {
     return !_i2c->WriteBulk(buf, 1);
 }
 
-bool LEDControllerSubsystem::setPattern(LEDControllerSubsystem::PatternType pattern,
-                               bool oneShot) {
+bool LEDControllerSubsystem::setPattern(
+    LEDControllerSubsystem::PatternType pattern, bool oneShot) {
     _lastCommand = LEDControllerSubsystem::CommandType::Pattern;
     uint8_t buf[3] = {(uint8_t)_lastCommand, (uint8_t)pattern, oneShot};
     return !_i2c->WriteBulk(buf, 3);
 }
 
-bool LEDControllerSubsystem::setColor(uint8_t red, uint8_t green, uint8_t blue) {
+bool LEDControllerSubsystem::setColor(uint8_t red, uint8_t green,
+                                      uint8_t blue) {
     _lastCommand = LEDControllerSubsystem::CommandType::ChangeColor;
     uint8_t buf[4] = {(uint8_t)_lastCommand, red, green, blue};
     return !_i2c->WriteBulk(buf, 4);

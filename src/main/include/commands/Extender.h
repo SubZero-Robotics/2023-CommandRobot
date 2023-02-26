@@ -5,8 +5,7 @@
 
 #include "subsystems/ExtensionSubsystem.h"
 
-class Extender
-    : public frc2::CommandHelper<frc2::CommandBase, Extender> {
+class Extender : public frc2::CommandHelper<frc2::CommandBase, Extender> {
    public:
     /**
      * Creates a new Extender.
@@ -14,8 +13,8 @@ class Extender
      * @param subsystem The subsystem used by this command.
      */
     explicit Extender(ExtensionSubsystem* subsystem,
-    std::function<double()> outExtent,
-    std::function<double()> inExtent);
+                      std::function<double()> outExtent,
+                      std::function<double()> inExtent);
 
     void Execute() override;
 

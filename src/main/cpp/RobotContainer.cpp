@@ -9,7 +9,6 @@
 #include "commands/Autos.h"
 #include "commands/DefaultDrive.h"
 #include "commands/ExampleCommand.h"
-#include "commands/MoveArm.h"
 #include "commands/Extender.h"
 #include "commands/ExtenderStop.h"
 #include "commands/GripperGrip.h"
@@ -18,7 +17,7 @@
 #include "commands/IntakeOut.h"
 #include "commands/LEDPurple.h"
 #include "commands/LEDYellow.h"
-
+#include "commands/MoveArm.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -37,33 +36,26 @@ void RobotContainer::ConfigureBindings() {
     // command is running.
     m_drive->SetDefaultCommand(DefaultDrive(
         m_drive, [this] { return DriverXbox.GetLeftY(); },
-        [this] { return -DriverXbox.GetLeftX() * DriveConstants::kCurbRotation; }));
+        [this] {
+            return -DriverXbox.GetLeftX() * DriveConstants::kCurbRotation;
+        }));
 
     // TODO: bind buttons for calling commands
 
-    m_effector.SetDefaultCommand(MoveArm(
-        &m_effector, [this] { return ArmXbox.GetLeftY(); }
-    ));
+    m_effector.SetDefaultCommand(
+        MoveArm(&m_effector, [this] { return ArmXbox.GetLeftY(); }));
 
-    m_extender.SetDefaultCommand(Extender(&m_extender, 
-    [this] { return ArmXbox.GetRightTriggerAxis();},
-    [this] { return ArmXbox.GetLeftTriggerAxis();}));
+    m_extender.SetDefaultCommand(Extender(
+        &m_extender, [this] { return ArmXbox.GetRightTriggerAxis(); },
+        [this] { return ArmXbox.GetLeftTriggerAxis(); }));
 
-    ArmXbox.A().OnTrue(IntakeOut(
-        &m_intake
-    ).ToPtr());
+    ArmXbox.A().OnTrue(IntakeOut(&m_intake).ToPtr());
 
-    ArmXbox.B().OnFalse(IntakeIn(
-        &m_intake
-    ).ToPtr());
+    ArmXbox.B().OnFalse(IntakeIn(&m_intake).ToPtr());
 
-    ArmXbox.LeftBumper().ToggleOnTrue(LEDYellow(
-        &m_leds
-    ).ToPtr());
+    ArmXbox.LeftBumper().ToggleOnTrue(LEDYellow(&m_leds).ToPtr());
 
-    ArmXbox.RightBumper().ToggleOnTrue(LEDPurple(
-        &m_leds
-    ).ToPtr());
+    ArmXbox.RightBumper().ToggleOnTrue(LEDPurple(&m_leds).ToPtr());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

@@ -7,6 +7,4 @@ ExtenderStop::ExtenderStop(ExtensionSubsystem* subsystem)
     Execute();
 }
 
-void ExtenderStop::Execute() {
-    m_extension->PercentOutput(0.0);
-}
+void ExtenderStop::Execute() { m_extension->PercentOutput(0.0); }
