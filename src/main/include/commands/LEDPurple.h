@@ -23,8 +23,8 @@ class LEDPurple : public frc2::CommandHelper<frc2::CommandBase, LEDPurple> {
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit LEDPurple(LEDControllerSubsystem* subsystem) :
-    m_subsystem(subsystem) {}
+    explicit LEDPurple(LEDControllerSubsystem* subsystem)
+        : m_subsystem(subsystem) {}
 
     void Execute() override {
         m_subsystem->setColor(180, 0, 255);
