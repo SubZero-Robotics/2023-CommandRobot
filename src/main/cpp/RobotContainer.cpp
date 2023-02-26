@@ -32,30 +32,30 @@ void RobotContainer::ConfigureBindings() {
     // Default drive command.  This will be run in teleop and when no other
     // command is running.
     m_drive->SetDefaultCommand(DefaultDrive(
-        m_drive, [this] { return Xbox.GetLeftY(); },
-        [this] { return -Xbox.GetLeftX() * 0.70; }));
+        m_drive, [this] { return DriverXbox.GetLeftY(); },
+        [this] { return -DriverXbox.GetLeftX() * 0.70; }));
 
     // TODO: bind buttons for calling commands
 
     m_effector.SetDefaultCommand(MoveArm(
-        &m_effector, [this] { return Xbox2.GetLeftY(); }
+        &m_effector, [this] { return ArmXbox.GetLeftY(); }
     ));
 
-    m_extender.SetDefaultCommand(Extender(&m_extender, [this] { return Xbox2.GetLeftY();}));
+    m_extender.SetDefaultCommand(Extender(&m_extender, [this] { return ArmXbox.GetLeftY();}));
 
-    Xbox2.A().OnTrue(GripperStop(
+    ArmXbox.A().OnTrue(GripperStop(
         &m_gripper
     ).ToPtr());
 
-    Xbox2.A().OnFalse(Gripper(
+    ArmXbox.A().OnFalse(Gripper(
         &m_gripper
     ).ToPtr());
 
-    Xbox2.X().OnTrue(IntakeOut(
+    ArmXbox.X().OnTrue(IntakeOut(
         &m_intake
     ).ToPtr());
 
-    Xbox2.X().OnFalse(IntakeIn(
+    ArmXbox.X().OnFalse(IntakeIn(
         &m_intake
     ).ToPtr());
 }
