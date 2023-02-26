@@ -18,7 +18,7 @@
 #include "commands/IntakeOut.h"
 #include "commands/LEDPurple.h"
 #include "commands/LEDYellow.h"
-#include "commands/MoveArm.h"
+#include "commands/RotateArm.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -44,7 +44,7 @@ void RobotContainer::ConfigureBindings() {
     // TODO: bind buttons for calling commands
 
     m_effector.SetDefaultCommand(
-        MoveArm(&m_effector, [this] { return ArmXbox.GetLeftY(); }));
+        RotateArm(&m_effector, [this] { return ArmXbox.GetLeftY(); }));
 
     m_extender.SetDefaultCommand(Extender(
         &m_extender, [this] { return ArmXbox.GetRightTriggerAxis(); },

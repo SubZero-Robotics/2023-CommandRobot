@@ -1,0 +1,3 @@
+0 apriltag
+1 cone
+2 cube
