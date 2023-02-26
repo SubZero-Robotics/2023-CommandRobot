@@ -133,6 +133,11 @@ void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
     previousPercentage = abs(currentPercentage);
 }
 
+void DriveSubsystem::TankDrive(units::meters_per_second_t left,
+                               units::meters_per_second_t right) {
+    m_drive.TankDrive(left / (3 * 1_mps), right / (3 * 1_mps));
+}
+
 void DriveSubsystem::TankDriveVolts(units::volt_t left, units::volt_t right) {
     LeftLead.SetVoltage(-left);
     RightLead.SetVoltage(-right);
