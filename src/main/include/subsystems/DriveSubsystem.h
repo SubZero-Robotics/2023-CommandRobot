@@ -260,4 +260,6 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     // State transition variables
     bool EnteredEnabled = false;
+
+    frc::AnalogInput extenderMagneticStop {extenderMagneticStopPort};
 };

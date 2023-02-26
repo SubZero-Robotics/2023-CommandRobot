@@ -34,6 +34,17 @@
  * they are needed.
  */
 
+// Motor IDs
+namespace CANSparkMaxConstants {
+    constexpr int kExtensionMotorID = 50;
+    constexpr int kLeadRotationMotorID = 1;
+    constexpr int kFollowRotationMotorID = 3;
+}
+
+// Limit Switch IDs
+
+constexpr int extenderMagneticStopPort = 0;
+
 // The deadzone for the joystick
 namespace DriveConstants {
 constexpr auto kTrackWidth = 0.6096_m;

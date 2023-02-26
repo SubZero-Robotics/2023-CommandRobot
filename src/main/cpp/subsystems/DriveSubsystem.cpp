@@ -87,6 +87,8 @@ void DriveSubsystem::Periodic() {
     gyroRate = ahrs.GetRate();
     frc::SmartDashboard::PutNumber("gyroRate", gyroRate);
 
+    frc::SmartDashboard::PutNumber("MAG VAL: ", extenderMagneticStop.GetValue());
+
     rEncoder = GetRightEncoder();
     lEncoder = GetLeftEncoder();
 

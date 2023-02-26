@@ -56,6 +56,8 @@ void RobotContainer::ConfigureBindings() {
     ArmXbox.LeftBumper().ToggleOnTrue(LEDYellow(&m_leds).ToPtr());
 
     ArmXbox.RightBumper().ToggleOnTrue(LEDPurple(&m_leds).ToPtr());
+
+    
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
