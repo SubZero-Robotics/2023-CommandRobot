@@ -3,11 +3,12 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
+#include "Constants.h"
 #include "rev/CANSparkMax.h"
 
 class ExtensionSubsystem : public frc2::SubsystemBase {
-    public:
-        ExtensionSubsystem();
+   public:
+    ExtensionSubsystem();
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
@@ -26,5 +27,8 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
 
-    rev::CANSparkMax m_extensionMotor{2, rev::CANSparkMax::MotorType::kBrushless};
+    // TODo: asign constants to the Can motors
+
+    rev::CANSparkMax m_extensionMotor{CANSparkMaxConstants::kExtensionMotorID,
+                                      rev::CANSparkMax::MotorType::kBrushless};
 };

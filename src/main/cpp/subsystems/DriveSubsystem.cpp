@@ -79,8 +79,6 @@ void DriveSubsystem::Periodic() {
     // Implementation of subsystem periodic method goes here.
     // Things that happen while robot is running */
 
-    static long long counter = 0;
-
     currentrobotAngle = Get2dAngle();
 
     gyroAngle = ahrs.GetYaw();
@@ -88,6 +86,9 @@ void DriveSubsystem::Periodic() {
 
     gyroRate = ahrs.GetRate();
     frc::SmartDashboard::PutNumber("gyroRate", gyroRate);
+
+    frc::SmartDashboard::PutNumber("MAG VAL: ",
+                                   extenderMagneticStop.GetValue());
 
     rEncoder = GetRightEncoder();
     lEncoder = GetLeftEncoder();

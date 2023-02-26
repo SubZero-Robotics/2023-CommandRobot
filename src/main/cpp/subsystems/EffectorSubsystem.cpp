@@ -11,9 +11,7 @@ void EffectorSubsystem::Periodic() {
     // todo: log angle to shuffleboard
 }
 
-void EffectorSubsystem::SimulationPeriodic() {
-    
-}
+void EffectorSubsystem::SimulationPeriodic() {}
 
 void EffectorSubsystem::PercentOutput(double output) {
     m_leadRotationMotor.Set(output);

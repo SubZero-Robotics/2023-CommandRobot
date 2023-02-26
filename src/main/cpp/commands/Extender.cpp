@@ -5,15 +5,23 @@
 
 #include "commands/Extender.h"
 
-Extender::Extender(ExtensionSubsystem* subsystem, std::function<double()> rotation)
-    : m_extension{subsystem}, m_rotation{rotation} {
+Extender::Extender(ExtensionSubsystem* subsystem,
+                   std::function<double()> outExtent,
+                   std::function<double()> inExtent)
+    : m_extension{subsystem},
+      m_outExtent{outExtent},
+      m_inExtent{inExtent}
+
+{
     // Register that this command requires the subsystem.
     AddRequirements(m_extension);
     Execute();
 }
 
 void Extender::Execute() {
-    double rotation = m_rotation();
+    double outExtent = m_outExtent();
+    double inExtent = m_inExtent();
+    auto rotation = outExtent >= inExtent ? outExtent : -inExtent;
 
     m_extension->PercentOutput(rotation);
 }

@@ -5,12 +5,9 @@
 
 #include "commands/GripperGrip.h"
 
-Gripper::Gripper(GripperSubsystem* subsystem)
-    : m_Gripper{subsystem} {
+Gripper::Gripper(GripperSubsystem* subsystem) : m_Gripper{subsystem} {
     // Register that this command requires the subsystem.
     AddRequirements(m_Gripper);
 }
 
-void Gripper::Execute() {
-    m_Gripper->Forward();
-}
+void Gripper::Execute() { m_Gripper->Forward(); }
