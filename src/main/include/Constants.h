@@ -92,7 +92,8 @@ constexpr auto kMaxTurnRate = 70_deg_per_s;
 constexpr auto kMaxTurnAcceleration = 200_deg_per_s / 1_s;
 
 namespace AutoConstants {
-constexpr double kAutoDriveDistanceInches = 10;
+constexpr double kMagicalAutoNumber = 44.95;
+constexpr double kAutoDriveDistanceInches = 36;
 constexpr double kAutoBackupDistanceInches = 20;
 constexpr double kAutoDriveSpeed = 0.5;
 }  // namespace AutoConstants

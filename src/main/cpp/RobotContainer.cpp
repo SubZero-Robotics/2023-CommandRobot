@@ -12,6 +12,11 @@
 #include "commands/MoveArm.h"
 #include "commands/Extender.h"
 #include "commands/ExtenderStop.h"
+#include "commands/GripperGrip.h"
+#include "commands/GripperStop.h"
+#include "commands/IntakeIn.h"
+#include "commands/IntakeOut.h"
+
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -28,22 +33,30 @@ void RobotContainer::ConfigureBindings() {
     // command is running.
     m_drive->SetDefaultCommand(DefaultDrive(
         m_drive, [this] { return Xbox.GetLeftY(); },
-        [this] { return Xbox.GetLeftX(); }));
+        [this] { return -Xbox.GetLeftX() * 0.70; }));
 
     // TODO: bind buttons for calling commands
 
     m_effector.SetDefaultCommand(MoveArm(
-        &m_effector, [this] { return Xbox.GetRightY(); }
+        &m_effector, [this] { return Xbox2.GetLeftY(); }
     ));
 
-    m_extender.SetDefaultCommand(ExtenderStop(&m_extender));
+    m_extender.SetDefaultCommand(Extender(&m_extender, [this] { return Xbox2.GetLeftY();}));
 
-    Xbox.LeftBumper().OnTrue(Extender(
-        &m_extender, [this] { return 1.0; }
+    Xbox2.A().OnTrue(GripperStop(
+        &m_gripper
     ).ToPtr());
 
-    Xbox.RightBumper().OnTrue(Extender(
-        &m_extender, [this] { return -1.0; }
+    Xbox2.A().OnFalse(Gripper(
+        &m_gripper
+    ).ToPtr());
+
+    Xbox2.X().OnTrue(IntakeOut(
+        &m_intake
+    ).ToPtr());
+
+    Xbox2.X().OnFalse(IntakeIn(
+        &m_intake
     ).ToPtr());
 }
 
