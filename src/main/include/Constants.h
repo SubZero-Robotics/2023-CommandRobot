@@ -34,6 +34,10 @@
  * they are needed.
  */
 
+// Arm Constants
+constexpr int kTicksPerCm = 500;
+constexpr int kMaxArmDistance = 35;
+
 // Motor IDs
 namespace CANSparkMaxConstants {
 constexpr int kExtensionMotorID = 50;
