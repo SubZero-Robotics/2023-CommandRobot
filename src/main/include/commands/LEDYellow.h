@@ -16,8 +16,7 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class LEDYellow
-    : public frc2::CommandHelper<frc2::CommandBase, LEDYellow> {
+class LEDYellow : public frc2::CommandHelper<frc2::CommandBase, LEDYellow> {
    public:
     /**
      * Creates a new LEDYellow.

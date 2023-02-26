@@ -6,11 +6,9 @@ GripperSubsystem::GripperSubsystem() {
     exampleDoublePH.Set(frc::DoubleSolenoid::Value::kForward);
 }
 
-void GripperSubsystem::Periodic() {
-}
+void GripperSubsystem::Periodic() {}
 
-void GripperSubsystem::SimulationPeriodic() {
-}
+void GripperSubsystem::SimulationPeriodic() {}
 
 void GripperSubsystem::Forward() {
     exampleDoublePH.Set(frc::DoubleSolenoid::Value::kForward);

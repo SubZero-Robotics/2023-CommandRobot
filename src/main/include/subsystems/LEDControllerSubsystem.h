@@ -26,7 +26,7 @@ class LEDControllerSubsystem {
     };
 
     LEDControllerSubsystem(uint8_t slaveAddress,
-                  frc::I2C::Port port = frc::I2C::kOnboard);
+                           frc::I2C::Port port = frc::I2C::kOnboard);
 
     /**
      * @brief Start communication with the LED controller

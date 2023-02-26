@@ -4,18 +4,18 @@
 
 #pragma once
 
+#include <frc/Compressor.h>
 #include <frc/XboxController.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
-#include <frc/Compressor.h>
 #include <frc2/command/button/Trigger.h>
 
 #include <memory>
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/ExampleSubsystem.h"
 #include "subsystems/EffectorSubsystem.h"
+#include "subsystems/ExampleSubsystem.h"
 #include "subsystems/ExtensionSubsystem.h"
 #include "subsystems/GripperSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
@@ -59,8 +59,7 @@ class RobotContainer {
     ExtensionSubsystem m_extender;
     GripperSubsystem m_gripper;
     IntakeSubsystem m_intake;
-    LEDControllerSubsystem m_leds{ kLEDCotrollerSlaveAddress};
-    
+    LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.

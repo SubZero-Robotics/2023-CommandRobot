@@ -5,11 +5,9 @@ IntakeSubsystem::IntakeSubsystem() {
     exampleDoublePH.Set(frc::DoubleSolenoid::Value::kForward);
 }
 
-void IntakeSubsystem::Periodic() {
-}
+void IntakeSubsystem::Periodic() {}
 
-void IntakeSubsystem::SimulationPeriodic() {
-}
+void IntakeSubsystem::SimulationPeriodic() {}
 
 void IntakeSubsystem::Out() {
     exampleDoublePH.Set(frc::DoubleSolenoid::Value::kForward);

@@ -5,8 +5,7 @@
 
 #include "subsystems/GripperSubsystem.h"
 
-class Gripper
-    : public frc2::CommandHelper<frc2::CommandBase, Gripper> {
+class Gripper : public frc2::CommandHelper<frc2::CommandBase, Gripper> {
    public:
     /**
      * Creates a new Gripper.
