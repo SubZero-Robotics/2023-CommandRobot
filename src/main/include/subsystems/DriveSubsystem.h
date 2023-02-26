@@ -61,6 +61,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
      */
     void ArcadeDrive(double, double);
 
+    void TankDrive(units::meters_per_second_t, units::meters_per_second_t);
+
     /**
      * Controls each side of the drive directly with a voltage.
      *
