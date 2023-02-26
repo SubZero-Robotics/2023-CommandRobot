@@ -13,7 +13,7 @@ class RotateArm : public frc2::CommandHelper<frc2::CommandBase, RotateArm> {
      * @param subsystem The subsystem used by this command.
      */
     explicit RotateArm(EffectorSubsystem* subsystem,
-                     std::function<double()> m_rotation);
+                       std::function<double()> m_rotation);
 
     void Execute() override;
 
