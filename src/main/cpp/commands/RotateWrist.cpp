@@ -8,7 +8,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 RotateWrist::RotateWrist(WristSubsystem* subsystem,
-                     std::function<double()> rotation)
+                         std::function<double()> rotation)
     : m_effector{subsystem}, m_rotation{rotation} {
     // Register that this command requires the subsystem.
     AddRequirements(m_effector);

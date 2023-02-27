@@ -12,6 +12,4 @@ void WristSubsystem::SimulationPeriodic() {
     // Implementation of subsystem simulation periodic method goes here.
 }
 
-void WristSubsystem::Rotate(double speed) {
-    m_wristRotationMotor.Set(speed);
-}
+void WristSubsystem::Rotate(double speed) { m_wristRotationMotor.Set(speed); }
