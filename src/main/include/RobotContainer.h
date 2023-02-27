@@ -23,6 +23,7 @@
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/RotateArmSubsystem.h"
+#include "subsystems/WristSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -63,6 +64,7 @@ class RobotContainer {
     GripperSubsystem m_gripper;
     IntakeSubsystem m_intake;
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
+    WristSubsystem m_wrist;
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
