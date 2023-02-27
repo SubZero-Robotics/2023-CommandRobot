@@ -39,7 +39,7 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
     bool AtLimit() {
         return m_limitSwitch.GetValue() >=
                    LimitSwitchConstants::kExtenderLimitSwitchThreshold ||
-                ExtenderDistanceCm() >= kMaxArmDistance;
+               ExtenderDistanceCm() >= kMaxArmDistance;
     }
 
    private:
