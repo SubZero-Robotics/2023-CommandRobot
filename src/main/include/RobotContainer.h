@@ -7,13 +7,13 @@
 #include <frc/Compressor.h>
 #include <frc/XboxController.h>
 #include <frc/controller/RamseteController.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/Trigger.h>
 #include <pathplanner/lib/PathPlanner.h>
 #include <pathplanner/lib/auto/RamseteAutoBuilder.h>
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/smartdashboard/SendableChooser.h>
 
 #include <memory>
 
