@@ -18,10 +18,10 @@ struct BoundingBox {
 
     // [topLeftY, topLeftX, bottomRightY, bottomRightX]
     static BoundingBox parse(std::array<float, 4> boxes) {
-        return {.topLeft = std::make_pair(boxes.at(1), boxes.at(0)),
-                .bottomRight = std::make_pair(boxes.at(3), boxes.at(2)),
-                .width = boxes.at(3) - boxes.at(1),
-                .height = boxes.at(2) - boxes.at(0)};
+        return {std::make_pair(boxes.at(1), boxes.at(0)),       // top-left (X, Y)
+                std::make_pair(boxes.at(3), boxes.at(2)),       // bottom-right (X, y)
+                boxes.at(3) - boxes.at(1),                      // width
+                boxes.at(2) - boxes.at(0)};                     // height
     }
 };
 
@@ -32,7 +32,8 @@ struct DetectedObject {
 
     static std::vector<DetectedObject> parse(
         std::vector<float> flattenedOutputList) {
-        auto detectedObjects = std::vector<DetectedObject>(10);
+        std::vector<DetectedObject> detectedObjects;
+        detectedObjects.reserve(10);
 
         int entryNum = flattenedOutputList.at(0);
 
@@ -44,9 +45,9 @@ struct DetectedObject {
                                       flattenedOutputList.at(startNum + 4),
                                       flattenedOutputList.at(startNum + 5)});
             DetectedObject box = {
-                .classId = (ObjectClasses)flattenedOutputList.at(startNum),
-                .confidence = flattenedOutputList.at(startNum + 1),
-                .bbox = BoundingBox::parse(bound)};
+                (ObjectClasses)flattenedOutputList.at(startNum),    // classId
+                flattenedOutputList.at(startNum + 1),               // confidence score
+                BoundingBox::parse(bound)};                         // bbox
             detectedObjects.push_back(box);
         }
     }
