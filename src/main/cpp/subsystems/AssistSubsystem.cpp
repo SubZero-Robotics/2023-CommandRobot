@@ -1,5 +1,6 @@
-#include "subsystems/ExampleSubsystem.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+
+#include "subsystems/ExampleSubsystem.h"
 
 ExampleSubsystem::ExampleSubsystem() {
     // Implementation of subsystem constructor goes here.
