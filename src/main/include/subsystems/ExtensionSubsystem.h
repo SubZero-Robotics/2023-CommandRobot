@@ -27,12 +27,6 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
 
     void PercentOutput(double);
 
-    bool AtLimit() {
-        return m_limitSwitch.GetValue() >=
-                   LimitSwitchConstants::kExtenderLimitSwitchThreshold ||
-               ExtenderDistanceCm() >= kMaxArmDistance;
-    }
-
     void ResetEncoder() { m_encoder.SetPosition(0); }
 
     void RunMotorHoming(double speed) {
@@ -40,7 +34,13 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
         m_extensionMotor.Set(speed);
     }
 
-    float ExtederDistanceCm() { m_encoder.GetPosition() * kTicksPerCm; }
+    float ExtenderDistanceCm() { m_encoder.GetPosition() * kTicksPerCm; }
+
+    bool AtLimit() {
+        return m_limitSwitch.GetValue() >=
+                   LimitSwitchConstants::kExtenderLimitSwitchThreshold ||
+                ExtenderDistanceCm() >= kMaxArmDistance;
+    }
 
    private:
     // Components (e.g. motor controllers and sensors) should generally be
