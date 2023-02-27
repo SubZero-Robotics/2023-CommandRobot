@@ -7,13 +7,30 @@
 #include "constants.h"
 #include "rev/CANSparkMax.h"
 
-class EffectorSubsystem : public frc2::SubsystemBase {
+class RotateArmSubsystem : public frc2::SubsystemBase {
    public:
-    EffectorSubsystem();
+    RotateArmSubsystem();
     /**
      * Will be called periodically whenever the CommandScheduler runs.
      */
     void Periodic() override;
+
+    bool AtLimit() {
+        return m_limitSwitch.GetValue() >=
+                   LimitSwitchConstants::kExtenderLimitSwitchThreshold ||
+               ArmRotationDegree() >= kRotationMaxDegree;
+    }
+
+    void ResetEncoder() { m_encoder.SetPosition(0); }
+
+    void RunMotorHoming(double speed) {
+        // todo check direction for speed
+        m_leadRotationMotor.Set(speed);
+    }
+
+    float ArmRotationDegree() {
+        (m_encoder.GetPosition() / kArmTicksPerDegree) + kRotationHomeDegree;
+    }
 
     /**
      * Will be called periodically whenever the CommandScheduler runs during
