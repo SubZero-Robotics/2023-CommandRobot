@@ -3,11 +3,11 @@
 // todo: get current angle
 // todo: map encoder ticks to angle (constant)
 
-#include "commands/RotateArm.h"
+#include "commands/RotateWrist.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
-RotateArm::RotateArm(RotateArmSubsystem* subsystem,
+RotateWrist::RotateWrist(WristSubsystem* subsystem,
                      std::function<double()> rotation)
     : m_effector{subsystem}, m_rotation{rotation} {
     // Register that this command requires the subsystem.
@@ -15,8 +15,8 @@ RotateArm::RotateArm(RotateArmSubsystem* subsystem,
     Execute();
 }
 
-void RotateArm::Execute() {
+void RotateWrist::Execute() {
     double rotation = m_rotation();
 
-    m_effector->PercentOutput(rotation);
+    m_effector->Rotate(rotation);
 }
