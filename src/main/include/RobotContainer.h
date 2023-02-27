@@ -17,12 +17,12 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/RotateArmSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/ExtensionSubsystem.h"
 #include "subsystems/GripperSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
+#include "subsystems/RotateArmSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since

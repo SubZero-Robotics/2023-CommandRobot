@@ -17,7 +17,7 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
 
     bool AtLimit() {
         return m_limitSwitch.GetValue() >=
-               LimitSwitchConstants::kExtenderLimitSwitchThreshold || 
+                   LimitSwitchConstants::kExtenderLimitSwitchThreshold ||
                ArmRotationDegree() >= kRotationMaxDegree;
     }
 
@@ -28,9 +28,9 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
         m_leadRotationMotor.Set(speed);
     }
 
-    float ArmRotationDegree() { 
-        (m_encoder.GetPosition() / kArmTicksPerDegree) +
-        kRotationHomeDegree; }
+    float ArmRotationDegree() {
+        (m_encoder.GetPosition() / kArmTicksPerDegree) + kRotationHomeDegree;
+    }
 
     /**
      * Will be called periodically whenever the CommandScheduler runs during
