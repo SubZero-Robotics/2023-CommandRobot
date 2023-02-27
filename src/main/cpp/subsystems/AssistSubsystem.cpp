@@ -10,7 +10,8 @@ ExampleSubsystem::ExampleSubsystem() {
 void ExampleSubsystem::Periodic() {
     // Implementation of subsystem periodic method goes here.
     auto DetectionArray = frc::SmartDashboard::GetNumberArray("detections", {});
-    auto DetectedObjects = DetectionParser::DetectedObject::parse(DetectionArray);
+    auto DetectedObjects =
+        DetectionParser::DetectedObject::parse(DetectionArray);
 }
 
 void ExampleSubsystem::SimulationPeriodic() {
