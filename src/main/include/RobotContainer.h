@@ -12,6 +12,8 @@
 #include <frc2/command/button/Trigger.h>
 #include <pathplanner/lib/PathPlanner.h>
 #include <pathplanner/lib/auto/RamseteAutoBuilder.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 #include <memory>
 
@@ -85,6 +87,11 @@ class RobotContainer {
         eventMap,
         {m_drive},
         true};
+
+    frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
+    frc2::CommandPtr m_testauto = autos::Test(autoBuilder, m_drive);
+
+    frc::SendableChooser<frc2::Command*> m_chooser;
 
     void ConfigureBindings();
 };

@@ -30,6 +30,11 @@ RobotContainer::RobotContainer() {
     // Configure the button bindings
     ConfigureBindings();
 
+    m_chooser.SetDefaultOption("StraightBack", m_straightback.get());
+    m_chooser.AddOption("Curved Path", m_testauto.get());
+
+    frc::SmartDashboard::PutData(&m_chooser);
+
     m_leds.setOn();
 }
 
@@ -67,5 +72,5 @@ void RobotContainer::ConfigureBindings() {
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
-    return autos::Test(autoBuilder, m_drive);
+    return m_chooser.GetSelected();
 }
