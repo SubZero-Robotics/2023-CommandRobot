@@ -46,7 +46,7 @@ void RobotContainer::ConfigureBindings() {
 
     m_effector.SetDefaultCommand(
         RotateArm(&m_effector, [this] { return ArmXbox.GetLeftY(); }));
-    
+
     m_wrist.SetDefaultCommand(
         RotateWrist(&m_wrist, [this] { return ArmXbox.GetRightY(); }));
 

@@ -42,9 +42,9 @@ struct DetectedObject {
             int startNum = i * 6 + 1;
             auto bound =
                 std::array<double, 4>({flattenedOutputList.at(startNum + 2),
-                                      flattenedOutputList.at(startNum + 3),
-                                      flattenedOutputList.at(startNum + 4),
-                                      flattenedOutputList.at(startNum + 5)});
+                                       flattenedOutputList.at(startNum + 3),
+                                       flattenedOutputList.at(startNum + 4),
+                                       flattenedOutputList.at(startNum + 5)});
             DetectedObject box = {
                 (ObjectClasses)flattenedOutputList.at(startNum),  // classId
                 flattenedOutputList.at(startNum + 1),  // confidence score

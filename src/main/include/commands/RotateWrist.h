@@ -13,7 +13,7 @@ class RotateWrist : public frc2::CommandHelper<frc2::CommandBase, RotateWrist> {
      * @param subsystem The subsystem used by this command.
      */
     explicit RotateWrist(WristSubsystem* subsystem,
-                       std::function<double()> m_rotation);
+                         std::function<double()> m_rotation);
 
     void Execute() override;
 
