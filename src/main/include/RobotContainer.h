@@ -91,7 +91,7 @@ class RobotContainer {
     frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
     frc2::CommandPtr m_testauto = autos::Test(autoBuilder, m_drive);
 
-    frc::SendableChooser<frc2::Command*> m_chooser;
+    frc::SendableChooser<frc2::CommandPtr> m_chooser;
 
     void ConfigureBindings();
 };
