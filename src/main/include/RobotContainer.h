@@ -71,7 +71,7 @@ class RobotContainer {
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
     std::unique_ptr<DriveSubsystem> drive;
-    DriveSubsystem *m_drive;
+    DriveSubsystem* m_drive;
 
     // Auto Builder
     std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
