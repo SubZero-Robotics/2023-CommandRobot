@@ -10,14 +10,14 @@ enum class ObjectClasses { Cone = 0, Cube = 1, Merge = 2 };
 
 struct BoundingBox {
     // An ordered pair representing X and Y of the top left coordinate
-    std::pair<float, float> topLeft;
+    std::pair<double, double> topLeft;
     // An ordered pair representing X and Y of the bottom right coordinate
-    std::pair<float, float> bottomRight;
-    float width;
-    float height;
+    std::pair<double, double> bottomRight;
+    double width;
+    double height;
 
     // [topLeftY, topLeftX, bottomRightY, bottomRightX]
-    static BoundingBox parse(std::array<float, 4> boxes) {
+    static BoundingBox parse(std::array<double, 4> boxes) {
         return {
             std::make_pair(boxes.at(1), boxes.at(0)),  // top-left (X, Y)
             std::make_pair(boxes.at(3), boxes.at(2)),  // bottom-right (X, y)
@@ -28,11 +28,11 @@ struct BoundingBox {
 
 struct DetectedObject {
     ObjectClasses classId;
-    float confidence;
+    double confidence;
     BoundingBox bbox;
 
     static std::vector<DetectedObject> parse(
-        std::vector<float> flattenedOutputList) {
+        std::vector<double> flattenedOutputList) {
         std::vector<DetectedObject> detectedObjects;
         detectedObjects.reserve(10);
 
@@ -41,7 +41,7 @@ struct DetectedObject {
         for (int i = 0; i < entryNum; i++) {
             int startNum = i * 6 + 1;
             auto bound =
-                std::array<float, 4>({flattenedOutputList.at(startNum + 2),
+                std::array<double, 4>({flattenedOutputList.at(startNum + 2),
                                       flattenedOutputList.at(startNum + 3),
                                       flattenedOutputList.at(startNum + 4),
                                       flattenedOutputList.at(startNum + 5)});

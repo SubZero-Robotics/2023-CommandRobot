@@ -1,6 +1,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "subsystems/ExampleSubsystem.h"
+#include "utils/DetectionParser.h"
 
 ExampleSubsystem::ExampleSubsystem() {
     // Implementation of subsystem constructor goes here.
@@ -8,7 +9,8 @@ ExampleSubsystem::ExampleSubsystem() {
 
 void ExampleSubsystem::Periodic() {
     // Implementation of subsystem periodic method goes here.
-    frc::SmartDashboard::GetNumberArray("detections", {});
+    auto DetectionArray = frc::SmartDashboard::GetNumberArray("detections", {});
+    auto DetectedObjects = DetectionParser::DetectedObject::parse(DetectionArray);
 }
 
 void ExampleSubsystem::SimulationPeriodic() {
