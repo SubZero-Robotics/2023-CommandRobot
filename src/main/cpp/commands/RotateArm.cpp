@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-RotateArm::RotateArm(EffectorSubsystem* subsystem,
+RotateArm::RotateArm(RotateArmSubsystem* subsystem,
                      std::function<double()> rotation)
     : m_effector{subsystem}, m_rotation{rotation} {
     // Register that this command requires the subsystem.

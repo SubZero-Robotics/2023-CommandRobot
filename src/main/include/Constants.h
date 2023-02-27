@@ -42,6 +42,8 @@ constexpr int kMaxArmDistance = 35;
 constexpr double kArmTicksPerDegree = 7;
 constexpr int kRotationMagneticStopPort = 1;
 constexpr int kRotationLimitSwitchThreshold = 3000;
+constexpr float kRotationHomeDegree = 60;
+constexpr float kRotationMaxDegree = 125;
 
 // Motor IDs
 namespace CANSparkMaxConstants {

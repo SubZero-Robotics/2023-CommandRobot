@@ -3,7 +3,7 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
-#include "subsystems/EffectorSubsystem.h"
+#include "subsystems/RotateArmSubsystem.h"
 
 class RotateArm : public frc2::CommandHelper<frc2::CommandBase, RotateArm> {
    public:
@@ -12,12 +12,12 @@ class RotateArm : public frc2::CommandHelper<frc2::CommandBase, RotateArm> {
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit RotateArm(EffectorSubsystem* subsystem,
+    explicit RotateArm(RotateArmSubsystem* subsystem,
                        std::function<double()> m_rotation);
 
     void Execute() override;
 
    private:
-    EffectorSubsystem* m_effector;
+    RotateArmSubsystem* m_effector;
     std::function<double()> m_rotation;
 };
