@@ -16,7 +16,7 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
     void Periodic() override;
 
     bool AtLimit() {
-        return m_limitSwitch.GetValue() >=
+        return m_limitswitch.GetValue() >=
                    LimitSwitchConstants::kExtenderLimitSwitchThreshold ||
                ArmRotationDegree() >= kRotationMaxDegree;
     }
