@@ -78,12 +78,12 @@ The reviewer is responsible for looking over the PR, testing the changes themsel
 - Disapprove (PR needs changes before it can be merged; please address the comments, click `Resolve` under each comment once fixed, then re-request a review)
 - Comment (simply add a comment(s) without approving or disapproving)
 
-## Network Map
-
 ## Necessary Hardware
 
 1 Prototype 4 v2
 2 Prototype 4
+
+## Network Map
 
 Device | Address
 |:---:|:---:|
