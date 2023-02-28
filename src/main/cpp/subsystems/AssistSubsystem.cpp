@@ -1,6 +1,7 @@
+#include "subsystems/AssistSubsystem.h"
+
 #include <frc/smartdashboard/SmartDashboard.h>
 
-#include "subsystems/AssistSubsystem.h"
 #include "utils/DetectionParser.h"
 
 AssistSubsystem::AssistSubsystem() {
@@ -13,7 +14,9 @@ void AssistSubsystem::Periodic() {
 
 // Limelight Stuff
 frc::Pose3d AssistSubsystem::GetPosition() {
-    nt::NetworkTableInstance::GetDefault().GetTable("limelight")->GetNumberArray("botpose",std::vector<double>(6));
+    nt::NetworkTableInstance::GetDefault()
+        .GetTable("limelight")
+        ->GetNumberArray("botpose", std::vector<double>(6));
 }
 
 std::vector<DetectionParser::DetectedObject> AssistSubsystem::GetObjects() {

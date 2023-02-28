@@ -2,17 +2,18 @@
 
 #pragma once
 
+#include <frc/geometry/Pose3d.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-#include <frc/geometry/Pose3d.h>
-#include "utils/DetectionParser.h"
-#include <vector>
 #include <networktables/NetworkTableInstance.h>
+
 #include <cmath>
+#include <vector>
+
+#include "utils/DetectionParser.h"
 
 class AssistSubsystem : public frc2::SubsystemBase {
    public:
-
     struct ArmPose {
         double rotationDegree;
         double armLengthIn;
@@ -25,7 +26,6 @@ class AssistSubsystem : public frc2::SubsystemBase {
      */
     void Periodic() override;
 
-
     frc::Pose3d GetPosition();
 
     std::vector<DetectionParser::DetectedObject> GetObjects();
@@ -36,14 +36,13 @@ class AssistSubsystem : public frc2::SubsystemBase {
      */
     void SimulationPeriodic() override;
 
-    static ArmPose GetArmPoseFromDistance(double distanceIn, double poleHeightIn) {
-        return {
-            atan(poleHeightIn / distanceIn),
-            hypot(distanceIn, poleHeightIn)
-        };
+    static ArmPose GetArmPoseFromDistance(double distanceIn,
+                                          double poleHeightIn) {
+        return {atan(poleHeightIn / distanceIn),
+                hypot(distanceIn, poleHeightIn)};
     }
 
-    private:
+   private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
 };
