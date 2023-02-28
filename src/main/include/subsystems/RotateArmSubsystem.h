@@ -29,7 +29,8 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
     }
 
     float ArmRotationDegree() {
-        return (m_encoder.GetPosition() / kArmTicksPerDegree) + kRotationHomeDegree;
+        return (m_encoder.GetPosition() / kArmTicksPerDegree) +
+               kRotationHomeDegree;
     }
 
     /**

@@ -18,6 +18,7 @@
 #include <memory>
 
 #include "Constants.h"
+#include "commands/Autos.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/ExtensionSubsystem.h"
@@ -26,7 +27,6 @@
 #include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/RotateArmSubsystem.h"
 #include "subsystems/WristSubsystem.h"
-#include "commands/Autos.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
