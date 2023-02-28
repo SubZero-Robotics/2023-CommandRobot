@@ -80,6 +80,11 @@ The reviewer is responsible for looking over the PR, testing the changes themsel
 
 ## Network Map
 
+## Necessary Hardware
+
+1 Prototype 4 v2
+2 Prototype 4
+
 Device | Address
 |:---:|:---:|
 Gateway|10.56.90.1
