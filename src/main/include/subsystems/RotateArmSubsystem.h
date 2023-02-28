@@ -16,7 +16,7 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
     void Periodic() override;
 
     bool AtLimit() {
-        return m_limitSwitch.GetValue() >=
+        return m_limitswitch.GetValue() >=
                    LimitSwitchConstants::kExtenderLimitSwitchThreshold ||
                ArmRotationDegree() >= kRotationMaxDegree;
     }
@@ -54,5 +54,5 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
     rev::SparkMaxRelativeEncoder m_encoder = m_leadRotationMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kQuadrature, 4096);
 
-    frc::AnalogInput m_limitswitch{kRotationMagneticStopPort};
+    frc::AnalogInput m_limitswitch{kRotationMagneticStopPort}; 
 };
