@@ -7,6 +7,8 @@
 #include <frc/Compressor.h>
 #include <frc/XboxController.h>
 #include <frc/controller/RamseteController.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/Trigger.h>
@@ -23,6 +25,7 @@
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/RotateArmSubsystem.h"
+#include "subsystems/WristSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -35,7 +38,7 @@ class RobotContainer {
    public:
     RobotContainer();
 
-    frc2::CommandPtr GetAutonomousCommand();
+    frc2::Command* GetAutonomousCommand();
 
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -63,11 +66,12 @@ class RobotContainer {
     GripperSubsystem m_gripper;
     IntakeSubsystem m_intake;
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
+    WristSubsystem m_wrist;
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
     std::unique_ptr<DriveSubsystem> drive;
-    DriveSubsystem *m_drive;
+    DriveSubsystem* m_drive;
 
     // Auto Builder
     std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
@@ -83,6 +87,11 @@ class RobotContainer {
         eventMap,
         {m_drive},
         true};
+
+    frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
+    frc2::CommandPtr m_testauto = autos::Test(autoBuilder, m_drive);
+
+    frc::SendableChooser<frc2::Command*> m_chooser;
 
     void ConfigureBindings();
 };

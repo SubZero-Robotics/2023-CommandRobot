@@ -132,6 +132,8 @@ void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
 
 void DriveSubsystem::TankDrive(units::meters_per_second_t left,
                                units::meters_per_second_t right) {
+    frc::SmartDashboard::PutNumber("Left Auto Speed", (double)left);
+    frc::SmartDashboard::PutNumber("Right Auto Speed", (double)right);
     m_drive.TankDrive(left / (3 * 1_mps), right / (3 * 1_mps));
 }
 

@@ -19,6 +19,7 @@
 #include "commands/LEDPurple.h"
 #include "commands/LEDYellow.h"
 #include "commands/RotateArm.h"
+#include "commands/RotateWrist.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -28,6 +29,11 @@ RobotContainer::RobotContainer() {
 
     // Configure the button bindings
     ConfigureBindings();
+
+    m_chooser.SetDefaultOption("StraightBack", m_straightback.get());
+    m_chooser.AddOption("Curved Path", m_testauto.get());
+
+    frc::SmartDashboard::PutData(&m_chooser);
 
     m_leds.setOn();
 }
@@ -46,6 +52,9 @@ void RobotContainer::ConfigureBindings() {
     m_effector.SetDefaultCommand(
         RotateArm(&m_effector, [this] { return ArmXbox.GetLeftY(); }));
 
+    m_wrist.SetDefaultCommand(
+        RotateWrist(&m_wrist, [this] { return ArmXbox.GetRightY(); }));
+
     m_extender.SetDefaultCommand(Extender(
         &m_extender, [this] { return ArmXbox.GetRightTriggerAxis(); },
         [this] { return ArmXbox.GetLeftTriggerAxis(); }));
@@ -61,7 +70,7 @@ void RobotContainer::ConfigureBindings() {
     ArmXbox.RightBumper().ToggleOnTrue(LEDPurple(&m_leds).ToPtr());
 }
 
-frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
+frc2::Command* RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
-    return autos::Test(autoBuilder, m_drive);
+    return m_chooser.GetSelected();
 }
