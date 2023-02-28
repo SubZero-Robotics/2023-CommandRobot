@@ -3,6 +3,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "utils/DetectionParser.h"
+#include <vector>
 
 AssistSubsystem::AssistSubsystem() {
     // Implementation of subsystem constructor goes here.
@@ -13,16 +14,19 @@ void AssistSubsystem::Periodic() {
 }
 
 // Limelight Stuff
-frc::Pose3d AssistSubsystem::GetPosition() {
-    nt::NetworkTableInstance::GetDefault()
+frc::Pose2d AssistSubsystem::GetPosition() {
+    auto rawbot = nt::NetworkTableInstance::GetDefault()
         .GetTable("limelight")
         ->GetNumberArray("botpose", std::vector<double>(6));
+    auto x = (units::meter_t)rawbot[0];
+    auto y = (units::meter_t)rawbot[1];
+    auto yaw = rawbot[5];
+    return frc::Pose2d{x, y, frc::Rotation2d(sin(yaw), cos(yaw))};
 }
 
 std::vector<DetectionParser::DetectedObject> AssistSubsystem::GetObjects() {
     auto DetectionArray = frc::SmartDashboard::GetNumberArray("detections", {});
-    auto DetectedObjects =
-        DetectionParser::DetectedObject::parse(DetectionArray);
+    return DetectionParser::DetectedObject::parse(DetectionArray);
 }
 
 void AssistSubsystem::SimulationPeriodic() {

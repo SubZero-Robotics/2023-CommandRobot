@@ -6,7 +6,6 @@
 
 #include <iostream>
 
-#include "commands/Autos.h"
 #include "commands/DefaultDrive.h"
 #include "commands/ExampleCommand.h"
 #include "commands/Extender.h"

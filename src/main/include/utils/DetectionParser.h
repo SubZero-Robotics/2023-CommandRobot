@@ -51,6 +51,7 @@ struct DetectedObject {
                 BoundingBox::parse(bound)};            // bbox
             detectedObjects.push_back(box);
         }
+        return detectedObjects;
     }
 };
 

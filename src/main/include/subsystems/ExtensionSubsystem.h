@@ -34,7 +34,7 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
         m_extensionMotor.Set(speed);
     }
 
-    float ExtenderDistanceCm() { m_encoder.GetPosition() * kTicksPerCm; }
+    float ExtenderDistanceCm() { return m_encoder.GetPosition() * kTicksPerCm; }
 
     bool AtLimit() {
         return m_limitSwitch.GetValue() >=

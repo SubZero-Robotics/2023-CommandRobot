@@ -2,7 +2,8 @@
 
 #pragma once
 
-#include <frc/geometry/Pose3d.h>
+#include <frc/geometry/Pose2d.h>
+#include <frc/geometry/Rotation2d.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <networktables/NetworkTableInstance.h>
@@ -26,7 +27,7 @@ class AssistSubsystem : public frc2::SubsystemBase {
      */
     void Periodic() override;
 
-    frc::Pose3d GetPosition();
+    frc::Pose2d GetPosition();
 
     std::vector<DetectionParser::DetectedObject> GetObjects();
 

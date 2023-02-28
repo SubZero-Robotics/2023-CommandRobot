@@ -20,9 +20,9 @@ DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
                                WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow)
     : RightLead(rightLead),
       RightFollow(rightFollow),
+      RightLeadSim(rightLead.GetSimCollection()),
       LeftLead(leftLead),
       LeftFollow(leftFollow),
-      RightLeadSim(rightLead.GetSimCollection()),
       LeftLeadSim(leftLead.GetSimCollection()) {
     // Implementation of subsystem constructor goes here.
     // Stuff you want to happen once, when robot code starts running
