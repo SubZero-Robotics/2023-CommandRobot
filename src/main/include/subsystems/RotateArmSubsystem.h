@@ -18,7 +18,7 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
     bool AtLimit() {
         return m_limitswitch.GetValue() >=
                    LimitSwitchConstants::kExtenderLimitSwitchThreshold ||
-               ArmRotationDegree() >= kRotationMaxDegree;
+               ArmRotationDegree() >= ArmConstants::kRotationMaxDegree;
     }
 
     void ResetEncoder() { m_encoder.SetPosition(0); }
@@ -29,7 +29,7 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
     }
 
     float ArmRotationDegree() {
-        return (m_encoder.GetPosition() / kArmTicksPerDegree) + kRotationHomeDegree;
+        return (m_encoder.GetPosition() / ArmConstants::kArmTicksPerDegree) + ArmConstants::kRotationHomeDegree;
     }
 
     /**
@@ -54,5 +54,5 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
     rev::SparkMaxRelativeEncoder m_encoder = m_leadRotationMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kQuadrature, 4096);
 
-    frc::AnalogInput m_limitswitch{kRotationMagneticStopPort};
+    frc::AnalogInput m_limitswitch{ArmConstants::kRotationMagneticStopPort};
 };

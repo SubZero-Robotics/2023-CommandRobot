@@ -26,7 +26,7 @@ void Extender::Execute() {
     auto rotation = outExtent >= inExtent ? outExtent : -inExtent;
 
     if (m_extension->AtLimit() ||
-        m_extension->ExtenderDistanceCm() >= kMaxArmDistance) {
+        m_extension->GetExtenderDistanceIn() >= ArmConstants::kMaxArmDistanceIn) {
         m_extension->PercentOutput(0);
         return;
     }

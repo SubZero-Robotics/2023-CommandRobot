@@ -3,11 +3,6 @@
 RotateArmSubsystem::RotateArmSubsystem() {
     // Implementation of subsystem constructor goes here.
 
-    double forwardRotationsSoftLimit =
-        (kArmSoftLimitForwardDegrees * kArmTicksPerDegree) /
-        kTicksPerMotorRotation;
-    int reverseRotationsSoftLimit = 0;
-
     m_leadRotationMotor.EnableSoftLimit(
         rev::CANSparkMax::SoftLimitDirection::kForward, true);
     m_leadRotationMotor.EnableSoftLimit(
@@ -16,10 +11,10 @@ RotateArmSubsystem::RotateArmSubsystem() {
     // Default unit is number of rotations
     m_leadRotationMotor.SetSoftLimit(
         rev::CANSparkMax::SoftLimitDirection::kForward,
-        forwardRotationsSoftLimit);
+        ArmConstants::kForwardRotationsSoftLimit);
     m_leadRotationMotor.SetSoftLimit(
         rev::CANSparkMax::SoftLimitDirection::kReverse,
-        reverseRotationsSoftLimit);
+        ArmConstants::kReverseRotationsSoftLimit);
 
     m_followRotationMotor.Follow(m_leadRotationMotor);
 }

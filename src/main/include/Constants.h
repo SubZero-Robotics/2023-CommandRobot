@@ -35,19 +35,26 @@
  */
 
 // Arm Extension Constants
-constexpr int kTicksPerCm = 500;
-constexpr int kMaxArmDistance = 35;
 
-// Motor Constants
-constexpr int kTicksPerMotorRotation = 42;
+namespace ArmConstants {
+    constexpr int kTicksPerIn = 12;
+    constexpr double kMaxArmDistanceIn = 35;
 
-// Arm Rotation Constants
-constexpr double kArmTicksPerDegree = 7;
-constexpr int kRotationMagneticStopPort = 1;
-constexpr int kRotationLimitSwitchThreshold = 3000;
-constexpr float kRotationHomeDegree = 60;
-constexpr float kRotationMaxDegree = 125;
-constexpr int kArmSoftLimitForwardDegrees = 65;
+    // Arm Rotation Constants
+    constexpr double kArmTicksPerDegree = 7;
+    constexpr int kRotationMagneticStopPort = 1;
+    constexpr int kRotationLimitSwitchThreshold = 3000;
+    constexpr float kRotationHomeDegree = 60;
+    constexpr float kRotationMaxDegree = 125;
+    constexpr int kArmSoftLimitForwardDegrees = 65;
+
+    // Motor Constants
+    constexpr int kTicksPerMotorRotation = 42;
+    constexpr double kForwardRotationsSoftLimit =
+            (kArmSoftLimitForwardDegrees * kArmTicksPerDegree) /
+            kTicksPerMotorRotation;
+    constexpr int kReverseRotationsSoftLimit = 0;
+}
 
 // Motor IDs
 namespace CANSparkMaxConstants {
