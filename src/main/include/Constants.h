@@ -42,12 +42,12 @@ namespace ArmConstants {
     constexpr double kExtenderSoftLimit = kTicksPerIn * kMaxArmDistanceIn;
 
     // Arm Rotation Constants
-    constexpr double kArmTicksPerDegree = 7;
     constexpr int kRotationLimitSwitchHomePort = 0;
     constexpr int kRotationLimitSwitchMaxPort = 1;
     constexpr float kRotationHomeDegree = 60;
     constexpr float kRotationMaxDegree = 125;
     constexpr int kArmSoftLimitForwardDegrees = 65;
+    constexpr int kArmGearRatio = 197.14;
 
     // Motor Constants
     constexpr int kTicksPerMotorRotation = 42;
@@ -55,10 +55,12 @@ namespace ArmConstants {
             (kArmSoftLimitForwardDegrees * kArmTicksPerDegree) /
             kTicksPerMotorRotation;
     constexpr int kReverseRotationsSoftLimit = 0;
+    constexpr double kArmTicksPerDegree = (kTicksPerMotorRotation * kArmGearRatio) / 360.0;
     
     // Homing Speeds
-    constexpr int kRotationHomingSpeed = .01;
-    constexpr int kExtenderHomingSpeed = .01;
+    constexpr int kRotationHomingSpeed = .05;
+    constexpr int kExtenderHomingSpeed = .15;
+    constexpr int kWristHomingSpeed = .1;
 }
 
 // Motor IDs
@@ -66,7 +68,7 @@ namespace CANSparkMaxConstants {
 constexpr int kExtensionMotorID = 50;
 constexpr int kLeadRotationMotorID = 1;
 constexpr int kFollowRotationMotorID = 3;
-constexpr int kIntakeSpinnyBoyID = 0;
+constexpr int kIntakeSpinnyBoyID = 17;
 constexpr int kWristRotationMotorID = 15;
 }  // namespace CANSparkMaxConstants
 
