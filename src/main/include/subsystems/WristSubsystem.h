@@ -48,5 +48,5 @@ class WristSubsystem : public frc2::SubsystemBase {
         rev::CANSparkMax::MotorType::kBrushless};
 
     rev::SparkMaxRelativeEncoder m_encoder = m_wristRotationMotor.GetEncoder(
-        rev::SparkMaxRelativeEncoder::Type::kQuadrature, 4096);
+        rev::SparkMaxRelativeEncoder::Type::kHallSensor, 42);
 };
