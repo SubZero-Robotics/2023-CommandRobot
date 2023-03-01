@@ -51,11 +51,11 @@ namespace ArmConstants {
 
     // Motor Constants
     constexpr int kTicksPerMotorRotation = 42;
+    constexpr double kArmTicksPerDegree = (kTicksPerMotorRotation * kArmGearRatio) / 360.0;
     constexpr double kForwardRotationsSoftLimit =
             (kArmSoftLimitForwardDegrees * kArmTicksPerDegree) /
             kTicksPerMotorRotation;
     constexpr int kReverseRotationsSoftLimit = 0;
-    constexpr double kArmTicksPerDegree = (kTicksPerMotorRotation * kArmGearRatio) / 360.0;
     
     // Homing Speeds
     constexpr int kRotationHomingSpeed = .05;
@@ -83,7 +83,6 @@ constexpr double kWristTicksPerDegree = (kWristGearRatio * ArmConstants::kTicksP
 
 namespace ExtenderConstants {
 constexpr int kExtenderLimitSwitchPort = 2;
-constexpr int kExtenderLimitSwitchHomePort = 3000;
 }  // namespace ExtenderConstants
 
 // The deadzone for the joystick
