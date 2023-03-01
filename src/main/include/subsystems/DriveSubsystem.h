@@ -42,6 +42,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     void TeleopInit();
 
+    void BrakeInit();
+
     void SetCoast(WPI_TalonFX* talon);
 
     void SetBrake(WPI_TalonFX* talon);

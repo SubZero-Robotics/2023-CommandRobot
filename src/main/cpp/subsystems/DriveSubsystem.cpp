@@ -121,6 +121,13 @@ void DriveSubsystem::TeleopInit() {
   SetCoast(&LeftFollow);
 }
 
+void DriveSubsystem::BrakeInit() {
+    SetBrake(&RightLead);
+  SetBrake(&RightFollow);
+  SetBrake(&LeftLead);
+  SetBrake(&LeftFollow);
+}
+
 void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
     if (abs(currentPercentage) >
         previousPercentage) {  // speeding up, accel filter
