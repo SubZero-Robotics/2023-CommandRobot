@@ -48,7 +48,7 @@ class RobotContainer {
     // TODO: Second Xbox controller
     frc2::CommandXboxController ArmXbox{1};
 
-    frc::Compressor phCompressor{9, frc::PneumaticsModuleType::REVPH};
+    //frc::Compressor phCompressor{9, frc::PneumaticsModuleType::REVPH};
 
     WPI_TalonFX RightLead{8};
     WPI_TalonFX RightFollow{7};
