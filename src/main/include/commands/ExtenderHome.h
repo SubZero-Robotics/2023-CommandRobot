@@ -15,17 +15,23 @@ class ExtenderHome
      * @param subsystem The subsystem used by this command.
      */
     explicit ExtenderHome(ExtensionSubsystem* subsystem)
-        : m_extension(subsystem){};
+        : m_extension(subsystem), isFinished(false){}
 
     void Execute() override {
-        while (!m_extension->AtLimit()) {
+        if (!m_extension->AtLimit()) {
             m_extension->RunMotorHoming(ArmConstants::kExtenderHomingSpeed);
+        } else {
+            m_extension->RunMotorHoming(0);
+            m_extension->ResetEncoder();
+            isFinished = true;
         }
+    }
 
-        m_extension->RunMotorHoming(0);
-        m_extension->ResetEncoder();
+    bool IsFinished() override {
+        return isFinished;
     }
 
    private:
     ExtensionSubsystem* m_extension;
+    bool isFinished;
 };

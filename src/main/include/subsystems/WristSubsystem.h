@@ -6,6 +6,7 @@
 
 #include "constants.h"
 #include "rev/CANSparkMax.h"
+#include <iostream>
 
 class WristSubsystem : public frc2::SubsystemBase {
    public:
@@ -17,7 +18,6 @@ class WristSubsystem : public frc2::SubsystemBase {
      * Will be called periodically whenever the CommandScheduler runs.
      */
     void Periodic() override;
-
     /**
      * Will be called periodically whenever the CommandScheduler runs during
      * simulation.
@@ -35,8 +35,12 @@ class WristSubsystem : public frc2::SubsystemBase {
     double GetWristDistanceDegree() { return m_encoder.GetPosition() * kWristTicksPerDegree;}
 
     bool AtLimit() {
-        return !m_limitSwitch.Get() ||
+        return AtLimitSwitch() ||
             GetWristDistanceDegree() >= kWristDegreeLimit;
+    }
+
+    bool AtLimitSwitch() {
+        return !m_limitSwitch.Get();
     }
 
    private:

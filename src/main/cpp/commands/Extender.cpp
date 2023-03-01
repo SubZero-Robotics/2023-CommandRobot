@@ -17,7 +17,6 @@ Extender::Extender(ExtensionSubsystem* subsystem,
 {
     // Register that this command requires the subsystem.
     AddRequirements(m_extension);
-    Execute();
 }
 
 void Extender::Execute() {

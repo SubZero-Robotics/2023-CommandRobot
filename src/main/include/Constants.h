@@ -76,7 +76,7 @@ constexpr int kWristRotationMotorID = 15;
 
 constexpr int kWristLimitSwitchPort = 3;
 constexpr int kWristGearRatio = 125;
-constexpr int kWristDegreeLimit = 200;
+constexpr int kWristDegreeLimit = 90;
 constexpr double kWristSoftLimit = ((kWristDegreeLimit / 360.0) * 
 (kWristGearRatio * ArmConstants::kTicksPerMotorRotation));
 constexpr double kWristTicksPerDegree = (kWristGearRatio * ArmConstants::kTicksPerMotorRotation) / 360.0;

@@ -29,12 +29,14 @@ class LEDPurple : public frc2::CommandHelper<frc2::CommandBase, LEDPurple> {
     void Execute() override {
         m_subsystem->setColor(180, 0, 255);
         m_subsystem->setPattern(LEDControllerSubsystem::PatternType::SetAll, true);
+        isFinished = true;
     }
 
     bool IsFinished() override {
-        return true;
+        return isFinished;
     }
 
    private:
     LEDControllerSubsystem* m_subsystem;
+    bool isFinished = false;
 };

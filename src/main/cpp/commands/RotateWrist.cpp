@@ -12,11 +12,19 @@ RotateWrist::RotateWrist(WristSubsystem* subsystem,
     : m_effector{subsystem}, m_rotation{rotation} {
     // Register that this command requires the subsystem.
     AddRequirements(m_effector);
-    Execute();
 }
 
 void RotateWrist::Execute() {
     double rotation = m_rotation();
 
-    m_effector->Rotate(rotation);
-}
+    if (!m_effector->AtLimitSwitch()) {
+        m_effector->Rotate(rotation);
+    } else {
+        m_effector->Rotate(-0.2);
+        m_effector->ResetWristEncoder();
+    }
+
+    if (m_effector->GetWristDistanceDegree() >= kWristDegreeLimit) {
+        m_effector->Rotate(0.2);
+    }
+} 

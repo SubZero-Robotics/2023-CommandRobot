@@ -57,8 +57,8 @@ void RobotContainer::ConfigureBindings() {
         RotateWrist(&m_wrist, [this] { return ArmXbox.GetRightY(); }));
 
     m_extender.SetDefaultCommand(Extender(
-        &m_extender, [this] { return ArmXbox.GetRightTriggerAxis(); },
-        [this] { return ArmXbox.GetLeftTriggerAxis(); }));
+        &m_extender, [this] { return ArmXbox.GetLeftTriggerAxis(); },
+        [this] { return ArmXbox.GetRightTriggerAxis(); }));
 
     DriverXbox.Y().OnTrue(RotateArmHome(&m_effector).ToPtr());
 
