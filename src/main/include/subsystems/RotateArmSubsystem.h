@@ -56,7 +56,7 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
         rev::CANSparkMax::MotorType::kBrushless};
 
     rev::SparkMaxRelativeEncoder m_encoder = m_leadRotationMotor.GetEncoder(
-        rev::SparkMaxRelativeEncoder::Type::kQuadrature, 4096);
+        rev::SparkMaxRelativeEncoder::Type::kHallSensor, 42);
 
     frc::DigitalInput m_limitswitchHome{ArmConstants::kRotationLimitSwitchHomePort};
     frc::DigitalInput m_limitswitchMax{ArmConstants::kRotationLimitSwitchMaxPort};
