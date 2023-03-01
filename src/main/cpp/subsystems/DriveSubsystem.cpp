@@ -116,6 +116,20 @@ void DriveSubsystem::Periodic() {
     }
 }
 
+void DriveSubsystem::DisabledInit() {
+  SetCoast(&RightLead);
+  SetCoast(&RightFollow);
+  SetCoast(&LeftLead);
+  SetCoast(&LeftFollow);
+}
+
+void DriveSubsystem::TeleopInit() {
+    SetCoast(&RightLead);
+  SetCoast(&RightFollow);
+  SetCoast(&LeftLead);
+  SetCoast(&LeftFollow);
+}
+
 void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
     if (abs(currentPercentage) >
         previousPercentage) {  // speeding up, accel filter
@@ -219,6 +233,16 @@ void DriveSubsystem::ConfigureMotor(WPI_TalonFX& talon) {
 
     /* Zero the sensor */
     talon.SetSelectedSensorPosition(0, 0, 10);
+}
+
+
+
+void DriveSubsystem::SetCoast(WPI_TalonFX *_talon) {
+  _talon->SetNeutralMode(Coast);
+}
+
+void DriveSubsystem::SetBrake(WPI_TalonFX *_talon) {
+  _talon->SetNeutralMode(Brake);
 }
 
 double DriveSubsystem::AverageEncoderPosition(Encoders encoders) {
