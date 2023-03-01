@@ -60,19 +60,19 @@ void RobotContainer::ConfigureBindings() {
         &m_extender, [this] { return ArmXbox.GetRightTriggerAxis(); },
         [this] { return ArmXbox.GetLeftTriggerAxis(); }));
 
-    DriverXbox.Y().ToggleOnTrue(RotateArmHome(&m_effector).ToPtr());
+    DriverXbox.Y().OnTrue(RotateArmHome(&m_effector).ToPtr());
 
-    DriverXbox.X().ToggleOnTrue(ExtenderHome(&m_extender).ToPtr());
+    DriverXbox.X().OnTrue(ExtenderHome(&m_extender).ToPtr());
 
-    DriverXbox.A().ToggleOnTrue(WristHome(&m_wrist).ToPtr());
+    DriverXbox.A().OnTrue(WristHome(&m_wrist).ToPtr());
 
     ArmXbox.A().OnTrue(IntakeOut(&m_intake).ToPtr());
 
     ArmXbox.B().OnFalse(IntakeIn(&m_intake).ToPtr());
 
-    ArmXbox.LeftBumper().ToggleOnTrue(LEDYellow(&m_leds).ToPtr());
+    ArmXbox.LeftBumper().OnTrue(LEDYellow(&m_leds).ToPtr());
 
-    ArmXbox.RightBumper().ToggleOnTrue(LEDPurple(&m_leds).ToPtr());
+    ArmXbox.RightBumper().OnTrue(LEDPurple(&m_leds).ToPtr());
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
