@@ -19,7 +19,7 @@ class ExtenderHome
 
     void Execute() override {
         while (!m_extension->AtLimit()) {
-            m_extension->RunMotorHoming(.1);
+            m_extension->RunMotorHoming(ArmConstants::kExtenderHomingSpeed);
         }
 
         m_extension->RunMotorHoming(0);

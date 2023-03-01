@@ -5,6 +5,7 @@
 - [Team 5690 SubZero Robotics 2023 Command Robot](#team-5690-subzero-robotics-2023-command-robot)
   - [Table of contents](#table-of-contents)
   - [About](#about)
+- [Subsystems](#subsystems)
   - [Getting started](#getting-started)
     - [Prerequisites](#prerequisites)
   - [Making changes](#making-changes)
@@ -21,6 +22,13 @@
 ## About
 
 :warning: **TODO: Add about section**
+
+# Subsystems
+Following the WPILib command based structure we have broken our robot up into a number of subsystems. They are listed below:
+
+| Subsystem | Purpose |
+|-----------|---------|
+
 
 ## Getting started
 

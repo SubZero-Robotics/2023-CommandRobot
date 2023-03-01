@@ -32,7 +32,7 @@ void Extender::Execute() {
     }
 
     frc::SmartDashboard::PutNumber("MAG VAL: ",
-                                   m_extension->m_limitSwitch.GetValue());
+                                   !m_extension->m_limitSwitch.Get());
 
     m_extension->PercentOutput(rotation);
 }

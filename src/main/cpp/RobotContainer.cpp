@@ -19,6 +19,7 @@
 #include "commands/LEDYellow.h"
 #include "commands/RotateArm.h"
 #include "commands/RotateWrist.h"
+#include "commands/RotateArmHome.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -58,7 +59,9 @@ void RobotContainer::ConfigureBindings() {
         &m_extender, [this] { return ArmXbox.GetRightTriggerAxis(); },
         [this] { return ArmXbox.GetLeftTriggerAxis(); }));
 
-    ArmXbox.X().ToggleOnTrue(ExtenderHome(&m_extender).ToPtr());
+    DriverXbox.Y().ToggleOnTrue(RotateArmHome(&m_effector).ToPtr());
+
+    DriverXbox.X().ToggleOnTrue(ExtenderHome(&m_extender).ToPtr());
 
     ArmXbox.A().OnTrue(IntakeOut(&m_intake).ToPtr());
 
