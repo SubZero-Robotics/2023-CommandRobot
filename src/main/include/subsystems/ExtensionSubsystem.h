@@ -1,6 +1,6 @@
 #pragma once
 
-#include <frc/AnalogInput.h>
+#include <frc/DigitalInput.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -9,8 +9,8 @@
 
 class ExtensionSubsystem : public frc2::SubsystemBase {
    public:
-    frc::AnalogInput m_limitSwitch{
-        LimitSwitchConstants::kExtenderMagneticStopPort};
+    frc::DigitalInput m_limitSwitch{
+        ExtenderConstants::kExtenderLimitSwitchHomePort};
 
     ExtensionSubsystem();
 
@@ -37,8 +37,7 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
     float GetExtenderDistanceIn() { return m_encoder.GetPosition() * ArmConstants::kTicksPerIn; }
 
     bool AtLimit() {
-        return m_limitSwitch.GetValue() >=
-                   LimitSwitchConstants::kExtenderLimitSwitchThreshold ||
+        return !m_limitSwitch.Get() ||
                GetExtenderDistanceIn() >= ArmConstants::kMaxArmDistanceIn;
     }
 

@@ -18,8 +18,8 @@ class RotateArmHome
         : m_rotation(subsystem){};
 
     void Execute() override {
-        while (!m_rotation->AtLimit()) {
-            m_rotation->RunMotorHoming(.1);
+        while (!m_rotation->AtHome()) {
+            m_rotation->RunMotorHoming(ArmConstants::kRotationHomingSpeed);
         }
 
         m_rotation->RunMotorHoming(0);

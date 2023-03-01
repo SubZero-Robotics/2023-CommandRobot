@@ -1,6 +1,6 @@
 #pragma once
 
-#include <frc/AnalogInput.h>
+#include <frc/DigitalInput.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -15,9 +15,13 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
      */
     void Periodic() override;
 
+    bool AtHome() {
+        return !m_limitswitchHome.Get();
+    }
+
     bool AtLimit() {
-        return m_limitswitch.GetValue() >=
-                   LimitSwitchConstants::kExtenderLimitSwitchThreshold ||
+        return  AtHome() ||
+                !m_limitswitchMax.Get() ||
                ArmRotationDegree() >= ArmConstants::kRotationMaxDegree;
     }
 
@@ -54,5 +58,6 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
     rev::SparkMaxRelativeEncoder m_encoder = m_leadRotationMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kQuadrature, 4096);
 
-    frc::AnalogInput m_limitswitch{ArmConstants::kRotationMagneticStopPort};
+    frc::DigitalInput m_limitswitchHome{ArmConstants::kRotationLimitSwitchHomePort};
+    frc::DigitalInput m_limitswitchMax{ArmConstants::kRotationLimitSwitchMaxPort};
 };
