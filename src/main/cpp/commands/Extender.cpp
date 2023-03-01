@@ -31,8 +31,7 @@ void Extender::Execute() {
         return;
     }
 
-    frc::SmartDashboard::PutNumber("MAG VAL: ",
-                                   !m_extension->m_limitSwitch.Get());
+    //frc::SmartDashboard::PutNumber("MAG VAL: ",!m_extension->m_limitSwitch.Get());
 
     m_extension->PercentOutput(rotation);
 }
