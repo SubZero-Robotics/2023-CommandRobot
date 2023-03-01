@@ -25,6 +25,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
 
     void Out();
     void In();
+    void Stop();
 
    private:
     // Components (e.g. motor controllers and sensors) should generally be

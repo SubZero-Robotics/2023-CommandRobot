@@ -24,13 +24,21 @@ void Extender::Execute() {
     double inExtent = m_inExtent();
     auto rotation = outExtent >= inExtent ? outExtent : -inExtent;
 
-    if (m_extension->AtLimit() ||
+    if (!m_extension->AtLimit() ||
         m_extension->GetExtenderDistanceIn() >= ArmConstants::kMaxArmDistanceIn) {
         m_extension->PercentOutput(0);
         return;
     }
 
-    //frc::SmartDashboard::PutNumber("MAG VAL: ",!m_extension->m_limitSwitch.Get());
+    if (!m_extension->AtLimit()) {
+        m_extension->Extend(rotation);
+    } else {
+        m_extension->Extend(-0.2);
+        m_extension->ResetEncoder();
+    }
 
-    m_extension->PercentOutput(rotation);
+    if (m_extension->GetExtenderDistanceIn() >= ArmConstants::kMaxArmDistanceIn) {
+        m_extension->Extend(0.2);
+    }
+
 }

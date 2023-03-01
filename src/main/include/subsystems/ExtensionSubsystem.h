@@ -23,6 +23,8 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
      */
     void SimulationPeriodic() override;
 
+    void Extend(double);
+
     void PercentOutput(double);
 
     void ResetEncoder() { m_encoder.SetPosition(0); }

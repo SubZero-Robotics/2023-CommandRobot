@@ -20,3 +20,5 @@ void ExtensionSubsystem::SimulationPeriodic() {}
 void ExtensionSubsystem::PercentOutput(double output) {
     m_extensionMotor.Set(output);
 }
+
+void ExtensionSubsystem::Extend(double speed) { m_extensionMotor.Set(speed); }

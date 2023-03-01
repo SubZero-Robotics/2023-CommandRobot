@@ -27,6 +27,4 @@ void RotateArm::Execute() {
     if (m_effector->AtLimit() ) {
         m_effector->PercentOutput(0.1);
     }
-
-    m_effector->PercentOutput(rotation);
 }

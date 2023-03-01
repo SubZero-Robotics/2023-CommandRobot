@@ -15,17 +15,24 @@ class RotateArmHome
      * @param subsystem The subsystem used by this command.
      */
     explicit RotateArmHome(RotateArmSubsystem* subsystem)
-        : m_rotation(subsystem){};
+        : m_rotation(subsystem), isFinished(false){};
 
     void Execute() override {
-        while (!m_rotation->AtHome()) {
+        if (!m_rotation->AtHome()) {
             m_rotation->RunMotorHoming(ArmConstants::kRotationHomingSpeed);
-        }
+        } else {
 
         m_rotation->RunMotorHoming(0);
         m_rotation->ResetEncoder();
+        isFinished = true;
+        }
+    }
+
+    bool IsFinished() override {
+        return isFinished;
     }
 
    private:
     RotateArmSubsystem* m_rotation;
+    bool isFinished;
 };

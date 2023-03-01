@@ -21,6 +21,7 @@
 #include "commands/RotateWrist.h"
 #include "commands/RotateArmHome.h"
 #include "commands/WristHome.h"
+#include "commands/IntakeStop.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -60,6 +61,10 @@ void RobotContainer::ConfigureBindings() {
         &m_extender, [this] { return ArmXbox.GetLeftTriggerAxis(); },
         [this] { return ArmXbox.GetRightTriggerAxis(); }));
 
+    m_intake.SetDefaultCommand(IntakeStop(
+        &m_intake).ToPtr());
+    
+
     DriverXbox.Y().OnTrue(RotateArmHome(&m_effector).ToPtr());
 
     DriverXbox.X().OnTrue(ExtenderHome(&m_extender).ToPtr());
@@ -68,7 +73,7 @@ void RobotContainer::ConfigureBindings() {
 
     ArmXbox.A().OnTrue(IntakeOut(&m_intake).ToPtr());
 
-    ArmXbox.B().OnFalse(IntakeIn(&m_intake).ToPtr());
+    ArmXbox.B().OnTrue(IntakeIn(&m_intake).ToPtr());
 
     ArmXbox.LeftBumper().OnTrue(LEDYellow(&m_leds).ToPtr());
 
