@@ -2,6 +2,15 @@
 
 WristSubsystem::WristSubsystem() {
     // Implementation of subsystem constructor goes here.
+
+    m_wristRotationMotor.EnableSoftLimit(
+        rev::CANSparkMax::SoftLimitDirection::kForward, true);
+
+    // Default unit is number of rotations
+    m_wristRotationMotor.SetSoftLimit(
+        rev::CANSparkMax::SoftLimitDirection::kForward,
+        kWristSoftLimit);
+
 }
 
 void WristSubsystem::Periodic() {

@@ -52,4 +52,5 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
 
     rev::SparkMaxRelativeEncoder m_encoder = m_extensionMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kQuadrature, 4096);
+        //4096 is default ctre ticks
 };

@@ -2,6 +2,15 @@
 
 ExtensionSubsystem::ExtensionSubsystem() {
     // Implementation of subsystem constructor goes here.
+
+    m_extensionMotor.EnableSoftLimit(
+        rev::CANSparkMax::SoftLimitDirection::kForward, true);
+
+    // Default unit is number of rotations
+    m_extensionMotor.SetSoftLimit(
+        rev::CANSparkMax::SoftLimitDirection::kForward,
+        ArmConstants::kExtenderSoftLimit);
+
 }
 
 void ExtensionSubsystem::Periodic() {}

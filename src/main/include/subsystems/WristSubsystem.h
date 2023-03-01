@@ -1,5 +1,6 @@
 #pragma once
 
+#include <frc/DigitalInput.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -8,6 +9,8 @@
 
 class WristSubsystem : public frc2::SubsystemBase {
    public:
+    frc::DigitalInput m_limitSwitch{
+        kWristLimitSwitchPort};
     WristSubsystem();
 
     /**
@@ -23,6 +26,19 @@ class WristSubsystem : public frc2::SubsystemBase {
 
     void Rotate(double);
 
+    void ResetWristEncoder() { m_encoder.SetPosition(0); }
+
+    void RunMotorHoming(double speed) {
+        m_wristRotationMotor.Set(speed);
+    }
+
+    double GetWristDistanceDegree() { return m_encoder.GetPosition() * kWristTicksPerDegree;}
+
+    bool AtLimit() {
+        return !m_limitSwitch.Get() ||
+            GetWristDistanceDegree() >= kWristDegreeLimit;
+    }
+
    private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
@@ -30,4 +46,7 @@ class WristSubsystem : public frc2::SubsystemBase {
     rev::CANSparkMax m_wristRotationMotor{
         CANSparkMaxConstants::kWristRotationMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
+
+    rev::SparkMaxRelativeEncoder m_encoder = m_wristRotationMotor.GetEncoder(
+        rev::SparkMaxRelativeEncoder::Type::kQuadrature, 4096);
 };

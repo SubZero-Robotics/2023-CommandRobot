@@ -20,6 +20,7 @@
 #include "commands/RotateArm.h"
 #include "commands/RotateWrist.h"
 #include "commands/RotateArmHome.h"
+#include "commands/WristHome.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -62,6 +63,8 @@ void RobotContainer::ConfigureBindings() {
     DriverXbox.Y().ToggleOnTrue(RotateArmHome(&m_effector).ToPtr());
 
     DriverXbox.X().ToggleOnTrue(ExtenderHome(&m_extender).ToPtr());
+
+    DriverXbox.A().ToggleOnTrue(WristHome(&m_wrist).ToPtr());
 
     ArmXbox.A().OnTrue(IntakeOut(&m_intake).ToPtr());
 

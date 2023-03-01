@@ -39,6 +39,7 @@
 namespace ArmConstants {
     constexpr int kTicksPerIn = 12;
     constexpr double kMaxArmDistanceIn = 35;
+    constexpr double kExtenderSoftLimit = kTicksPerIn * kMaxArmDistanceIn;
 
     // Arm Rotation Constants
     constexpr double kArmTicksPerDegree = 7;
@@ -69,10 +70,17 @@ constexpr int kIntakeSpinnyBoyID = 0;
 constexpr int kWristRotationMotorID = 0;
 }  // namespace CANSparkMaxConstants
 
-// Limit Switch IDs
+// Wrist Constants
+
+constexpr int kWristLimitSwitchPort = 3;
+constexpr int kWristGearRatio = 125;
+constexpr int kWristDegreeLimit = 200;
+constexpr double kWristSoftLimit = ((kWristDegreeLimit / 360.0) * 
+(kWristGearRatio * ArmConstants::kTicksPerMotorRotation));
+constexpr double kWristTicksPerDegree = (kWristGearRatio * ArmConstants::kTicksPerMotorRotation) / 360.0;
 
 namespace ExtenderConstants {
-constexpr int kExtenderMagneticStopPort = 2;
+constexpr int kExtenderLimitSwitchPort = 2;
 constexpr int kExtenderLimitSwitchHomePort = 3000;
 }  // namespace ExtenderConstants
 
