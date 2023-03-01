@@ -62,15 +62,6 @@ DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
  */
 frc::Field2d& DriveSubsystem::GetField() { return field; }
 
-void DriveSubsystem::DisabledInit() {}
-
-void DriveSubsystem::TeleopInit() {
-    ConfigureMotor(RightLead);
-    ConfigureMotor(RightFollow);
-    ConfigureMotor(LeftLead);
-    ConfigureMotor(LeftFollow);
-}
-
 void DriveSubsystem::SetCoast(WPI_TalonFX* talon) {
     talon->SetNeutralMode(Coast);
 }
@@ -233,12 +224,6 @@ void DriveSubsystem::ConfigureMotor(WPI_TalonFX& talon) {
 
     /* Zero the sensor */
     talon.SetSelectedSensorPosition(0, 0, 10);
-}
-
-
-
-void DriveSubsystem::SetCoast(WPI_TalonFX *_talon) {
-  _talon->SetNeutralMode(Coast);
 }
 
 void DriveSubsystem::SetBrake(WPI_TalonFX *_talon) {
