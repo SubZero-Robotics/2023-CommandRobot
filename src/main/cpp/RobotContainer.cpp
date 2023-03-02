@@ -85,5 +85,6 @@ void RobotContainer::ConfigureBindings() {
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
+    m_Brake.SetBrakeMode();
     return autos::StraightBack(m_drive);
 }

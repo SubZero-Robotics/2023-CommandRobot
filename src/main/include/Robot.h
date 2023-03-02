@@ -10,6 +10,7 @@
 #include <optional>
 
 #include "RobotContainer.h"
+#include "commands/BrakeSet.h"
 
 class Robot : public frc::TimedRobot {
    public:
@@ -31,4 +32,5 @@ class Robot : public frc::TimedRobot {
     std::optional<frc2::CommandPtr> m_autonomousCommand;
 
     RobotContainer m_container;
+
 };

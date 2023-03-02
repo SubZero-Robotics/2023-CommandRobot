@@ -100,7 +100,7 @@ constexpr double kEncoderDistancePerPulse =
     kWheelCircumfrenceMeters / kEncoderCPR;
 constexpr double kPulsesPerMeter = 1 / kEncoderDistancePerPulse;
 constexpr double kCurbRotation = 0.70;
-constexpr double kPrecisionModeCoEff = .65;
+constexpr double kPrecisionModeCoEff = .45;
 
 // These characterization values MUST be determined either experimentally or
 // theoretically for *your* robot's drive. The Robot Characterization
