@@ -33,7 +33,6 @@ RobotContainer::RobotContainer() {
     ConfigureBindings();
 
     m_chooser.SetDefaultOption("StraightBack", m_straightback.get());
-    m_chooser.AddOption("Curved Path", m_testauto.get());
 
     frc::SmartDashboard::PutData(&m_chooser);
 
@@ -80,7 +79,7 @@ void RobotContainer::ConfigureBindings() {
     DriverXbox.RightBumper().OnTrue(LEDPurple(&m_leds).ToPtr());
 }
 
-frc2::Command* RobotContainer::GetAutonomousCommand() {
+frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
-    return m_chooser.GetSelected();
+    return autos::StraightBack(m_drive);
 }

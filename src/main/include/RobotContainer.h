@@ -12,8 +12,6 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/Trigger.h>
-#include <pathplanner/lib/PathPlanner.h>
-#include <pathplanner/lib/auto/RamseteAutoBuilder.h>
 
 #include <memory>
 
@@ -40,7 +38,7 @@ class RobotContainer {
    public:
     RobotContainer();
 
-    frc2::Command* GetAutonomousCommand();
+    frc2::CommandPtr GetAutonomousCommand();
 
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -75,23 +73,7 @@ class RobotContainer {
     std::unique_ptr<DriveSubsystem> drive;
     DriveSubsystem* m_drive;
 
-    // Auto Builder
-    std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
-    pathplanner::RamseteAutoBuilder autoBuilder{
-        [this]() { return m_drive->GetPose(); },
-        [this](frc::Pose2d initPose) { m_drive->ResetOdometry(initPose); },
-        frc::RamseteController(),
-        (frc::DifferentialDriveKinematics)DriveConstants::kDriveKinematics,
-        [this](units::meters_per_second_t left,
-               units::meters_per_second_t right) {
-            m_drive->TankDrive(left, right);
-        },
-        eventMap,
-        {m_drive},
-        true};
-
     frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
-    frc2::CommandPtr m_testauto = autos::Test(autoBuilder, m_drive);
 
     frc::SendableChooser<frc2::Command*> m_chooser;
 
