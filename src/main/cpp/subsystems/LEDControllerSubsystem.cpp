@@ -32,6 +32,11 @@ bool LEDControllerSubsystem::setColor(uint8_t red, uint8_t green,
                                       uint8_t blue) {
     _lastCommand = LEDControllerSubsystem::CommandType::ChangeColor;
     uint8_t buf[4] = {(uint8_t)_lastCommand, red, green, blue};
+    if (blue >= 150) {
+        _currentColor = Colors::Purple;
+    } else {
+        _currentColor = Colors::Yellow;
+    }
     return !_i2c->WriteBulk(buf, 4);
 }
 

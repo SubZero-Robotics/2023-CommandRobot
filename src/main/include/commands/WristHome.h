@@ -28,9 +28,14 @@ class WristHome
         }
     }
 
+    // set back to false so that the command can be run twice
     bool IsFinished() override {
         return isFinished;
     }
+
+    void Initialize() override {
+        isFinished = false;
+    } 
 
    private:
     WristSubsystem* m_wristMotor;

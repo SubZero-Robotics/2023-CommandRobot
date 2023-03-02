@@ -17,11 +17,17 @@ RotateWrist::RotateWrist(WristSubsystem* subsystem,
 void RotateWrist::Execute() {
     double rotation = m_rotation();
 
-    if (!m_effector->AtLimitSwitch()) {
-        m_effector->Rotate(rotation);
+    if (abs(rotation) < kDeadzone) rotation = 0.0;
+
+    if (m_effector->AtLimitSwitch()) {
+        if (rotation < 0) {
+            m_effector->Rotate(rotation);
+            m_effector->ResetWristEncoder();
+        } else {
+            m_effector->Rotate(0.0);
+        }
     } else {
-        m_effector->Rotate(-0.2);
-        m_effector->ResetWristEncoder();
+        m_effector->Rotate(rotation);
     }
 
     // if (m_effector->GetWristDistanceDegree() >= kWristDegreeLimit) {

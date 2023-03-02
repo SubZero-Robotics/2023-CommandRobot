@@ -66,8 +66,8 @@ class RobotContainer {
     RotateArmSubsystem m_effector;
     ExtensionSubsystem m_extender;
     GripperSubsystem m_gripper;
-    IntakeSubsystem m_intake;
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
+    IntakeSubsystem m_intake{&m_leds};
     WristSubsystem m_wrist;
 
     // Drive subsystem from 2022. We should probably make cross season code

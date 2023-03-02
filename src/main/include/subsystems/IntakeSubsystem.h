@@ -5,12 +5,13 @@
 #include <frc2/command/SubsystemBase.h>
 
 #include "constants.h"
+#include "subsystems/LEDControllerSubsystem.h"
 
 using namespace CANSparkMaxConstants;
 
 class IntakeSubsystem : public frc2::SubsystemBase {
    public:
-    IntakeSubsystem();
+    IntakeSubsystem(LEDControllerSubsystem* subsystem);
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
@@ -30,6 +31,6 @@ class IntakeSubsystem : public frc2::SubsystemBase {
    private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
-
+    LEDControllerSubsystem *m_ledsubsystem;
     WPI_TalonSRX m_intakeSpinnyBoy{kIntakeSpinnyBoyID};
 };

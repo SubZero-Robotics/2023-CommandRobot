@@ -47,7 +47,8 @@ void RobotContainer::ConfigureBindings() {
         m_drive, [this] { return DriverXbox.GetLeftY(); },
         [this] {
             return -DriverXbox.GetLeftX() * DriveConstants::kCurbRotation;
-        }));
+        },
+        [this] { return DriverXbox.GetBButton(); }));
 
     // TODO: bind buttons for calling commands
 
@@ -55,7 +56,7 @@ void RobotContainer::ConfigureBindings() {
         RotateArm(&m_effector, [this] { return ArmXbox.GetLeftY(); }));
 
     m_wrist.SetDefaultCommand(
-        RotateWrist(&m_wrist, [this] { return ArmXbox.GetRightY(); }));
+        RotateWrist(&m_wrist, [this] { return -ArmXbox.GetRightY(); }));
 
     m_extender.SetDefaultCommand(Extender(
         &m_extender, [this] { return ArmXbox.GetLeftTriggerAxis(); },
@@ -68,15 +69,15 @@ void RobotContainer::ConfigureBindings() {
 
     // DriverXbox.X().OnTrue(ExtenderHome(&m_extender).ToPtr());
 
-    // DriverXbox.A().OnTrue(WristHome(&m_wrist).ToPtr());
+    DriverXbox.A().OnTrue(WristHome(&m_wrist).ToPtr());
 
-    ArmXbox.A().WhileTrue(IntakeOut(&m_intake).ToPtr());
+    ArmXbox.LeftBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 
-    ArmXbox.B().WhileTrue(IntakeIn(&m_intake).ToPtr());
+    ArmXbox.RightBumper().WhileTrue(IntakeIn(&m_intake).ToPtr());
 
-    ArmXbox.LeftBumper().OnTrue(LEDYellow(&m_leds).ToPtr());
+    DriverXbox.LeftBumper().OnTrue(LEDYellow(&m_leds).ToPtr());
 
-    ArmXbox.RightBumper().OnTrue(LEDPurple(&m_leds).ToPtr());
+    DriverXbox.RightBumper().OnTrue(LEDPurple(&m_leds).ToPtr());
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

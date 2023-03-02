@@ -35,8 +35,8 @@ class WristSubsystem : public frc2::SubsystemBase {
     double GetWristDistanceDegree() { return m_encoder.GetPosition() * kWristTicksPerDegree;}
 
     bool AtLimit() {
-        return AtLimitSwitch() ||
-            GetWristDistanceDegree() >= kWristDegreeLimit;
+        return AtLimitSwitch();
+    //        GetWristDistanceDegree() >= kWristDegreeLimit;
     }
 
     bool AtLimitSwitch() {
