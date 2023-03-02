@@ -20,11 +20,11 @@ void RotateArm::Execute() {
     if (!m_effector->AtHome()) {
         m_effector->PercentOutput(rotation);
     } else {
-        m_effector->PercentOutput(-0.1);
+        m_effector->PercentOutput(-0.2);
         m_effector->ResetEncoder();
     }
 
-    if (m_effector->AtLimit() ) {
-        m_effector->PercentOutput(0.1);
+    if (m_effector->AtMax() ) {
+        m_effector->PercentOutput(0.2);
     }
 }

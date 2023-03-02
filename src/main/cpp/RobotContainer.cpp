@@ -64,16 +64,15 @@ void RobotContainer::ConfigureBindings() {
     m_intake.SetDefaultCommand(IntakeStop(
         &m_intake).ToPtr());
     
+    // DriverXbox.Y().OnTrue(RotateArmHome(&m_effector).ToPtr());
 
-    DriverXbox.Y().OnTrue(RotateArmHome(&m_effector).ToPtr());
+    // DriverXbox.X().OnTrue(ExtenderHome(&m_extender).ToPtr());
 
-    DriverXbox.X().OnTrue(ExtenderHome(&m_extender).ToPtr());
+    // DriverXbox.A().OnTrue(WristHome(&m_wrist).ToPtr());
 
-    DriverXbox.A().OnTrue(WristHome(&m_wrist).ToPtr());
+    ArmXbox.A().WhileTrue(IntakeOut(&m_intake).ToPtr());
 
-    ArmXbox.A().OnTrue(IntakeOut(&m_intake).ToPtr());
-
-    ArmXbox.B().OnTrue(IntakeIn(&m_intake).ToPtr());
+    ArmXbox.B().WhileTrue(IntakeIn(&m_intake).ToPtr());
 
     ArmXbox.LeftBumper().OnTrue(LEDYellow(&m_leds).ToPtr());
 

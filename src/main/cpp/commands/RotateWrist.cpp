@@ -24,7 +24,7 @@ void RotateWrist::Execute() {
         m_effector->ResetWristEncoder();
     }
 
-    if (m_effector->GetWristDistanceDegree() >= kWristDegreeLimit) {
-        m_effector->Rotate(0.2);
-    }
+    // if (m_effector->GetWristDistanceDegree() >= kWristDegreeLimit) {
+    //     m_effector->Rotate(0.2);
+    // }
 } 

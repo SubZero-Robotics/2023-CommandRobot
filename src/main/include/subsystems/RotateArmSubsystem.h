@@ -19,10 +19,8 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
         return !m_limitswitchHome.Get();
     }
 
-    bool AtLimit() {
-        return  AtHome() ||
-                !m_limitswitchMax.Get() ||
-               ArmRotationDegree() >= ArmConstants::kRotationMaxDegree;
+    bool AtMax() {
+        return !m_limitswitchMax.Get();
     }
 
     void ResetEncoder() { m_encoder.SetPosition(0); }
