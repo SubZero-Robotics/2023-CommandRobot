@@ -36,6 +36,8 @@ struct Encoders {
 
 class DriveSubsystem : public frc2::SubsystemBase {
    public:
+        WPI_TalonFX& RightLead;
+        WPI_TalonFX& LeftLead;
     DriveSubsystem(WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&);
 
     void DisabledInit();
@@ -193,13 +195,11 @@ class DriveSubsystem : public frc2::SubsystemBase {
     frc::Field2d field;
 
     // right motor controllers
-    WPI_TalonFX& RightLead;
     WPI_TalonFX& RightFollow;
     TalonFXSimCollection& RightLeadSim;
     Encoders rightEncoders;
 
     // left motor controllers
-    WPI_TalonFX& LeftLead;
     WPI_TalonFX& LeftFollow;
     TalonFXSimCollection& LeftLeadSim;
     Encoders leftEncoders;

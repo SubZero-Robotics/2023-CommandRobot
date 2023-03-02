@@ -20,7 +20,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/ExtensionSubsystem.h"
-#include "subsystems/GripperSubsystem.h"
+#include "subsystems/BrakeSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/RotateArmSubsystem.h"
@@ -63,7 +63,7 @@ class RobotContainer {
     // Arm Subsystem
     RotateArmSubsystem m_effector;
     ExtensionSubsystem m_extender;
-    GripperSubsystem m_gripper;
+    BrakeSubsystem m_Brake{RightLead, LeftLead};
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
     IntakeSubsystem m_intake{&m_leds};
     WristSubsystem m_wrist;

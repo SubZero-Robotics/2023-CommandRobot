@@ -11,8 +11,8 @@
 #include "commands/Extender.h"
 #include "commands/ExtenderHome.h"
 #include "commands/ExtenderStop.h"
-#include "commands/GripperGrip.h"
-#include "commands/GripperStop.h"
+#include "commands/BrakeStop.h"
+#include "commands/BrakeSet.h"
 #include "commands/IntakeIn.h"
 #include "commands/IntakeOut.h"
 #include "commands/LEDPurple.h"
@@ -77,6 +77,10 @@ void RobotContainer::ConfigureBindings() {
     DriverXbox.LeftBumper().OnTrue(LEDYellow(&m_leds).ToPtr());
 
     DriverXbox.RightBumper().OnTrue(LEDPurple(&m_leds).ToPtr());
+
+    DriverXbox.X().OnTrue(BrakeSet(&m_Brake).ToPtr());
+
+    DriverXbox.Y().OnTrue(BrakeStop(&m_Brake).ToPtr());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
