@@ -32,6 +32,10 @@ class WristHome
         return isFinished;
     }
 
+    void Initialize() override {
+        isFinished = false;
+    } 
+
    private:
     WristSubsystem* m_wristMotor;
     bool isFinished;

@@ -58,9 +58,9 @@ namespace ArmConstants {
     constexpr int kReverseRotationsSoftLimit = 0;
     
     // Homing Speeds
-    constexpr int kRotationHomingSpeed = .05;
-    constexpr int kExtenderHomingSpeed = .15;
-    constexpr int kWristHomingSpeed = .1;
+    constexpr double kRotationHomingSpeed = .05;
+    constexpr double kExtenderHomingSpeed = .3;
+    constexpr double kWristHomingSpeed = .1;
 }
 
 // Motor IDs
@@ -100,6 +100,7 @@ constexpr double kEncoderDistancePerPulse =
     kWheelCircumfrenceMeters / kEncoderCPR;
 constexpr double kPulsesPerMeter = 1 / kEncoderDistancePerPulse;
 constexpr double kCurbRotation = 0.70;
+constexpr double kPrecisionModeCoEff = .65;
 
 // These characterization values MUST be determined either experimentally or
 // theoretically for *your* robot's drive. The Robot Characterization
@@ -115,7 +116,7 @@ constexpr double kPDriveVel = 2.9104;
 constexpr double kRamseteB = 2.0;
 constexpr double kRamseteZeta = 0.7;
 }  // namespace DriveConstants
-constexpr double kDeadzone = 0;
+constexpr double kDeadzone = 0.0;
 
 // DriveSubsystem constants
 
