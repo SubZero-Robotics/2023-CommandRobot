@@ -33,6 +33,7 @@ DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
 
     rightEncoders = {.lead = &RightLead, .follow = &RightFollow};
     leftEncoders = {.lead = &LeftLead, .follow = &LeftFollow};
+    
 
     InvertSide(leftEncoders);
 
@@ -115,10 +116,7 @@ void DriveSubsystem::DisabledInit() {
 }
 
 void DriveSubsystem::TeleopInit() {
-    SetCoast(&RightLead);
-  SetCoast(&RightFollow);
-  SetCoast(&LeftLead);
-  SetCoast(&LeftFollow);
+    m_Brake.UnsetBrakeMode();
 }
 
 void DriveSubsystem::BrakeInit() {

@@ -28,6 +28,8 @@
 #include <networktables/NetworkTableInstance.h>
 
 #include "Constants.h"
+#include "commands/BrakeSet.h"
+#include "subsystems/BrakeSubsystem.h"
 
 struct Encoders {
     WPI_TalonFX* lead;
@@ -49,6 +51,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void SetCoast(WPI_TalonFX* talon);
 
     void SetBrake(WPI_TalonFX* talon);
+
+    BrakeSubsystem m_Brake{RightLead, LeftLead};
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
