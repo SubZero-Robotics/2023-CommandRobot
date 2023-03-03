@@ -15,8 +15,7 @@
 #include "commands/BrakeSet.h"
 #include "commands/IntakeIn.h"
 #include "commands/IntakeOut.h"
-#include "commands/LEDPurple.h"
-#include "commands/LEDYellow.h"
+#include "commands/LEDToggle.h"
 #include "commands/RotateArm.h"
 #include "commands/RotateWrist.h"
 #include "commands/RotateArmHome.h"
@@ -33,6 +32,7 @@ RobotContainer::RobotContainer() {
     ConfigureBindings();
 
     m_chooser.SetDefaultOption("StraightBack", m_straightback.get());
+    m_chooser.SetDefaultOption("DoesNothing", m_nothing.get());
 
     frc::SmartDashboard::PutData(&m_chooser);
 
@@ -74,9 +74,7 @@ void RobotContainer::ConfigureBindings() {
 
     ArmXbox.RightBumper().WhileTrue(IntakeIn(&m_intake).ToPtr());
 
-    DriverXbox.LeftBumper().OnTrue(LEDYellow(&m_leds).ToPtr());
-
-    DriverXbox.RightBumper().OnTrue(LEDPurple(&m_leds).ToPtr());
+    DriverXbox.RightBumper().OnTrue(LEDToggle(&m_leds).ToPtr());
 
     DriverXbox.X().OnTrue(BrakeSet(&m_Brake).ToPtr());
 
@@ -87,4 +85,5 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
     m_Brake.SetBrakeMode();
     return autos::StraightBack(m_drive);
+    return autos::DoesNothing(m_drive);
 }

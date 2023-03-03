@@ -28,8 +28,8 @@ void DefaultDrive::Execute() {
 
     // drive it
     if (m_modifier()) {
-        XboxX *= DriveConstants::kPrecisionModeCoEff;
-        XboxY *= DriveConstants::kPrecisionModeCoEff;
+        XboxX *= DriveConstants::kPrecisionModeXCoEff;
+        XboxY *= DriveConstants::kPrecisionModeYCoEff;
     }
     m_drive->ArcadeDrive(XboxY, XboxX);
 }

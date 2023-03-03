@@ -5,7 +5,10 @@ LEDControllerSubsystem::LEDControllerSubsystem(uint8_t slaveAddress,
     : _i2c(std::make_unique<frc::I2C>(port, slaveAddress)),
       _slaveAddress(slaveAddress),
       _lastCommand(LEDControllerSubsystem::CommandType::Off),
-      _lastPattern(LEDControllerSubsystem::PatternType::None) {}
+      _lastPattern(LEDControllerSubsystem::PatternType::None) {
+            setColor(255, 255, 0);
+            setPattern(LEDControllerSubsystem::PatternType::SetAll, true);
+      }
 
 bool LEDControllerSubsystem::initialize() { return !_i2c->AddressOnly(); }
 

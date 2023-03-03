@@ -74,6 +74,7 @@ class RobotContainer {
     DriveSubsystem* m_drive;
 
     frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
+    frc2::CommandPtr m_nothing = autos::DoesNothing(m_drive);
 
     frc::SendableChooser<frc2::Command*> m_chooser;
 

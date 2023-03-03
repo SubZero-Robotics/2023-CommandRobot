@@ -16,20 +16,30 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class LEDPurple : public frc2::CommandHelper<frc2::CommandBase, LEDPurple> {
+class LEDToggle : public frc2::CommandHelper<frc2::CommandBase, LEDToggle> {
    public:
     /**
-     * Creates a new LEDPurple.
+     * Creates a new LEDYellow.
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit LEDPurple(LEDControllerSubsystem* subsystem)
-        : m_subsystem(subsystem) {}
+    explicit LEDToggle(LEDControllerSubsystem* subsystem)
+        : m_subsystem(subsystem) {
+        }
 
     void Execute() override {
-        m_subsystem->setColor(180, 0, 255);
-        m_subsystem->setPattern(LEDControllerSubsystem::PatternType::SetAll, true);
-        isFinished = true;
+
+        if (m_subsystem->getCurrentColor() == LEDControllerSubsystem::Colors::Purple)
+        {
+            m_subsystem->setColor(255, 255, 0);
+            m_subsystem->setPattern(LEDControllerSubsystem::PatternType::SetAll, true);
+            isFinished = true;
+        } else {
+            m_subsystem->setColor(180, 0, 255);
+            m_subsystem->setPattern(LEDControllerSubsystem::PatternType::SetAll, true);
+            isFinished = true;
+        }
+        
     }
 
     bool IsFinished() override {
