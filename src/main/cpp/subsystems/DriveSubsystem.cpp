@@ -33,6 +33,7 @@ DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
 
     rightEncoders = {.lead = &RightLead, .follow = &RightFollow};
     leftEncoders = {.lead = &LeftLead, .follow = &LeftFollow};
+    
 
     InvertSide(leftEncoders);
 
