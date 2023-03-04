@@ -101,7 +101,7 @@ constexpr double kEncoderDistancePerPulse =
 constexpr double kPulsesPerMeter = 1 / kEncoderDistancePerPulse;
 constexpr double kCurbRotation = 0.70;
 constexpr double kPrecisionModeYCoEff = .45;
-constexpr double kPrecisionModeXCoEff = .6;
+constexpr double kPrecisionModeXCoEff = .525;
 
 // These characterization values MUST be determined either experimentally or
 // theoretically for *your* robot's drive. The Robot Characterization
