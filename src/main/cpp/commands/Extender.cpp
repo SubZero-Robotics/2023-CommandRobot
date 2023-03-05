@@ -30,11 +30,15 @@ void Extender::Execute() {
     //     return;
     // }
 
-    if (!m_extension->AtLimit()) {
-        m_extension->Extend(rotation);
-    } else {
-        m_extension->Extend(-0.2);
+    if (m_extension->AtLimit()) {
         m_extension->ResetEncoder();
+        if (rotation > 0){
+            m_extension->PercentOutput(rotation);
+        } else {
+            m_extension->PercentOutput(0.0);
+        }
+    } else {
+        m_extension->PercentOutput(rotation);
     }
 
     // if (m_extension->GetExtenderDistanceIn() >= ArmConstants::kMaxArmDistanceIn) {
