@@ -30,7 +30,8 @@ class DefaultDrive
      * @param rotation The control input for turning
      */
     DefaultDrive(DriveSubsystem* subsystem, std::function<double()> forward,
-                 std::function<double()> rotation, std::function<bool()> modifier);
+                 std::function<double()> rotation,
+                 std::function<bool()> modifier);
 
     void Execute() override;
 

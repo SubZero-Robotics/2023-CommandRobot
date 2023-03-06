@@ -6,8 +6,7 @@
 #include "Constants.h"
 #include "subsystems/WristSubsystem.h"
 
-class WristHome
-    : public frc2::CommandHelper<frc2::CommandBase, WristHome> {
+class WristHome : public frc2::CommandHelper<frc2::CommandBase, WristHome> {
    public:
     /**
      * Creates a new Wrist.
@@ -21,21 +20,16 @@ class WristHome
         if (!m_wristMotor->AtLimit()) {
             m_wristMotor->RunMotorHoming(ArmConstants::kExtenderHomingSpeed);
         } else {
-
-        m_wristMotor->RunMotorHoming(0);
-        m_wristMotor->ResetWristEncoder();
-        isFinished = true;
+            m_wristMotor->RunMotorHoming(0);
+            m_wristMotor->ResetWristEncoder();
+            isFinished = true;
         }
     }
 
     // set back to false so that the command can be run twice
-    bool IsFinished() override {
-        return isFinished;
-    }
+    bool IsFinished() override { return isFinished; }
 
-    void Initialize() override {
-        isFinished = false;
-    } 
+    void Initialize() override { isFinished = false; }
 
    private:
     WristSubsystem* m_wristMotor;

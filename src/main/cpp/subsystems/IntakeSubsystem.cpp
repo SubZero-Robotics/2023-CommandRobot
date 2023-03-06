@@ -1,6 +1,7 @@
 #include <subsystems/IntakeSubsystem.h>
 
-IntakeSubsystem::IntakeSubsystem(LEDControllerSubsystem* subsystem) : m_ledsubsystem(subsystem) {
+IntakeSubsystem::IntakeSubsystem(LEDControllerSubsystem* subsystem)
+    : m_ledsubsystem(subsystem) {
     // Implementation of subsystem constructor goes here.
 }
 
@@ -9,7 +10,8 @@ void IntakeSubsystem::Periodic() {}
 void IntakeSubsystem::SimulationPeriodic() {}
 
 void IntakeSubsystem::Out() {
-    if (m_ledsubsystem->getCurrentColor() == LEDControllerSubsystem::Colors::Yellow) {
+    if (m_ledsubsystem->getCurrentColor() ==
+        LEDControllerSubsystem::Colors::Yellow) {
         m_intakeSpinnyBoy.Set(-1.0);
     } else {
         m_intakeSpinnyBoy.Set(1.0);
@@ -17,7 +19,8 @@ void IntakeSubsystem::Out() {
 }
 
 void IntakeSubsystem::In() {
-    if (m_ledsubsystem->getCurrentColor() == LEDControllerSubsystem::Colors::Purple) {
+    if (m_ledsubsystem->getCurrentColor() ==
+        LEDControllerSubsystem::Colors::Purple) {
         m_intakeSpinnyBoy.Set(-1.0);
     } else {
         m_intakeSpinnyBoy.Set(1.0);

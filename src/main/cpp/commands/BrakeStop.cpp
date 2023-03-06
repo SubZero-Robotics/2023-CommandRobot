@@ -5,4 +5,7 @@ BrakeStop::BrakeStop(BrakeSubsystem* subsystem) : m_Brake{subsystem} {
     AddRequirements(m_Brake);
 }
 
-void BrakeStop::Execute() { m_Brake->UnsetBrakeMode(); isFinished = true; }
+void BrakeStop::Execute() {
+    m_Brake->UnsetBrakeMode();
+    isFinished = true;
+}

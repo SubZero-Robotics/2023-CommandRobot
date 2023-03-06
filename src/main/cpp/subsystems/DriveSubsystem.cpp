@@ -33,7 +33,6 @@ DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
 
     rightEncoders = {.lead = &RightLead, .follow = &RightFollow};
     leftEncoders = {.lead = &LeftLead, .follow = &LeftFollow};
-    
 
     InvertSide(leftEncoders);
 
@@ -109,21 +108,19 @@ void DriveSubsystem::Periodic() {
 }
 
 void DriveSubsystem::DisabledInit() {
-  SetCoast(&RightLead);
-  SetCoast(&RightFollow);
-  SetCoast(&LeftLead);
-  SetCoast(&LeftFollow);
+    SetCoast(&RightLead);
+    SetCoast(&RightFollow);
+    SetCoast(&LeftLead);
+    SetCoast(&LeftFollow);
 }
 
-void DriveSubsystem::TeleopInit() {
-    m_Brake.UnsetBrakeMode();
-}
+void DriveSubsystem::TeleopInit() { m_Brake.UnsetBrakeMode(); }
 
 void DriveSubsystem::BrakeInit() {
     SetBrake(&RightLead);
-  SetBrake(&RightFollow);
-  SetBrake(&LeftLead);
-  SetBrake(&LeftFollow);
+    SetBrake(&RightFollow);
+    SetBrake(&LeftLead);
+    SetBrake(&LeftFollow);
 }
 
 void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
@@ -231,8 +228,8 @@ void DriveSubsystem::ConfigureMotor(WPI_TalonFX& talon) {
     talon.SetSelectedSensorPosition(0, 0, 10);
 }
 
-void DriveSubsystem::SetBrake(WPI_TalonFX *_talon) {
-  _talon->SetNeutralMode(Brake);
+void DriveSubsystem::SetBrake(WPI_TalonFX* _talon) {
+    _talon->SetNeutralMode(Brake);
 }
 
 double DriveSubsystem::AverageEncoderPosition(Encoders encoders) {

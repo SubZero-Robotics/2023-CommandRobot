@@ -38,8 +38,8 @@ struct Encoders {
 
 class DriveSubsystem : public frc2::SubsystemBase {
    public:
-        WPI_TalonFX& RightLead;
-        WPI_TalonFX& LeftLead;
+    WPI_TalonFX& RightLead;
+    WPI_TalonFX& LeftLead;
     DriveSubsystem(WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&);
 
     void DisabledInit();
@@ -165,7 +165,6 @@ class DriveSubsystem : public frc2::SubsystemBase {
    private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
-
 
     /**
      * @brief Gets the Average of two encoder positions

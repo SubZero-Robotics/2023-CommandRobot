@@ -4,14 +4,14 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
+#include <iostream>
+
 #include "constants.h"
 #include "rev/CANSparkMax.h"
-#include <iostream>
 
 class WristSubsystem : public frc2::SubsystemBase {
    public:
-    frc::DigitalInput m_limitSwitch{
-        kWristLimitSwitchPort};
+    frc::DigitalInput m_limitSwitch{kWristLimitSwitchPort};
     WristSubsystem();
 
     /**
@@ -28,20 +28,18 @@ class WristSubsystem : public frc2::SubsystemBase {
 
     void ResetWristEncoder() { m_encoder.SetPosition(0); }
 
-    void RunMotorHoming(double speed) {
-        m_wristRotationMotor.Set(speed);
-    }
+    void RunMotorHoming(double speed) { m_wristRotationMotor.Set(speed); }
 
-    double GetWristDistanceDegree() { return m_encoder.GetPosition() * kWristTicksPerDegree;}
+    double GetWristDistanceDegree() {
+        return m_encoder.GetPosition() * kWristTicksPerDegree;
+    }
 
     bool AtLimit() {
         return AtLimitSwitch();
-    //        GetWristDistanceDegree() >= kWristDegreeLimit;
+        //        GetWristDistanceDegree() >= kWristDegreeLimit;
     }
 
-    bool AtLimitSwitch() {
-        return !m_limitSwitch.Get();
-    }
+    bool AtLimitSwitch() { return !m_limitSwitch.Get(); }
 
    private:
     // Components (e.g. motor controllers and sensors) should generally be

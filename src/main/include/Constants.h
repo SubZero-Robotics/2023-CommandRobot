@@ -37,31 +37,31 @@
 // Arm Extension Constants
 
 namespace ArmConstants {
-    constexpr int kTicksPerIn = 12;
-    constexpr double kMaxArmDistanceIn = 35;
-    constexpr double kExtenderSoftLimit = kTicksPerIn * kMaxArmDistanceIn;
+constexpr int kTicksPerIn = 12;
+constexpr double kMaxArmDistanceIn = 35;
+constexpr double kExtenderSoftLimit = kTicksPerIn * kMaxArmDistanceIn;
 
-    // Arm Rotation Constants
-    constexpr int kRotationLimitSwitchHomePort = 0;
-    constexpr int kRotationLimitSwitchMaxPort = 1;
-    constexpr float kRotationHomeDegree = 60;
-    constexpr float kRotationMaxDegree = 125;
-    constexpr int kArmSoftLimitForwardDegrees = 65;
-    constexpr int kArmGearRatio = 197.14;
+// Arm Rotation Constants
+constexpr int kRotationLimitSwitchHomePort = 0;
+constexpr int kRotationLimitSwitchMaxPort = 1;
+constexpr float kRotationHomeDegree = 60;
+constexpr float kRotationMaxDegree = 125;
+constexpr int kArmSoftLimitForwardDegrees = 65;
+constexpr int kArmGearRatio = 197.14;
 
-    // Motor Constants
-    constexpr int kTicksPerMotorRotation = 42;
-    constexpr double kArmTicksPerDegree = (kTicksPerMotorRotation * kArmGearRatio) / 360.0;
-    constexpr double kForwardRotationsSoftLimit =
-            (kArmSoftLimitForwardDegrees * kArmTicksPerDegree) /
-            kTicksPerMotorRotation;
-    constexpr int kReverseRotationsSoftLimit = 0;
-    
-    // Homing Speeds
-    constexpr double kRotationHomingSpeed = .05;
-    constexpr double kExtenderHomingSpeed = .3;
-    constexpr double kWristHomingSpeed = .1;
-}
+// Motor Constants
+constexpr int kTicksPerMotorRotation = 42;
+constexpr double kArmTicksPerDegree =
+    (kTicksPerMotorRotation * kArmGearRatio) / 360.0;
+constexpr double kForwardRotationsSoftLimit =
+    (kArmSoftLimitForwardDegrees * kArmTicksPerDegree) / kTicksPerMotorRotation;
+constexpr int kReverseRotationsSoftLimit = 0;
+
+// Homing Speeds
+constexpr double kRotationHomingSpeed = .05;
+constexpr double kExtenderHomingSpeed = .3;
+constexpr double kWristHomingSpeed = .1;
+}  // namespace ArmConstants
 
 // Motor IDs
 namespace CANSparkMaxConstants {
@@ -77,9 +77,11 @@ constexpr int kWristRotationMotorID = 15;
 constexpr int kWristLimitSwitchPort = 3;
 constexpr int kWristGearRatio = 125;
 constexpr int kWristDegreeLimit = 90;
-constexpr double kWristSoftLimit = ((kWristDegreeLimit / 360.0) * 
-(kWristGearRatio * ArmConstants::kTicksPerMotorRotation));
-constexpr double kWristTicksPerDegree = (kWristGearRatio * ArmConstants::kTicksPerMotorRotation) / 360.0;
+constexpr double kWristSoftLimit =
+    ((kWristDegreeLimit / 360.0) *
+     (kWristGearRatio * ArmConstants::kTicksPerMotorRotation));
+constexpr double kWristTicksPerDegree =
+    (kWristGearRatio * ArmConstants::kTicksPerMotorRotation) / 360.0;
 
 namespace ExtenderConstants {
 constexpr int kExtenderLimitSwitchPort = 2;

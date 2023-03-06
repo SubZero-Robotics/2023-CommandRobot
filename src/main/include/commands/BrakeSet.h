@@ -16,9 +16,7 @@ class BrakeSet : public frc2::CommandHelper<frc2::CommandBase, BrakeSet> {
 
     void Execute() override;
 
-    bool IsFinished() override {
-        return isFinished;
-    }
+    bool IsFinished() override { return isFinished; }
 
    private:
     BrakeSubsystem* m_Brake;

@@ -17,15 +17,15 @@
 
 #include "Constants.h"
 #include "commands/Autos.h"
+#include "commands/BrakeMode.h"
+#include "subsystems/BrakeSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/ExtensionSubsystem.h"
-#include "subsystems/BrakeSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/RotateArmSubsystem.h"
 #include "subsystems/WristSubsystem.h"
-#include "commands/BrakeMode.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -46,7 +46,7 @@ class RobotContainer {
     // TODO: Second Xbox controller
     frc2::CommandXboxController ArmXbox{1};
 
-    //frc::Compressor phCompressor{9, frc::PneumaticsModuleType::REVPH};
+    // frc::Compressor phCompressor{9, frc::PneumaticsModuleType::REVPH};
 
     WPI_TalonFX RightLead{8};
     WPI_TalonFX RightFollow{7};

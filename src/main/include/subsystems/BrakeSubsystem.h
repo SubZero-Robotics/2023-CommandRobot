@@ -1,10 +1,10 @@
 #pragma once
 
+#include <ctre/Phoenix.h>
 #include <frc/Compressor.h>
 #include <frc/DoubleSolenoid.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-#include <ctre/Phoenix.h>
 
 class BrakeSubsystem : public frc2::SubsystemBase {
    public:
@@ -25,13 +25,13 @@ class BrakeSubsystem : public frc2::SubsystemBase {
     void Reverse();
 
     void SetBrakeMode() {
-      _lTalon.SetNeutralMode(Brake);
-      _rTalon.SetNeutralMode(Brake);
+        _lTalon.SetNeutralMode(Brake);
+        _rTalon.SetNeutralMode(Brake);
     }
 
     void UnsetBrakeMode() {
-      _lTalon.SetNeutralMode(Coast);
-      _rTalon.SetNeutralMode(Coast);
+        _lTalon.SetNeutralMode(Coast);
+        _rTalon.SetNeutralMode(Coast);
     }
 
    private:
@@ -41,6 +41,6 @@ class BrakeSubsystem : public frc2::SubsystemBase {
     frc::Compressor m_compressor{9, frc::PneumaticsModuleType::CTREPCM};
     frc::DoubleSolenoid exampleDoublePH{9, frc::PneumaticsModuleType::CTREPCM,
                                         1, 2};
-   WPI_TalonFX &_rTalon;
-   WPI_TalonFX &_lTalon;
+    WPI_TalonFX &_rTalon;
+    WPI_TalonFX &_lTalon;
 };

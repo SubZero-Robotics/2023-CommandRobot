@@ -3,10 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "Robot.h"
+
 #include <cameraserver/CameraServer.h>
 #include <frc2/command/CommandScheduler.h>
 
-void Robot::RobotInit() { }
+void Robot::RobotInit() {}
 
 /**
  * This function is called every 20 ms, no matter the mode. Use
