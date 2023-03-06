@@ -221,7 +221,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         }
 
         static inline IsValidPort(int port) {
-            return port >= 0 && port < 9;
+            return port >= 0 && port < 10;
         }
 
     protected:
