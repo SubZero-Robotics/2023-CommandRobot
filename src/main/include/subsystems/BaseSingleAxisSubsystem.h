@@ -70,16 +70,16 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             _motor(motor), _config(cfg), _isHoming(false), _isMovingToPosition(false),
             _targetPosition(0), _pid(cfg.pid) {
 
-            if (_config.absoluteEncoderPort != -1) {
+            if (IsValidPort(_config.absoluteEncoderPort)) {
                 _encoder = std::make_unique<frc::DutyCycleEncoder>(_config.absoluteEncoderPort);
                 _encoder->SetDistancePerRotation(_config.distancePerRevolution);
             }
 
-            if (_config.minLimitSwitchPort != -1) {
+            if (IsValidPort(_config.minLimitSwitchPort)) {
                 _minLimitSwitch = std::make_unique<frc::DigitalInput>(_config.minLimitSwitchPort);
             }
 
-            if (_config.maxLimitSwitchPort != -1) {
+            if (IsValidPort(_config.maxLimitSwitchPort)) {
                 _maxLimitSwitch = std::make_unique<frc::DigitalInput>(_config.maxLimitSwitchPort);
             }
         }
@@ -115,13 +115,25 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             }
         }
 
+        void UpdateMovement() {
+            if (_isMovingToPosition) {
+                auto res = std::clamp(_pid.Calculate(GetCurrentPosition(), _targetPosition),
+                    -_config.defaultMovementSpeed, _config.defaultMovementSpeed);
+                if (!_pid.AtSetpoint()) {
+                    RunMotorSpeed(res);
+                } else {
+                    _isMovingToPosition = false;
+                }
+            }
+        }
+
         inline void ResetEncoder() {
             _encoder->Reset();
         }
 
         inline double GetCurrentPosition() {
             if (_encoder) {
-                return _encoder->GetAbsolutePosition();
+                return _encoder->GetDistance();
             }
         }
 
@@ -187,9 +199,10 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         inline void StopMovement() {
             _isHoming = false;
             _isMovingToPosition = false;
+            _motor->Set(0);
         }
 
-        frc2::CommandPtr HomeCommand() {
+        frc2::CommandPtr GetHomeCommand() {
             return frc2::FunctionalCommand(
                 [this] { Home(); },
                 [this] { RunMotorSpeed(-_config.defaultMovementSpeed); },
@@ -204,15 +217,11 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         }
 
         void Periodic() override {
-            if (_isMovingToPosition) {
-                auto res = std::clamp(_pid.Calculate(GetCurrentPosition(), _targetPosition),
-                -_config.defaultMovementSpeed, _config.defaultMovementSpeed);
-                if (!_pid.AtSetpoint()) {
-                    RunMotorSpeed(res);
-                } else {
-                    _isMovingToPosition = false;
-                }
-            }
+            UpdateMovement();
+        }
+
+        static inline IsValidPort(int port) {
+            return port >= 0 && port < 9;
         }
 
     protected:
