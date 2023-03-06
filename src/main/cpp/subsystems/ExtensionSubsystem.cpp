@@ -10,7 +10,6 @@ ExtensionSubsystem::ExtensionSubsystem() {
     m_extensionMotor.SetSoftLimit(
         rev::CANSparkMax::SoftLimitDirection::kForward,
         ArmConstants::kExtenderSoftLimit);
-
 }
 
 void ExtensionSubsystem::Periodic() {}

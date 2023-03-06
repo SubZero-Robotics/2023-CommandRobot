@@ -15,13 +15,9 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
      */
     void Periodic() override;
 
-    bool AtHome() {
-        return !m_limitswitchHome.Get();
-    }
+    bool AtHome() { return !m_limitswitchHome.Get(); }
 
-    bool AtMax() {
-        return !m_limitswitchMax.Get();
-    }
+    bool AtMax() { return !m_limitswitchMax.Get(); }
 
     void ResetEncoder() { m_encoder.SetPosition(0); }
 
@@ -31,7 +27,8 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
     }
 
     float ArmRotationDegree() {
-        return (m_encoder.GetPosition() / ArmConstants::kArmTicksPerDegree) + ArmConstants::kRotationHomeDegree;
+        return (m_encoder.GetPosition() / ArmConstants::kArmTicksPerDegree) +
+               ArmConstants::kRotationHomeDegree;
     }
 
     /**
@@ -56,6 +53,8 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
     rev::SparkMaxRelativeEncoder m_encoder = m_leadRotationMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kHallSensor, 42);
 
-    frc::DigitalInput m_limitswitchHome{ArmConstants::kRotationLimitSwitchHomePort};
-    frc::DigitalInput m_limitswitchMax{ArmConstants::kRotationLimitSwitchMaxPort};
+    frc::DigitalInput m_limitswitchHome{
+        ArmConstants::kRotationLimitSwitchHomePort};
+    frc::DigitalInput m_limitswitchMax{
+        ArmConstants::kRotationLimitSwitchMaxPort};
 };

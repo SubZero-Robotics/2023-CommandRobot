@@ -37,22 +37,17 @@ frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive) {
         .ToPtr();
 }
 
-
 frc2::CommandPtr autos::DoesNothing(DriveSubsystem* m_drive) {
     return frc2::FunctionalCommand(
-        [m_drive] { m_drive->ResetEncoders(); },
-        // Drive forward while the command is executing
-        [m_drive] {
-            m_drive->ArcadeDrive(0, 0);
-        },
-        // Stop driving at the end of the command
-        [m_drive](bool interrupted) { m_drive->ArcadeDrive(0, 0); },
-        // End the command when the robot's driven distance exceeds the
-        // desired value
-        [m_drive] {
-            return true;
-        },
-        // Requires the drive subsystem
-        {m_drive})
-.ToPtr();
+               [m_drive] { m_drive->ResetEncoders(); },
+               // Drive forward while the command is executing
+               [m_drive] { m_drive->ArcadeDrive(0, 0); },
+               // Stop driving at the end of the command
+               [m_drive](bool interrupted) { m_drive->ArcadeDrive(0, 0); },
+               // End the command when the robot's driven distance exceeds the
+               // desired value
+               [m_drive] { return true; },
+               // Requires the drive subsystem
+               {m_drive})
+        .ToPtr();
 }

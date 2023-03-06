@@ -6,21 +6,21 @@
 
 #include <iostream>
 
+#include "commands/BrakeSet.h"
+#include "commands/BrakeStop.h"
 #include "commands/DefaultDrive.h"
 #include "commands/ExampleCommand.h"
 #include "commands/Extender.h"
 #include "commands/ExtenderHome.h"
 #include "commands/ExtenderStop.h"
-#include "commands/BrakeStop.h"
-#include "commands/BrakeSet.h"
 #include "commands/IntakeIn.h"
 #include "commands/IntakeOut.h"
+#include "commands/IntakeStop.h"
 #include "commands/LEDToggle.h"
 #include "commands/RotateArm.h"
-#include "commands/RotateWrist.h"
 #include "commands/RotateArmHome.h"
+#include "commands/RotateWrist.h"
 #include "commands/WristHome.h"
-#include "commands/IntakeStop.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -61,9 +61,8 @@ void RobotContainer::ConfigureBindings() {
         &m_extender, [this] { return ArmXbox.GetLeftTriggerAxis(); },
         [this] { return ArmXbox.GetRightTriggerAxis(); }));
 
-    m_intake.SetDefaultCommand(IntakeStop(
-        &m_intake).ToPtr());
-    
+    m_intake.SetDefaultCommand(IntakeStop(&m_intake).ToPtr());
+
     // DriverXbox.Y().OnTrue(RotateArmHome(&m_effector).ToPtr());
 
     // DriverXbox.X().OnTrue(ExtenderHome(&m_extender).ToPtr());

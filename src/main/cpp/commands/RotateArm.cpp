@@ -20,14 +20,14 @@ void RotateArm::Execute() {
     if (abs(rotation) < kDeadzone) rotation = 0.0;
 
     if (m_effector->AtHome()) {
-        if (rotation < 0){
+        if (rotation < 0) {
             m_effector->ResetEncoder();
             m_effector->PercentOutput(rotation);
         } else {
             m_effector->PercentOutput(0.0);
         }
-    } else if (m_effector->AtMax() ) {
-        if (rotation > 0){
+    } else if (m_effector->AtMax()) {
+        if (rotation > 0) {
             m_effector->PercentOutput(rotation);
         } else {
             m_effector->PercentOutput(0.0);

@@ -10,5 +10,7 @@ BrakeSet::BrakeSet(BrakeSubsystem* subsystem) : m_Brake{subsystem} {
     AddRequirements(m_Brake);
 }
 
-void BrakeSet::Execute() { m_Brake->SetBrakeMode(); 
-isFinished = true;}
+void BrakeSet::Execute() {
+    m_Brake->SetBrakeMode();
+    isFinished = true;
+}

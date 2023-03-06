@@ -16,9 +16,7 @@ class BrakeMode : public frc2::CommandHelper<frc2::CommandBase, BrakeMode> {
 
     void Execute() override;
 
-    bool IsFinished() override {
-        return true;
-    }
+    bool IsFinished() override { return true; }
 
    private:
     DriveSubsystem* m_drive;

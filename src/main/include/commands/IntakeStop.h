@@ -5,8 +5,7 @@
 
 #include "subsystems/IntakeSubsystem.h"
 
-class IntakeStop
-    : public frc2::CommandHelper<frc2::CommandBase, IntakeStop> {
+class IntakeStop : public frc2::CommandHelper<frc2::CommandBase, IntakeStop> {
    public:
     /**
      * Creates a new Extender.

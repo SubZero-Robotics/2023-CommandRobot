@@ -25,14 +25,14 @@ void Extender::Execute() {
     auto rotation = outExtent >= inExtent ? outExtent : -inExtent;
 
     // if (!m_extension->AtLimit() ||
-    //     m_extension->GetExtenderDistanceIn() >= ArmConstants::kMaxArmDistanceIn) {
-    //     m_extension->PercentOutput(0);
+    //     m_extension->GetExtenderDistanceIn() >=
+    //     ArmConstants::kMaxArmDistanceIn) { m_extension->PercentOutput(0);
     //     return;
     // }
 
     if (m_extension->AtLimit()) {
         m_extension->ResetEncoder();
-        if (rotation > 0){
+        if (rotation > 0) {
             m_extension->PercentOutput(rotation);
         } else {
             m_extension->PercentOutput(0.0);
@@ -41,8 +41,8 @@ void Extender::Execute() {
         m_extension->PercentOutput(rotation);
     }
 
-    // if (m_extension->GetExtenderDistanceIn() >= ArmConstants::kMaxArmDistanceIn) {
+    // if (m_extension->GetExtenderDistanceIn() >=
+    // ArmConstants::kMaxArmDistanceIn) {
     //     m_extension->Extend(0.2);
     // }
-
 }

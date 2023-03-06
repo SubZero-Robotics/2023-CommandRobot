@@ -9,7 +9,6 @@
 
 class ExtensionSubsystem : public frc2::SubsystemBase {
    public:
-
     ExtensionSubsystem();
 
     /**
@@ -34,7 +33,9 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
         m_extensionMotor.Set(speed);
     }
 
-    float GetExtenderDistanceIn() { return m_encoder.GetPosition() * ArmConstants::kTicksPerIn; }
+    float GetExtenderDistanceIn() {
+        return m_encoder.GetPosition() * ArmConstants::kTicksPerIn;
+    }
 
     bool AtLimit() {
         return !m_limitSwitch.Get() ||
@@ -55,5 +56,5 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
 
     rev::SparkMaxRelativeEncoder m_encoder = m_extensionMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kHallSensor, 42);
-        //4096 is default ctre ticks
+    // 4096 is default ctre ticks
 };

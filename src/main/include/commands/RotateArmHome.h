@@ -21,16 +21,13 @@ class RotateArmHome
         if (!m_rotation->AtHome()) {
             m_rotation->RunMotorHoming(ArmConstants::kRotationHomingSpeed);
         } else {
-
-        m_rotation->RunMotorHoming(0);
-        m_rotation->ResetEncoder();
-        isFinished = true;
+            m_rotation->RunMotorHoming(0);
+            m_rotation->ResetEncoder();
+            isFinished = true;
         }
     }
 
-    bool IsFinished() override {
-        return isFinished;
-    }
+    bool IsFinished() override { return isFinished; }
 
    private:
     RotateArmSubsystem* m_rotation;

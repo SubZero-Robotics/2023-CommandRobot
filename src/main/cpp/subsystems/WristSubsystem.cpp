@@ -8,9 +8,7 @@ WristSubsystem::WristSubsystem() {
 
     // Default unit is number of rotations
     m_wristRotationMotor.SetSoftLimit(
-        rev::CANSparkMax::SoftLimitDirection::kForward,
-        kWristSoftLimit);
-
+        rev::CANSparkMax::SoftLimitDirection::kForward, kWristSoftLimit);
 }
 
 void WristSubsystem::Periodic() {

@@ -14,12 +14,14 @@ DefaultDrive::DefaultDrive(DriveSubsystem* subsystem,
                            std::function<double()> forward,
                            std::function<double()> rotation,
                            std::function<bool()> modifier)
-    : m_drive{subsystem}, m_forward{forward}, m_rotation{rotation}, m_modifier(modifier) {
+    : m_drive{subsystem},
+      m_forward{forward},
+      m_rotation{rotation},
+      m_modifier(modifier) {
     AddRequirements({subsystem});
 }
 
 void DefaultDrive::Execute() {
-
     // Apply stick deadzone
     double XboxX = m_rotation();
     if (abs(XboxX) < kDeadzone) XboxX = 0.0;

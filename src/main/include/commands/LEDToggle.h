@@ -24,27 +24,24 @@ class LEDToggle : public frc2::CommandHelper<frc2::CommandBase, LEDToggle> {
      * @param subsystem The subsystem used by this command.
      */
     explicit LEDToggle(LEDControllerSubsystem* subsystem)
-        : m_subsystem(subsystem) {
-        }
+        : m_subsystem(subsystem) {}
 
     void Execute() override {
-
-        if (m_subsystem->getCurrentColor() == LEDControllerSubsystem::Colors::Purple)
-        {
+        if (m_subsystem->getCurrentColor() ==
+            LEDControllerSubsystem::Colors::Purple) {
             m_subsystem->setColor(255, 255, 0);
-            m_subsystem->setPattern(LEDControllerSubsystem::PatternType::SetAll, true);
+            m_subsystem->setPattern(LEDControllerSubsystem::PatternType::SetAll,
+                                    true);
             isFinished = true;
         } else {
             m_subsystem->setColor(180, 0, 255);
-            m_subsystem->setPattern(LEDControllerSubsystem::PatternType::SetAll, true);
+            m_subsystem->setPattern(LEDControllerSubsystem::PatternType::SetAll,
+                                    true);
             isFinished = true;
         }
-        
     }
 
-    bool IsFinished() override {
-        return isFinished;
-    }
+    bool IsFinished() override { return isFinished; }
 
    private:
     LEDControllerSubsystem* m_subsystem;
