@@ -5,7 +5,12 @@
 - [Team 5690 SubZero Robotics 2023 Command Robot](#team-5690-subzero-robotics-2023-command-robot)
   - [Table of contents](#table-of-contents)
   - [About](#about)
-- [Subsystems](#subsystems)
+  - [Development Cycle](#development-cycle)
+    - [Main](#main)
+    - [Competition](#competition)
+  - [Subsystems](#subsystems)
+  - [CAN IDs](#can-ids)
+  - [Network Map](#network-map)
   - [Getting started](#getting-started)
     - [Prerequisites](#prerequisites)
   - [Making changes](#making-changes)
@@ -16,25 +21,55 @@
       - [Pushing commits](#pushing-commits)
       - [Pulling branches](#pulling-branches)
       - [Pull requests](#pull-requests)
-  - [Network Map](#network-map)
   - [Contact](#contact)
 
 ## About
 
 :warning: **TODO: Add about section**
 
-# Subsystems
+## Development Cycle
+
+### Main
+
+Main should **always** contain known, tested, and working code that has been throroughly verified by running it on the robot. Use other development branches to create new features and test them before pulling into `main` via a Pull Request (PR). `main` cannot have code pushed to it directly, meaning a PR is **mandatory**.
+
+Use the `main` branch for non-competition usage and practice.
+
+### Competition
+
+Before a competition, create a new branch based on `main` and lock it via a GitHub protection rule to prevent pushes. Only use this branch during a competition to avoid unnecessary or breaking deployments to the RIO.
+
+:warning: ***Changes should only be made to this branch if there is a blocking error that must be fixed immediately!*** :warning:
+
+## Subsystems
+
 Following the WPILib command based structure we have broken our robot up into a number of subsystems. They are listed below:
 
-| Subsystem | Purpose |
-|-----------|---------|
+| Subsystem                                             | Purpose                                                  |
+| :---------------------------------------------------- | :------------------------------------------------------- |
+| [Brake](src/main/include/subsystems/BrakeSubsystem.h) | Set or unset brakes (supports brake mode and pneumatics) |
 
+## CAN IDs
+
+| Purpose/Name | CAN ID | Motor/Driver Type |
+| :---: | :---: | :---: |
+| Left drive lead | `<ADD HERE>` | `<ADD HERE>` |
+
+## Network Map
+
+|  Device   |   Address   |
+| :-------: | :---------: |
+|  Gateway  | 10.56.90.1  |
+|    RIO    | 10.56.90.2  |
+|   Coral   | 10.56.90.4  |
+| LimeLight | 10.56.90.11 |
 
 ## Getting started
 
 ### Prerequisites
 
 Install the following:
+
 - [WPILib](https://docs.wpilib.org/en/stable/docs/getting-started/getting-started-frc-control-system/wpilib-setup.html)
 - [Git](https://git-scm.com/download/win) (You don't need GitHub desktop)
 
@@ -85,15 +120,6 @@ The reviewer is responsible for looking over the PR, testing the changes themsel
 - Approve (PR is good; required to merge and should be done by a mentor or team lead)
 - Disapprove (PR needs changes before it can be merged; please address the comments, click `Resolve` under each comment once fixed, then re-request a review)
 - Comment (simply add a comment(s) without approving or disapproving)
-
-## Network Map
-
-Device | Address
-|:---:|:---:|
-Gateway|10.56.90.1
-RIO|10.56.90.2
-Coral|10.56.90.4
-LimeLight|10.56.90.11
 
 ## Contact
 
