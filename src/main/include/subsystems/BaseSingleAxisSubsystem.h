@@ -34,10 +34,15 @@
  * 
  * @tparam Motor Any motor that supports Set(percent)
  */
-
 template <typename Motor>
 class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     public:
+        enum ConfigConstants {
+            MOTOR_DIRECTION_NORMAL = 1,
+            MOTOR_DIRECTION_REVERSED = -1,
+            UNUSED_DIO_PORT = -1
+        };
+
         enum class AxisType {
             Rotational,
             Linear
@@ -59,16 +64,16 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             double minDistance;
             double maxDistance;
             double distancePerRevolution;
-            int motorDirection = 1;
-            int minLimitSwitchPort = -1;
-            int maxLimitSwitchPort = -1;
-            int absoluteEncoderPort = -1;
+            ConfigConstants motorDirection = MOTOR_DIRECTION_NORMAL;
+            int minLimitSwitchPort = (int)UNUSED_DIO_PORT;
+            int maxLimitSwitchPort = (int)UNUSED_DIO_PORT;
+            int absoluteEncoderPort = (int)UNUSED_DIO_PORT;
             double defaultMovementSpeed = 0.2;
         };
 
-        BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor) :
-            _motor(motor), _config(cfg), _isHoming(false), _isMovingToPosition(false),
-            _targetPosition(0), _pid(cfg.pid) {
+        BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &&motor) :
+            _motor(std::move(motor)), _config(cfg), _pid(cfg.pid), _isHoming(false), _isMovingToPosition(false),
+            _targetPosition(0) {
 
             if (IsValidPort(_config.absoluteEncoderPort)) {
                 _encoder = std::make_unique<frc::DutyCycleEncoder>(_config.absoluteEncoderPort);
@@ -82,6 +87,8 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             if (IsValidPort(_config.maxLimitSwitchPort)) {
                 _maxLimitSwitch = std::make_unique<frc::DigitalInput>(_config.maxLimitSwitchPort);
             }
+
+            _config.defaultMovementSpeed = std::clamp(_config.defaultMovementSpeed, -1.0, 1.0);
         }
 
         /**
@@ -91,8 +98,8 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
          * 
          * @param speed Percentage speed
          */
-        void RunMotorSpeed(double speed) {
-            speed *= _config.motorDirection;
+        void RunMotorSpeed(double speed) const {
+            speed *= (int)_config.motorDirection;
 
             if (AtHome()) {
                 if (speed > 0) {
@@ -127,17 +134,17 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             }
         }
 
-        inline void ResetEncoder() {
+        inline void ResetEncoder() const {
             _encoder->Reset();
         }
 
-        inline double GetCurrentPosition() {
+        inline double GetCurrentPosition() const {
             if (_encoder) {
                 return _encoder->GetDistance();
             }
         }
 
-        bool AtHome() {
+        bool AtHome() const {
             if (_minLimitSwitch) {
                 if (AtLimitSwitchHome()) {
                     ResetEncoder();
@@ -155,7 +162,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             return false;
         }
 
-        inline bool AtMax() {
+        inline bool AtMax() const {
             if (_maxLimitSwitch) {
                 return AtLimitSwitchMax();
             }
@@ -167,7 +174,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             return false;
         }
 
-        inline bool AtLimitSwitchHome() {
+        inline bool AtLimitSwitchHome() const {
             if (_minLimitSwitch) {
                 return !_minLimitSwitch->Get();
             }
@@ -175,7 +182,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             return false;
         }
 
-        inline bool AtLimitSwitchMax() {
+        inline bool AtLimitSwitchMax() const {
             if (_maxLimitSwitch) {
                 return !_maxLimitSwitch->Get();
             }
@@ -192,8 +199,8 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             _isHoming = true;
         }
 
-        inline bool GetMovingToPosition() {
-            return !_isMovingToPosition;
+        inline bool GetIsMovingToPosition() const {
+            return _isMovingToPosition;
         }
 
         inline void StopMovement() {
@@ -220,13 +227,15 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             UpdateMovement();
         }
 
-        static inline IsValidPort(int port) {
+        static inline bool IsValidPort(int port) {
             return port >= 0 && port < 10;
         }
 
     protected:
-        Motor &_motor;
+        Motor _motor;
         SingleAxisConfig _config;
+        std::unique_ptr<frc::DutyCycleEncoder> _encoder;
+        frc2::PIDController _pid;
         bool _isHoming;
         bool _isMovingToPosition;
         double _targetPosition;
@@ -234,8 +243,6 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     private:
         std::unique_ptr<frc::DigitalInput> _minLimitSwitch;
         std::unique_ptr<frc::DigitalInput> _maxLimitSwitch;
-        std::unique_ptr<frc::DutyCycleEncoder> _encoder;
-        frc2::PIDController _pid;
 };
 
 #endif
