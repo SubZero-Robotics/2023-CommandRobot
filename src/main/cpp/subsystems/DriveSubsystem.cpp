@@ -19,9 +19,9 @@ using namespace DriveConstants;
 DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
                                WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow)
     : RightLead(rightLead),
+      LeftLead(leftLead),
       RightFollow(rightFollow),
       RightLeadSim(rightLead.GetSimCollection()),
-      LeftLead(leftLead),
       LeftFollow(leftFollow),
       LeftLeadSim(leftLead.GetSimCollection()) {
     // Implementation of subsystem constructor goes here.
