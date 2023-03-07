@@ -4,6 +4,7 @@
 #include <frc/DigitalInput.h>
 #include <frc/DutyCycleEncoder.h>
 #include <frc/controller/PIDController.h>
+#include <frc/controller/ProfiledPIDController.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -14,9 +15,12 @@
 /**
  * @brief A base class for a single-axis subsystem
  *
- * @example BaseSingleAxisSubsystem<rev::CANSparkMax>::SingleAxisConfig config =
- { BaseSingleAxisSubsystem<rev::CANSparkMax>::AxisType::Linear,    // type
-        frc2::PIDController(1, 2, 3),   // PID
+ * @example BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>::SingleAxisConfig config =
+ { BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>::AxisType::Linear,    // type
+        frc::ProfilePIDController(1.3, 0.0, 0.7,
+            frc::TrapezoidProfile<units::meters>::Constraints(1.75_mps, 0.75_mps_sq),
+            20_ms   // kDt (s)
+        ),   // PID
         0,      // min distance
         200,    // max distance
         30,     // distance per revolution in linear units
@@ -31,12 +35,13 @@
         CANSparkMaxConstants::kLeadRotationMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
 
-    BaseSingleAxisSubsystem<rev::CANSparkMax> singleAxis =
- BaseSingleAxisSubsystem<rev::CANSparkMax>(config, m_leadRotationMotor);
+    BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters> singleAxis =
+ BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>(config, m_leadRotationMotor);
  *
  * @tparam Motor Any motor that supports Set(percent)
+ * @tparam Unit Position unit (units::meters, etc.)
  */
-template <typename Motor>
+template <typename Motor, typename Unit>
 class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
    public:
     enum ConfigConstants {
@@ -51,7 +56,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      * @brief Configuration for a single axis of absolute movement
      *
      * @param type Rotational or Linear direction
-     * @param pid PIDController for moving the axis
+     * @param pid ProfiledPIDController for moving the axis along a profile
      * @param minDistance Minimum distance in your choice of linear or
      * rotational units
      * @param maxDistance Maximum distance in your choice of linear or
@@ -63,7 +68,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      */
     struct SingleAxisConfig {
         AxisType type;
-        frc2::PIDController pid;
+        frc::ProfiledPIDController<Unit> pid;
         double minDistance;
         double maxDistance;
         double distancePerRevolution;
@@ -77,7 +82,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &&motor)
         : _motor(std::move(motor)),
           _config(cfg),
-          _pid(cfg.pid),
+          _controller(cfg.pid),
           _isHoming(false),
           _isMovingToPosition(false),
           _targetPosition(0) {
@@ -105,12 +110,12 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      * @brief Run motor at the specified speed.
      * ! Make sure to use _config.motorDirection to invert if needed!
      * This method will also prevent movement in certain directions if at a
-     * limit
+     * limit. Use RunMotorExternal if moving the motor from an external command
      *
      * @param speed Percentage speed
      */
     void RunMotorSpeed(double speed) const {
-        speed *= (int)_config.motorDirection;
+        speed = std::clamp(speed * (int)_config.motorDirection, -1.0, 1.0);
 
         if (AtHome()) {
             if (speed > 0) {
@@ -133,12 +138,22 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         }
     }
 
+    /**
+     * @brief Call this one from a joystick-bound command to override current movement
+     * 
+     * @param speed Percentage speed
+     */
+    void RunMotorExternal(double speed) {
+        StopMovement();
+        RunMotorSpeed(speed);
+    }
+
     void UpdateMovement() {
         if (_isMovingToPosition) {
-            auto res = std::clamp(
-                _pid.Calculate(GetCurrentPosition(), _targetPosition),
+            double res = std::clamp(
+                _controller.Calculate(GetCurrentPosition(), _targetPosition),
                 -_config.defaultMovementSpeed, _config.defaultMovementSpeed);
-            if (!_pid.AtSetpoint()) {
+            if (!_controller.AtGoal()) {
                 RunMotorSpeed(res);
             } else {
                 _isMovingToPosition = false;
@@ -148,7 +163,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
 
     inline void ResetEncoder() const { _encoder->Reset(); }
 
-    inline double GetCurrentPosition() const {
+    inline Unit GetCurrentPosition() const {
         if (_encoder) {
             return _encoder->GetDistance();
         }
@@ -200,9 +215,10 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         return false;
     }
 
-    void MoveToPosition(double position) {
+    void MoveToPosition(Unit position) {
         _isMovingToPosition = true;
         _targetPosition = position;
+        _controller.SetGoal(position);
     }
 
     void Home() { _isHoming = true; }
@@ -236,10 +252,10 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     Motor _motor;
     SingleAxisConfig _config;
     std::unique_ptr<frc::DutyCycleEncoder> _encoder;
-    frc2::PIDController _pid;
+    frc::ProfiledPIDController<Unit> _controller;
     bool _isHoming;
     bool _isMovingToPosition;
-    double _targetPosition;
+    Unit _targetPosition;
 
    private:
     std::unique_ptr<frc::DigitalInput> _minLimitSwitch;
