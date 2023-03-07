@@ -45,29 +45,30 @@ Before a competition, create a new branch based on `main` and lock it via a GitH
 
 Following the WPILib command based structure we have broken our robot up into a number of subsystems. They are listed below:
 
-| Subsystem                                             | Purpose                                                  |
-| :---------------------------------------------------- | :------------------------------------------------------- |
-| [Brake](src/main/include/subsystems/BrakeSubsystem.h) | Set or unset brakes (supports brake mode and pneumatics) |
-| [Drive](src/main/include/subsystems/DriveSubsystem.h) | Drives robot |
-| [Extension](src/main/include/subsystems/Extension.h) | Extends the arm |
-| [Intake](src/main/include/subsystems/IntakeSubsystem.h) | Activates the intake |
-| [LEDController](src/main/include/subsystems/LEDControllerSubsystem.h) | Activates the LEDs (Does yellow and purple) |
-| [RotateArm](src/main/include/subsystems/RotateArmSubsystem.h) | Rotates the arm |
-| [Wrist](src/main/include/subsystems/WristSubsystem.h) | Rotates the wrist |
+| Subsystem                                                             | Purpose                                                  |
+| :-------------------------------------------------------------------- | :------------------------------------------------------- |
+| [Brake](src/main/include/subsystems/BrakeSubsystem.h)                 | Set or unset brakes (supports brake mode and pneumatics) |
+| [Drive](src/main/include/subsystems/DriveSubsystem.h)                 | Drives robot                                             |
+| [Extension](src/main/include/subsystems/Extension.h)                  | Extends the arm                                          |
+| [Intake](src/main/include/subsystems/IntakeSubsystem.h)               | Activates the intake                                     |
+| [LEDController](src/main/include/subsystems/LEDControllerSubsystem.h) | Activates the LEDs (Does yellow and purple)              |
+| [RotateArm](src/main/include/subsystems/RotateArmSubsystem.h)         | Rotates the arm                                          |
+| [Wrist](src/main/include/subsystems/WristSubsystem.h)                 | Rotates the wrist                                        |
 
 ## CAN IDs
 
-|  Purpose/Name   |    CAN ID    | Motor/Driver Type |
-| :-------------: | :----------: | :---------------: |
-| Left drive lead | 7 |  TalonFX  |
-| Left drive follow | 5 |  TalonFX  |
-| Right drive lead | 8 |  TalonFX  |
-| Right drive follow | 6 |  TalonFX  |
-| Lead arm rotation | 1 |  SparkMax  |
-| Follow arm rotation | 3 |  SparkMax  |
-| Wrist rotation | 15 |  SparkMax  |
-| Intake spinner | 17 |  SparkMax  |
-| Extension motor | 50|  SparkMax  |
+|     Purpose/Name     | CAN ID | Motor/Driver Type |
+| :------------------: | :----: | :---------------: |
+|   Left drive lead    |   7    |      TalonFX      |
+|  Left drive follow   |   5    |      TalonFX      |
+|   Right drive lead   |   8    |      TalonFX      |
+|  Right drive follow  |   6    |      TalonFX      |
+|  Lead arm rotation   |   1    |     SparkMax      |
+| Follow arm rotation  |   3    |     SparkMax      |
+|    Wrist rotation    |   15   |     SparkMax      |
+|    Intake spinner    |   17   |     SparkMax      |
+|   Extension motor    |   50   |     SparkMax      |
+| Pneumatic controller |   9    |       RevPH       |
 
 
 ## Network Map
