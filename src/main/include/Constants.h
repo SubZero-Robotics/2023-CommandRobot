@@ -66,8 +66,8 @@ constexpr double kWristHomingSpeed = .1;
 // Motor IDs
 namespace CANSparkMaxConstants {
 constexpr int kExtensionMotorID = 50;
-constexpr int kLeadRotationMotorID = 1;
-constexpr int kFollowRotationMotorID = 3;
+constexpr int kArmRotationLeadMotorID = 1;
+constexpr int kArmRotationFollowMotorID = 3;
 constexpr int kIntakeSpinnyBoyID = 17;
 constexpr int kWristRotationMotorID = 15;
 }  // namespace CANSparkMaxConstants
@@ -90,6 +90,11 @@ constexpr int kExtenderLimitSwitchPort = 2;
 // The deadzone for the joystick
 namespace DriveConstants {
 constexpr auto kTrackWidth = 0.6096_m;
+constexpr int kCompressorID = 9;
+constexpr int kRightLeadMotorID = 8;
+constexpr int kLeftLeadMotorID = 7;
+constexpr int kRightFollowMotorID = 6;
+constexpr int kLeftFollowMotorID = 5;
 constexpr int kEncoderCPR = 22241.28;  // Counts Per Rotation. 2048 (talonfx
                                        // cpr) multiplied by gear ratio (10.86)
 constexpr float kVelocityScalingFactor = 10;

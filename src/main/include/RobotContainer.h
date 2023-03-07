@@ -43,16 +43,15 @@ class RobotContainer {
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
     frc2::CommandXboxController DriverXbox{0};
-    // TODO: Second Xbox controller
     frc2::CommandXboxController ArmXbox{1};
 
-    // frc::Compressor phCompressor{9, frc::PneumaticsModuleType::REVPH};
+    frc::Compressor phCompressor{DriveConstants::kCompressorID, frc::PneumaticsModuleType::REVPH};
 
-    WPI_TalonFX RightLead{8};
-    WPI_TalonFX RightFollow{7};
+    WPI_TalonFX RightLead{DriveConstants::kRightLeadMotorID};
+    WPI_TalonFX RightFollow{DriveConstants::kRightFollowMotorID};
 
-    WPI_TalonFX LeftLead{6};
-    WPI_TalonFX LeftFollow{5};
+    WPI_TalonFX LeftLead{DriveConstants::kLeftLeadMotorID};
+    WPI_TalonFX LeftFollow{DriveConstants::kLeftFollowMotorID};
 
     // The robot's subsystems are defined here...
 
