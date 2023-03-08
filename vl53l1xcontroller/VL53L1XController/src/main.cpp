@@ -4,19 +4,33 @@
 #include <Arduino.h>
 #include <VL53L1X.h>
 #include <Wire.h>
+#include <SPI.h>
 
-constexpr uint8_t outputPin = 2;
 constexpr uint16_t minRangeMM = 20;
 constexpr uint16_t maxRangeMM = 150;
 
 VL53L1X sensor;
+volatile double distance;
+
+// SPI interrupt routine
+ISR (SPI_STC_vect)
+{
+  for ( uint8_t i = 0; i < sizeof(double); i++)
+  {
+    SPI.transfer(*(uint8_t*)(&distance + i));
+  }
+  
+}
 
 void setup() {
     Serial.begin(115200);
     Wire.begin();
-    Wire.setClock(400000);  // use 400 kHz I2C
-    pinMode(outputPin, OUTPUT);
-    digitalWrite(outputPin, HIGH);
+    pinMode(MISO, OUTPUT);
+    digitalWrite(MISO, HIGH);
+    // turn on SPI in slave mode
+    SPCR |= _BV(SPE);
+    // turn on interrupts
+    SPI.attachInterrupt();
 
     sensor.setTimeout(500);
     if (!sensor.init()) {
@@ -58,10 +72,6 @@ void loop() {
 
     if (sensor.ranging_data.range_status == VL53L1X::RangeValid) {
         auto range = sensor.ranging_data.range_mm;
-        if (range >= minRangeMM && range <= maxRangeMM) {
-            digitalWrite(outputPin, LOW);
-        } else {
-            digitalWrite(outputPin, HIGH);
-        }
+        distance = (double) range;
     }
 }
