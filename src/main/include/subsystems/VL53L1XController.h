@@ -1,13 +1,16 @@
 #ifndef VL53L1X_CONTROLLER_H
 #define VL53L1X_CONTROLLER_H
 
-#include <memory>
 #include <frc/SPI.h>
+
+#include <memory>
+
 #include "Constants.h"
 
 class VL53L1XController {
    public:
-    VL53L1XController(Frc::SPI::Port CSPin) : _spi(std::make_unique<frc::SPI>(CSPin)) {
+    VL53L1XController(Frc::SPI::Port CSPin)
+        : _spi(std::make_unique<frc::SPI>(CSPin)) {
         _spi->SetClockRate(kClockSpeedSPISlaveHZ);
         _spi->SetChipSelectActiveHigh();
     }
