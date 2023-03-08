@@ -49,7 +49,7 @@ Following the WPILib command based structure we have broken our robot up into a 
 | :-------------------------------------------------------------------- | :------------------------------------------------------- |
 | [Brake](src/main/include/subsystems/BrakeSubsystem.h)                 | Set or unset brakes (supports brake mode and pneumatics) |
 | [Drive](src/main/include/subsystems/DriveSubsystem.h)                 | Drives robot                                             |
-| [Extension](src/main/include/subsystems/Extension.h)                  | Extends the arm                                          |
+| [Extension](src/main/include/subsystems/ExtensionSubsystem.h)         | Extends the arm                                          |
 | [Intake](src/main/include/subsystems/IntakeSubsystem.h)               | Activates the intake                                     |
 | [LEDController](src/main/include/subsystems/LEDControllerSubsystem.h) | Activates the LEDs (Does yellow and purple)              |
 | [RotateArm](src/main/include/subsystems/RotateArmSubsystem.h)         | Rotates the arm                                          |
@@ -79,6 +79,7 @@ Following the WPILib command based structure we have broken our robot up into a 
 |    RIO    | 10.56.90.2  |
 |   Coral   | 10.56.90.4  |
 | LimeLight | 10.56.90.11 |
+|  Laptop   |   Dynamic   |
 
 ## Getting started
 
