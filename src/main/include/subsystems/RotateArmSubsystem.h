@@ -44,10 +44,10 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
     // declared private and exposed only through public methods.
 
     rev::CANSparkMax m_leadRotationMotor{
-        CANSparkMaxConstants::kLeadRotationMotorID,
+        CANSparkMaxConstants::kArmRotationLeadMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
     rev::CANSparkMax m_followRotationMotor{
-        CANSparkMaxConstants::kFollowRotationMotorID,
+        CANSparkMaxConstants::kArmRotationFollowMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
 
     rev::SparkMaxRelativeEncoder m_encoder = m_leadRotationMotor.GetEncoder(
