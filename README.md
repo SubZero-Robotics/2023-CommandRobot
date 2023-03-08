@@ -138,6 +138,20 @@ The reviewer is responsible for looking over the PR, testing the changes themsel
 - Disapprove (PR needs changes before it can be merged; please address the comments, click `Resolve` under each comment once fixed, then re-request a review)
 - Comment (simply add a comment(s) without approving or disapproving)
 
+## Necessary Hardware
+
+1 Prototype 4 v2
+2 Prototype 4
+
+## Network Map
+
+Device | Address
+|:---:|:---:|
+Gateway|10.56.90.1
+RIO|10.56.90.2
+Coral|10.56.90.4
+LimeLight|10.56.90.11
+
 ## Contact
 
 If you would like to contact the subzero robotics programmers, you can do so at [5690programmers@gmail.com](mailto:5690Programmers@gmail.com)
