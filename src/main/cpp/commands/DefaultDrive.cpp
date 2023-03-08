@@ -17,7 +17,7 @@ DefaultDrive::DefaultDrive(DriveSubsystem* subsystem,
     : m_drive{subsystem},
       m_forward{forward},
       m_rotation{rotation},
-      m_modifier(modifier) {
+      m_precisionModeModifier(modifier) {
     AddRequirements({subsystem});
 }
 
@@ -29,7 +29,7 @@ void DefaultDrive::Execute() {
     if (abs(XboxY) < kDeadzone) XboxY = 0.0;
 
     // drive it
-    if (m_modifier()) {
+    if (m_precisionModeModifier()) {
         XboxX *= DriveConstants::kPrecisionModeXCoEff;
         XboxY *= DriveConstants::kPrecisionModeYCoEff;
     }

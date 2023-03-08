@@ -114,7 +114,7 @@ void DriveSubsystem::DisabledInit() {
     SetCoast(&LeftFollow);
 }
 
-void DriveSubsystem::TeleopInit() { m_Brake.UnsetBrakeMode(); }
+void DriveSubsystem::TeleopInit() { m_Brake.Unset(); }
 
 void DriveSubsystem::BrakeInit() {
     SetBrake(&RightLead);
@@ -141,7 +141,8 @@ void DriveSubsystem::TankDrive(units::meters_per_second_t left,
                                units::meters_per_second_t right) {
     frc::SmartDashboard::PutNumber("Left Auto Speed", (double)left);
     frc::SmartDashboard::PutNumber("Right Auto Speed", (double)right);
-    m_drive.TankDrive(left / (3 * 1_mps), right / (3 * 1_mps));
+    m_drive.TankDrive(left / DriveConstants::kMaxDriveVelocity,
+    right / DriveConstants::kMaxDriveVelocity);
 }
 
 void DriveSubsystem::TankDriveVolts(units::volt_t left, units::volt_t right) {

@@ -5,6 +5,7 @@
 #include <frc/DoubleSolenoid.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
+#include "Constants.h"
 
 class BrakeSubsystem : public frc2::SubsystemBase {
    public:
@@ -21,8 +22,8 @@ class BrakeSubsystem : public frc2::SubsystemBase {
      */
     void SimulationPeriodic() override;
 
-    void Forward();
-    void Reverse();
+    void Set();
+    void Unset();
 
     void SetBrakeMode() {
         _lTalon.SetNeutralMode(Brake);

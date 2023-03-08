@@ -29,16 +29,16 @@ class LEDToggle : public frc2::CommandHelper<frc2::CommandBase, LEDToggle> {
     void Execute() override {
         if (m_subsystem->getCurrentColor() ==
             LEDControllerSubsystem::Colors::Purple) {
-            m_subsystem->setColor(255, 255, 0);
+            m_subsystem->setColor(LEDControllerSubsystem::Colors::Yellow);
             m_subsystem->setPattern(LEDControllerSubsystem::PatternType::SetAll,
                                     true);
-            isFinished = true;
         } else {
-            m_subsystem->setColor(180, 0, 255);
+            m_subsystem->setColor(LEDControllerSubsystem::Colors::Purple);
             m_subsystem->setPattern(LEDControllerSubsystem::PatternType::SetAll,
                                     true);
-            isFinished = true;
         }
+
+        isFinished = true;
     }
 
     bool IsFinished() override { return isFinished; }

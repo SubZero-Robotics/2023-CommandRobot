@@ -30,7 +30,7 @@ frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive) {
                                                   m_drive->GetRightEncoder());
                    return abs(m_drive->GetAverageEncoderDistance()) >=
                           AutoConstants::kAutoDriveDistanceInches /
-                              kMagicalAutoNumber;
+                              kStraightBackDivisor;
                },
                // Requires the drive subsystem
                {m_drive})

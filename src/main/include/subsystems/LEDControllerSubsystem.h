@@ -2,6 +2,7 @@
 #define LED_CONTROLLER_H
 
 #include <frc/I2C.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include <memory>
 
@@ -77,6 +78,8 @@ class LEDControllerSubsystem {
      * @param color Color data in the form of 0x00RRGGBB
      */
     bool setColor(uint32_t color);
+
+    bool setColor(Colors color);
 
     /**
      * @brief Send the READPATTERNDONE command

@@ -31,7 +31,7 @@ class DefaultDrive
      */
     DefaultDrive(DriveSubsystem* subsystem, std::function<double()> forward,
                  std::function<double()> rotation,
-                 std::function<bool()> modifier);
+                 std::function<bool()> precisionModeModifier);
 
     void Execute() override;
 
@@ -39,5 +39,5 @@ class DefaultDrive
     DriveSubsystem* m_drive;
     std::function<double()> m_forward;
     std::function<double()> m_rotation;
-    std::function<bool()> m_modifier;
+    std::function<bool()> m_precisionModeModifier;
 };

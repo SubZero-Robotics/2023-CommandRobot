@@ -15,6 +15,7 @@
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
 #include <units/length.h>
+#include <units/pressure.h>
 #include <units/time.h>
 #include <units/velocity.h>
 #include <units/voltage.h>
@@ -61,6 +62,20 @@ constexpr int kReverseRotationsSoftLimit = 0;
 constexpr double kRotationHomingSpeed = .05;
 constexpr double kExtenderHomingSpeed = .3;
 constexpr double kWristHomingSpeed = .1;
+
+constexpr double kIntakeSpeed = 1.0;
+
+// Wrist Constants
+constexpr int kWristLimitSwitchPort = 3;
+constexpr int kWristGearRatio = 125;
+constexpr int kWristDegreeLimit = 90;
+constexpr double kWristSoftLimit =
+    ((kWristDegreeLimit / 360.0) *
+     (kWristGearRatio * ArmConstants::kTicksPerMotorRotation));
+constexpr double kWristTicksPerDegree =
+    (kWristGearRatio * ArmConstants::kTicksPerMotorRotation) / 360.0;
+
+constexpr int kExtenderLimitSwitchPort = 2;
 }  // namespace ArmConstants
 
 // Motor IDs
@@ -71,21 +86,6 @@ constexpr int kFollowRotationMotorID = 3;
 constexpr int kIntakeSpinnyBoyID = 17;
 constexpr int kWristRotationMotorID = 15;
 }  // namespace CANSparkMaxConstants
-
-// Wrist Constants
-
-constexpr int kWristLimitSwitchPort = 3;
-constexpr int kWristGearRatio = 125;
-constexpr int kWristDegreeLimit = 90;
-constexpr double kWristSoftLimit =
-    ((kWristDegreeLimit / 360.0) *
-     (kWristGearRatio * ArmConstants::kTicksPerMotorRotation));
-constexpr double kWristTicksPerDegree =
-    (kWristGearRatio * ArmConstants::kTicksPerMotorRotation) / 360.0;
-
-namespace ExtenderConstants {
-constexpr int kExtenderLimitSwitchPort = 2;
-}  // namespace ExtenderConstants
 
 // The deadzone for the joystick
 namespace DriveConstants {
@@ -104,6 +104,7 @@ constexpr double kPulsesPerMeter = 1 / kEncoderDistancePerPulse;
 constexpr double kCurbRotation = 0.70;
 constexpr double kPrecisionModeYCoEff = .45;
 constexpr double kPrecisionModeXCoEff = .525;
+constexpr auto kMaxDriveVelocity = 3_mps;
 
 // These characterization values MUST be determined either experimentally or
 // theoretically for *your* robot's drive. The Robot Characterization
@@ -118,6 +119,8 @@ constexpr double kPDriveVel = 2.9104;
 
 constexpr double kRamseteB = 2.0;
 constexpr double kRamseteZeta = 0.7;
+constexpr auto kBrakeMinPressure = 60_psi;
+constexpr auto kBrakeMaxPressure = 120_psi;
 }  // namespace DriveConstants
 constexpr double kDeadzone = 0.0;
 
@@ -148,7 +151,7 @@ constexpr auto kMaxTurnRate = 70_deg_per_s;
 constexpr auto kMaxTurnAcceleration = 200_deg_per_s / 1_s;
 
 namespace AutoConstants {
-constexpr double kMagicalAutoNumber = 44.95;
+constexpr double kStraightBackDivisor = 44.95;
 constexpr double kAutoDriveDistanceInches = 66;
 constexpr double kAutoBackupDistanceInches = 20;
 constexpr double kAutoDriveSpeed = 0.5;

@@ -6,7 +6,7 @@ LEDControllerSubsystem::LEDControllerSubsystem(uint8_t slaveAddress,
       _slaveAddress(slaveAddress),
       _lastCommand(LEDControllerSubsystem::CommandType::Off),
       _lastPattern(LEDControllerSubsystem::PatternType::None) {
-    setColor(255, 255, 0);
+    setColor(Colors::Yellow);
     setPattern(LEDControllerSubsystem::PatternType::SetAll, true);
 }
 
@@ -35,11 +35,6 @@ bool LEDControllerSubsystem::setColor(uint8_t red, uint8_t green,
                                       uint8_t blue) {
     _lastCommand = LEDControllerSubsystem::CommandType::ChangeColor;
     uint8_t buf[4] = {(uint8_t)_lastCommand, red, green, blue};
-    if (blue >= 150) {
-        _currentColor = Colors::Purple;
-    } else {
-        _currentColor = Colors::Yellow;
-    }
     return !_i2c->WriteBulk(buf, 4);
 }
 
@@ -49,6 +44,17 @@ bool LEDControllerSubsystem::setColor(uint32_t color) {
     uint8_t b = color & 0xFF;
 
     return setColor(r, g, b);
+}
+
+bool LEDControllerSubsystem::setColor(Colors color) {
+    _currentColor = color;
+    if (color == Colors::Yellow) {
+        frc::SmartDashboard::PutString("LED State", "Yellow");
+        setColor(255, 255, 0);
+    } else if (color == Colors::Purple) {
+        frc::SmartDashboard::PutString("LED State", "Purple");
+        setColor(180, 0, 255);
+    }
 }
 
 bool LEDControllerSubsystem::getPatternDone() {

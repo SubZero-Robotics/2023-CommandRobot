@@ -63,6 +63,7 @@ void RobotContainer::ConfigureBindings() {
 
     m_intake.SetDefaultCommand(IntakeStop(&m_intake).ToPtr());
 
+    // TODO: add homing code
     // DriverXbox.Y().OnTrue(RotateArmHome(&m_effector).ToPtr());
 
     // DriverXbox.X().OnTrue(ExtenderHome(&m_extender).ToPtr());
@@ -82,7 +83,7 @@ void RobotContainer::ConfigureBindings() {
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
-    m_Brake.SetBrakeMode();
+    // TODO: return correct auto
+    m_Brake.Set();
     return autos::StraightBack(m_drive);
-    return autos::DoesNothing(m_drive);
 }

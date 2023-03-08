@@ -31,6 +31,6 @@ class IntakeSubsystem : public frc2::SubsystemBase {
    private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
-    LEDControllerSubsystem* m_ledsubsystem;
+    LEDControllerSubsystem* m_ledSubsystem;
     WPI_TalonSRX m_intakeSpinnyBoy{kIntakeSpinnyBoyID};
 };

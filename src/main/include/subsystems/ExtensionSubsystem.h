@@ -49,7 +49,7 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
     // TODo: asign constants to the Can motors
 
     frc::DigitalInput m_limitSwitch{
-        ExtenderConstants::kExtenderLimitSwitchPort};
+        ArmConstants::kExtenderLimitSwitchPort};
 
     rev::CANSparkMax m_extensionMotor{CANSparkMaxConstants::kExtensionMotorID,
                                       rev::CANSparkMax::MotorType::kBrushless};

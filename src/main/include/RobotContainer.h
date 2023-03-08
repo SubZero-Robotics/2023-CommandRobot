@@ -17,7 +17,6 @@
 
 #include "Constants.h"
 #include "commands/Autos.h"
-#include "commands/BrakeMode.h"
 #include "subsystems/BrakeSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
