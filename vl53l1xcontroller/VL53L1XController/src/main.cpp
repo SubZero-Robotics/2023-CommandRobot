@@ -2,9 +2,9 @@
 // https://www.st.com/resource/en/user_manual/um2555-vl53l1x-ultra-lite-driver-multiple-zone-implementation-stmicroelectronics.pdf
 
 #include <Arduino.h>
+#include <SPI.h>
 #include <VL53L1X.h>
 #include <Wire.h>
-#include <SPI.h>
 
 constexpr uint16_t minRangeMM = 20;
 constexpr uint16_t maxRangeMM = 150;
@@ -13,13 +13,10 @@ VL53L1X sensor;
 volatile double distance;
 
 // SPI interrupt routine
-ISR (SPI_STC_vect)
-{
-  for ( uint8_t i = 0; i < sizeof(double); i++)
-  {
-    SPI.transfer(*(uint8_t*)(&distance + i));
-  }
-  
+ISR(SPI_STC_vect) {
+    for (uint8_t i = 0; i < sizeof(double); i++) {
+        SPI.transfer(*(uint8_t*)(&distance + i));
+    }
 }
 
 void setup() {
@@ -72,6 +69,6 @@ void loop() {
 
     if (sensor.ranging_data.range_status == VL53L1X::RangeValid) {
         auto range = sensor.ranging_data.range_mm;
-        distance = (double) range;
+        distance = (double)range;
     }
 }
