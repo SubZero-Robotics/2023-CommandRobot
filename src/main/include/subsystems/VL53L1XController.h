@@ -1,13 +1,16 @@
 #ifndef VL53L1X_CONTROLLER_H
 #define VL53L1X_CONTROLLER_H
 
-#include <frc/DigitalInput.h>
-
 #include <memory>
+#include <frc/SPI.h>
+#include "Constants.h"
 
 class VL53L1XController {
    public:
-    VL53L1XController(uint8_t inputPin);
+    VL53L1XController(Frc::SPI::Port CSPin) : _spi(std::make_unique<frc::SPI>(CSPin)) {
+        _spi->SetClockRate(kClockSpeedSPISlaveHZ);
+        _spi->SetChipSelectActiveHigh();
+    }
 
     /**
      * @brief Get if lidar distance is in valid range.
@@ -18,7 +21,7 @@ class VL53L1XController {
     bool getDistanceValid();
 
    private:
-    std::unique_ptr<frc::DigitalInput> _input;
+    std::unique_ptr<Frc::SPI> _spi;
 };
 
 #endif
