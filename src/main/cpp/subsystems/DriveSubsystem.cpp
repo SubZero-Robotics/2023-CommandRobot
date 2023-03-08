@@ -20,9 +20,9 @@ DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
                                WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow)
     : RightLead(rightLead),
       RightFollow(rightFollow),
+      RightLeadSim(rightLead.GetSimCollection()),
       LeftLead(leftLead),
       LeftFollow(leftFollow),
-      RightLeadSim(rightLead.GetSimCollection()),
       LeftLeadSim(leftLead.GetSimCollection()) {
     // Implementation of subsystem constructor goes here.
     // Stuff you want to happen once, when robot code starts running
@@ -62,24 +62,23 @@ DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
  */
 frc::Field2d& DriveSubsystem::GetField() { return field; }
 
-void DriveSubsystem::DisabledInit() {}
-
-void DriveSubsystem::TeleopInit() {
-    ConfigureMotor(RightLead);
-    ConfigureMotor(RightFollow);
-    ConfigureMotor(LeftLead);
-    ConfigureMotor(LeftFollow);
+void DriveSubsystem::SetBrakeMode() {
+    RightLead.SetNeutralMode(Brake);
+    RightFollow.SetNeutralMode(Brake);
+    LeftLead.SetNeutralMode(Brake);
+    LeftFollow.SetNeutralMode(Brake);
 }
 
-void DriveSubsystem::SetCoast(WPI_TalonFX* talon) {
-    talon->SetNeutralMode(Coast);
+void DriveSubsystem::SetCoastMode() {
+    RightLead.SetNeutralMode(Coast);
+    RightFollow.SetNeutralMode(Coast);
+    LeftLead.SetNeutralMode(Coast);
+    LeftFollow.SetNeutralMode(Coast);
 }
 
 void DriveSubsystem::Periodic() {
     // Implementation of subsystem periodic method goes here.
     // Things that happen while robot is running */
-
-    static long long counter = 0;
 
     currentrobotAngle = Get2dAngle();
 
@@ -116,9 +115,13 @@ void DriveSubsystem::Periodic() {
             TeleopInit();
         }
     }
-    counter++;
-    frc::SmartDashboard::PutNumber("counter", counter);
 }
+
+void DriveSubsystem::DisabledInit() { SetCoastMode(); }
+
+void DriveSubsystem::TeleopInit() { m_brake.Unset(); }
+
+void DriveSubsystem::BrakeInit() { SetBrakeMode(); }
 
 void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
     if (abs(currentPercentage) >
@@ -132,6 +135,14 @@ void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
         accelfilter.Calculate(currentPercentage);
     }
     previousPercentage = abs(currentPercentage);
+}
+
+void DriveSubsystem::TankDrive(units::meters_per_second_t left,
+                               units::meters_per_second_t right) {
+    frc::SmartDashboard::PutNumber("Left Auto Speed", (double)left);
+    frc::SmartDashboard::PutNumber("Right Auto Speed", (double)right);
+    m_drive.TankDrive(left / DriveConstants::kMaxDriveVelocity,
+                      right / DriveConstants::kMaxDriveVelocity);
 }
 
 void DriveSubsystem::TankDriveVolts(units::volt_t left, units::volt_t right) {

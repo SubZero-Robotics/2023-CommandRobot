@@ -13,4 +13,5 @@ namespace autos {
  * Example static factory for an autonomous command.
  */
 frc2::CommandPtr StraightBack(DriveSubsystem* m_drive);
+frc2::CommandPtr DoesNothing(DriveSubsystem* m_drive);
 }  // namespace autos
