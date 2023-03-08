@@ -1,9 +1,9 @@
 #pragma once
 
 #include <frc/Joystick.h>
+#include <frc/geometry/Pose2d.h>
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc/geometry/Pose2d.h>
 
 #include "subsystems/DriveSubsystem.h"
 
@@ -26,9 +26,7 @@ class DriveResetOdometry
 
     void End(bool interrupted) override {}
 
-    bool IsFinished() override {
-        return false;
-    }
+    bool IsFinished() override { return false; }
 
    private:
     DriveSubsystem* m_driveSubsystem;

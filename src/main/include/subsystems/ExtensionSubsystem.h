@@ -43,13 +43,13 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
     }
 
    private:
-    frc::DigitalInput m_limitSwitch{
-        ArmConstants::kExtenderLimitSwitchPort};
+    frc::DigitalInput m_limitSwitch{ArmConstants::kExtenderLimitSwitchPort};
 
     rev::CANSparkMax m_extensionMotor{CANSparkMaxConstants::kExtensionMotorID,
                                       rev::CANSparkMax::MotorType::kBrushless};
 
     rev::SparkMaxRelativeEncoder m_encoder = m_extensionMotor.GetEncoder(
-        rev::SparkMaxRelativeEncoder::Type::kHallSensor, ArmConstants::kTicksPerMotorRotation);
+        rev::SparkMaxRelativeEncoder::Type::kHallSensor,
+        ArmConstants::kTicksPerMotorRotation);
     // 4096 is default ctre ticks
 };

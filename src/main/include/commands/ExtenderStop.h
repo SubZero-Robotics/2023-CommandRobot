@@ -19,9 +19,7 @@ class ExtenderStop
         AddRequirements(m_extension);
     }
 
-    void Execute() override {
-        m_extension->PercentOutput(0.0);
-    }
+    void Execute() override { m_extension->PercentOutput(0.0); }
 
    private:
     ExtensionSubsystem* m_extension;

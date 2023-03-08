@@ -117,15 +117,11 @@ void DriveSubsystem::Periodic() {
     }
 }
 
-void DriveSubsystem::DisabledInit() {
-    SetCoastMode();
-}
+void DriveSubsystem::DisabledInit() { SetCoastMode(); }
 
 void DriveSubsystem::TeleopInit() { m_brake.Unset(); }
 
-void DriveSubsystem::BrakeInit() {
-    SetBrakeMode();
-}
+void DriveSubsystem::BrakeInit() { SetBrakeMode(); }
 
 void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
     if (abs(currentPercentage) >
@@ -146,7 +142,7 @@ void DriveSubsystem::TankDrive(units::meters_per_second_t left,
     frc::SmartDashboard::PutNumber("Left Auto Speed", (double)left);
     frc::SmartDashboard::PutNumber("Right Auto Speed", (double)right);
     m_drive.TankDrive(left / DriveConstants::kMaxDriveVelocity,
-    right / DriveConstants::kMaxDriveVelocity);
+                      right / DriveConstants::kMaxDriveVelocity);
 }
 
 void DriveSubsystem::TankDriveVolts(units::volt_t left, units::volt_t right) {

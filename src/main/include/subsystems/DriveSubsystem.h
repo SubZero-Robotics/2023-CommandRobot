@@ -190,7 +190,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     /**
      * @brief Set all talons to brake mode
-     * 
+     *
      */
     void SetBrakeMode();
 

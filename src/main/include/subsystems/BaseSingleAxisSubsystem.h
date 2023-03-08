@@ -15,11 +15,12 @@
 /**
  * @brief A base class for a single-axis subsystem
  *
- * @example BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>::SingleAxisConfig config =
- { BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>::AxisType::Linear,    // type
-        frc::ProfilePIDController(1.3, 0.0, 0.7,
-            frc::TrapezoidProfile<units::meters>::Constraints(1.75_mps, 0.75_mps_sq),
-            20_ms   // kDt (s)
+ * @example BaseSingleAxisSubsystem<rev::CANSparkMax,
+ units::meters>::SingleAxisConfig config = {
+ BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>::AxisType::Linear, //
+ type frc::ProfilePIDController(1.3, 0.0, 0.7,
+            frc::TrapezoidProfile<units::meters>::Constraints(1.75_mps,
+ 0.75_mps_sq), 20_ms   // kDt (s)
         ),   // PID
         0,      // min distance
         200,    // max distance
@@ -36,7 +37,8 @@
         rev::CANSparkMax::MotorType::kBrushless};
 
     BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters> singleAxis =
- BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>(config, m_leadRotationMotor);
+ BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>(config,
+ m_leadRotationMotor);
  *
  * @tparam Motor Any motor that supports Set(percent)
  * @tparam Unit Position unit (units::meters, etc.)
@@ -139,8 +141,9 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     }
 
     /**
-     * @brief Call this one from a joystick-bound command to override current movement
-     * 
+     * @brief Call this one from a joystick-bound command to override current
+     * movement
+     *
      * @param speed Percentage speed
      */
     void RunMotorExternal(double speed) {
