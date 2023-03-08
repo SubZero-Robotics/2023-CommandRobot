@@ -10,6 +10,9 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
+#include <cmath>
+
+#include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 
 /**
@@ -30,12 +33,33 @@ class DefaultDrive
      * @param rotation The control input for turning
      */
     DefaultDrive(DriveSubsystem* subsystem, std::function<double()> forward,
-                 std::function<double()> rotation);
+                 std::function<double()> rotation,
+                 std::function<bool()> precisionModeModifier)
+        : m_drive{subsystem},
+          m_forward{forward},
+          m_rotation{rotation},
+          m_precisionModeModifier(precisionModeModifier) {
+        AddRequirements({subsystem});
+    }
 
-    void Execute() override;
+    void Execute() override {
+        // Apply stick deadzone
+        double XboxX = m_rotation();
+        if (abs(XboxX) < kDeadzone) XboxX = 0.0;
+        double XboxY = m_forward();
+        if (abs(XboxY) < kDeadzone) XboxY = 0.0;
+
+        // drive it
+        if (m_precisionModeModifier()) {
+            XboxX *= DriveConstants::kPrecisionModeXCoEff;
+            XboxY *= DriveConstants::kPrecisionModeYCoEff;
+        }
+        m_drive->ArcadeDrive(XboxY, XboxX);
+    }
 
    private:
     DriveSubsystem* m_drive;
     std::function<double()> m_forward;
     std::function<double()> m_rotation;
+    std::function<bool()> m_precisionModeModifier;
 };

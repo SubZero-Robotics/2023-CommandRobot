@@ -24,12 +24,29 @@ frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive) {
                // End the command when the robot's driven distance exceeds the
                // desired value
                [m_drive] {
-                   frc::SmartDashboard::PutNumber(
-                       "Encoder Distance",
-                       m_drive->GetAverageEncoderDistance());
+                   frc::SmartDashboard::PutNumber("Left Encoder",
+                                                  m_drive->GetLeftEncoder());
+                   frc::SmartDashboard::PutNumber("Right Encoder",
+                                                  m_drive->GetRightEncoder());
                    return abs(m_drive->GetAverageEncoderDistance()) >=
-                          AutoConstants::kAutoDriveDistanceInches;
+                          AutoConstants::kAutoDriveDistanceInches /
+                              kStraightBackDivisor;
                },
+               // Requires the drive subsystem
+               {m_drive})
+        .ToPtr();
+}
+
+frc2::CommandPtr autos::DoesNothing(DriveSubsystem* m_drive) {
+    return frc2::FunctionalCommand(
+               [m_drive] { m_drive->ResetEncoders(); },
+               // Drive forward while the command is executing
+               [m_drive] { m_drive->ArcadeDrive(0, 0); },
+               // Stop driving at the end of the command
+               [m_drive](bool interrupted) { m_drive->ArcadeDrive(0, 0); },
+               // End the command when the robot's driven distance exceeds the
+               // desired value
+               [m_drive] { return true; },
                // Requires the drive subsystem
                {m_drive})
         .ToPtr();

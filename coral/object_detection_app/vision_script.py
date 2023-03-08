@@ -15,7 +15,7 @@ parser.add_argument('-N', '--no-networking', help='Don\'t output data via networ
 parser.add_argument('-t', '--threshold', metavar='THRESHOLD',
                     help='Set object detection threshold', default=0.5, type=float)
 parser.add_argument('-p', '--port', metavar='PORT',
-                    help='Port for webserver', default=5001, type=int)
+                    help='Port for webserver', default=8080, type=int)
 args = vars(parser.parse_args())
 
 THRESHOLD = args['threshold']

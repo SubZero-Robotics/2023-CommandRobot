@@ -24,7 +24,10 @@ class ExampleCommand
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit ExampleCommand(ExampleSubsystem* subsystem);
+    explicit ExampleCommand(ExampleSubsystem* subsystem)
+        : m_subsystem{subsystem} {
+        AddRequirements(m_subsystem);
+    }
 
    private:
     ExampleSubsystem* m_subsystem;

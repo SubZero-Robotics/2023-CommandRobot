@@ -7,7 +7,6 @@
 #include <AHRS.h>
 #include <ctre/Phoenix.h>
 #include <frc/AnalogGyro.h>
-#include <frc/AnalogInput.h>
 #include <frc/DriverStation.h>
 #include <frc/RobotController.h>
 #include <frc/drive/DifferentialDrive.h>
@@ -29,6 +28,8 @@
 #include <networktables/NetworkTableInstance.h>
 
 #include "Constants.h"
+#include "commands/BrakeSet.h"
+#include "subsystems/BrakeSubsystem.h"
 
 struct Encoders {
     WPI_TalonFX* lead;
@@ -43,7 +44,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     void TeleopInit();
 
-    void SetCoast(WPI_TalonFX* talon);
+    void BrakeInit();
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
@@ -61,6 +62,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
      * @param rotation the commanded rotation
      */
     void ArcadeDrive(double, double);
+
+    void TankDrive(units::meters_per_second_t, units::meters_per_second_t);
 
     /**
      * Controls each side of the drive directly with a voltage.
@@ -185,6 +188,14 @@ class DriveSubsystem : public frc2::SubsystemBase {
      */
     static void InvertSide(Encoders);
 
+    /**
+     * @brief Set all talons to brake mode
+     *
+     */
+    void SetBrakeMode();
+
+    void SetCoastMode();
+
     frc::Field2d field;
 
     // right motor controllers
@@ -200,6 +211,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
     Encoders leftEncoders;
 
     frc::DifferentialDrive m_drive{RightLead, LeftLead};
+
+    BrakeSubsystem m_brake{RightLead, LeftLead};
 
     // The default (starting) values for the encoder
     double lEncoder = 0.0;
