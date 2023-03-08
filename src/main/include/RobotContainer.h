@@ -44,8 +44,6 @@ class RobotContainer {
     frc2::CommandXboxController DriverXbox{0};
     frc2::CommandXboxController ArmXbox{1};
 
-    frc::Compressor phCompressor{DriveConstants::kCompressorID, frc::PneumaticsModuleType::REVPH};
-
     WPI_TalonFX RightLead{DriveConstants::kRightLeadMotorID};
     WPI_TalonFX RightFollow{DriveConstants::kRightFollowMotorID};
 

@@ -12,13 +12,19 @@ class BrakeStop : public frc2::CommandHelper<frc2::CommandBase, BrakeStop> {
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit BrakeStop(BrakeSubsystem* subsystem);
+    explicit BrakeStop(BrakeSubsystem* subsystem) : m_brake{subsystem} {
+        // Register that this command requires the subsystem.
+        AddRequirements(m_brake);
+    }
 
-    void Execute() override;
+    void Execute() override {
+        m_brake->UnsetBrakeMode();
+        isFinished = true;
+    }
 
     bool IsFinished() override { return isFinished; }
 
    private:
-    BrakeSubsystem* m_Brake;
+    BrakeSubsystem* m_brake;
     bool isFinished = false;
 };

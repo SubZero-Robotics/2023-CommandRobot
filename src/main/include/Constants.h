@@ -23,7 +23,7 @@
 #include <numbers>
 
 // uncomment this for simulation
-#define IS_SIMULATION
+// #define IS_SIMULATION
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -90,7 +90,6 @@ constexpr int kWristRotationMotorID = 15;
 // The deadzone for the joystick
 namespace DriveConstants {
 constexpr auto kTrackWidth = 0.6096_m;
-constexpr int kCompressorID = 9;
 constexpr int kRightLeadMotorID = 8;
 constexpr int kLeftLeadMotorID = 7;
 constexpr int kRightFollowMotorID = 6;
@@ -126,6 +125,9 @@ constexpr double kRamseteB = 2.0;
 constexpr double kRamseteZeta = 0.7;
 constexpr auto kBrakeMinPressure = 60_psi;
 constexpr auto kBrakeMaxPressure = 120_psi;
+constexpr auto kPenumaticsModuleID = 9;
+constexpr auto kSolenoidForwardChannel = 1;
+constexpr auto kSolenoidReverseChannel = 2;
 }  // namespace DriveConstants
 constexpr double kDeadzone = 0.0;
 
@@ -162,7 +164,7 @@ constexpr double kAutoBackupDistanceInches = 20;
 constexpr double kAutoDriveSpeed = 0.5;
 }  // namespace AutoConstants
 
-constexpr uint8_t kLEDCotrollerSlaveAddress = 1;
+constexpr uint8_t kLEDCotrollerSlaveAddress = 0x01;
 
 // XboxController enums.  Since the Trigger stuff works on the base Joystick
 // class, not the Xbox extension, these are undefined where we want to use them.

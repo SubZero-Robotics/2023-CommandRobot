@@ -12,12 +12,21 @@ class IntakeIn : public frc2::CommandHelper<frc2::CommandBase, IntakeIn> {
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit IntakeIn(IntakeSubsystem* subsystem);
+    explicit IntakeIn(IntakeSubsystem* subsystem)
+        : m_intake{subsystem}, isFinished{false} {
+        // Register that this command requires the subsystem.
+        AddRequirements(m_intake);
+    }
 
-    void Execute() override;
-    bool IsFinished() override;
+    void Execute() override {
+        m_intake->In();
+    }
+
+    bool IsFinished() override {
+        return isFinished;
+    }
 
    private:
-    IntakeSubsystem* m_Intake;
+    IntakeSubsystem* m_intake;
     bool isFinished;
 };

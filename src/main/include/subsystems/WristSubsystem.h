@@ -6,12 +6,11 @@
 
 #include <iostream>
 
-#include "constants.h"
+#include "Constants.h"
 #include "rev/CANSparkMax.h"
 
 class WristSubsystem : public frc2::SubsystemBase {
    public:
-    frc::DigitalInput m_limitSwitch{kWristLimitSwitchPort};
     WristSubsystem();
 
     /**
@@ -31,7 +30,7 @@ class WristSubsystem : public frc2::SubsystemBase {
     void RunMotorHoming(double speed) { m_wristRotationMotor.Set(speed); }
 
     double GetWristDistanceDegree() {
-        return m_encoder.GetPosition() * kWristTicksPerDegree;
+        return m_encoder.GetPosition() * ArmConstants::kWristTicksPerDegree;
     }
 
     bool AtLimit() {
@@ -44,6 +43,8 @@ class WristSubsystem : public frc2::SubsystemBase {
    private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
+
+    frc::DigitalInput m_limitSwitch{ArmConstants::kWristLimitSwitchPort};
 
     rev::CANSparkMax m_wristRotationMotor{
         CANSparkMaxConstants::kWristRotationMotorID,

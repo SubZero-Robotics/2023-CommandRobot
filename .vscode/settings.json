@@ -17,6 +17,7 @@
   "C_Cpp.default.configurationProvider": "vscode-wpilib",
   "C_Cpp.errorSquiggles": "enabled",
   "files.associations": {
+    "*.ino": "cpp",
     "numbers": "cpp",
     "array": "cpp",
     "atomic": "cpp",
@@ -87,6 +88,8 @@
     "cinttypes": "cpp",
     "typeindex": "cpp",
     "typeinfo": "cpp",
-    "variant": "cpp"
-  }
+    "variant": "cpp",
+    "xstddef": "cpp",
+    "xtr1common": "cpp"
+}
 }

@@ -19,9 +19,9 @@ using namespace DriveConstants;
 DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
                                WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow)
     : RightLead(rightLead),
-      LeftLead(leftLead),
       RightFollow(rightFollow),
       RightLeadSim(rightLead.GetSimCollection()),
+      LeftLead(leftLead),
       LeftFollow(leftFollow),
       LeftLeadSim(leftLead.GetSimCollection()) {
     // Implementation of subsystem constructor goes here.
@@ -62,8 +62,18 @@ DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
  */
 frc::Field2d& DriveSubsystem::GetField() { return field; }
 
-void DriveSubsystem::SetCoast(WPI_TalonFX* talon) {
-    talon->SetNeutralMode(Coast);
+void DriveSubsystem::SetBrakeMode() {
+    RightLead.SetNeutralMode(Brake);
+    RightFollow.SetNeutralMode(Brake);
+    LeftLead.SetNeutralMode(Brake);
+    LeftFollow.SetNeutralMode(Brake);
+}
+
+void DriveSubsystem::SetCoastMode() {
+    RightLead.SetNeutralMode(Coast);
+    RightFollow.SetNeutralMode(Coast);
+    LeftLead.SetNeutralMode(Coast);
+    LeftFollow.SetNeutralMode(Coast);
 }
 
 void DriveSubsystem::Periodic() {
@@ -108,19 +118,13 @@ void DriveSubsystem::Periodic() {
 }
 
 void DriveSubsystem::DisabledInit() {
-    SetCoast(&RightLead);
-    SetCoast(&RightFollow);
-    SetCoast(&LeftLead);
-    SetCoast(&LeftFollow);
+    SetCoastMode();
 }
 
-void DriveSubsystem::TeleopInit() { m_Brake.Unset(); }
+void DriveSubsystem::TeleopInit() { m_brake.Unset(); }
 
 void DriveSubsystem::BrakeInit() {
-    SetBrake(&RightLead);
-    SetBrake(&RightFollow);
-    SetBrake(&LeftLead);
-    SetBrake(&LeftFollow);
+    SetBrakeMode();
 }
 
 void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
@@ -227,10 +231,6 @@ void DriveSubsystem::ConfigureMotor(WPI_TalonFX& talon) {
 
     /* Zero the sensor */
     talon.SetSelectedSensorPosition(0, 0, 10);
-}
-
-void DriveSubsystem::SetBrake(WPI_TalonFX* _talon) {
-    _talon->SetNeutralMode(Brake);
 }
 
 double DriveSubsystem::AverageEncoderPosition(Encoders encoders) {

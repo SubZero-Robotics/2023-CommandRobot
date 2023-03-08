@@ -1,9 +1,7 @@
 #include <subsystems/IntakeSubsystem.h>
 
 IntakeSubsystem::IntakeSubsystem(LEDControllerSubsystem* subsystem)
-    : m_ledSubsystem(subsystem) {
-    // Implementation of subsystem constructor goes here.
-}
+    : m_ledSubsystem(subsystem) {}
 
 void IntakeSubsystem::Periodic() {}
 

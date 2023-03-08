@@ -43,11 +43,6 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
     }
 
    private:
-    // Components (e.g. motor controllers and sensors) should generally be
-    // declared private and exposed only through public methods.
-
-    // TODo: asign constants to the Can motors
-
     frc::DigitalInput m_limitSwitch{
         ArmConstants::kExtenderLimitSwitchPort};
 
@@ -55,6 +50,6 @@ class ExtensionSubsystem : public frc2::SubsystemBase {
                                       rev::CANSparkMax::MotorType::kBrushless};
 
     rev::SparkMaxRelativeEncoder m_encoder = m_extensionMotor.GetEncoder(
-        rev::SparkMaxRelativeEncoder::Type::kHallSensor, 42);
+        rev::SparkMaxRelativeEncoder::Type::kHallSensor, ArmConstants::kTicksPerMotorRotation);
     // 4096 is default ctre ticks
 };

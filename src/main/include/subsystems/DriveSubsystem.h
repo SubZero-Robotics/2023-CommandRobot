@@ -38,8 +38,6 @@ struct Encoders {
 
 class DriveSubsystem : public frc2::SubsystemBase {
    public:
-    WPI_TalonFX& RightLead;
-    WPI_TalonFX& LeftLead;
     DriveSubsystem(WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&);
 
     void DisabledInit();
@@ -47,12 +45,6 @@ class DriveSubsystem : public frc2::SubsystemBase {
     void TeleopInit();
 
     void BrakeInit();
-
-    void SetCoast(WPI_TalonFX* talon);
-
-    void SetBrake(WPI_TalonFX* talon);
-
-    BrakeSubsystem m_Brake{RightLead, LeftLead};
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
@@ -196,19 +188,31 @@ class DriveSubsystem : public frc2::SubsystemBase {
      */
     static void InvertSide(Encoders);
 
+    /**
+     * @brief Set all talons to brake mode
+     * 
+     */
+    void SetBrakeMode();
+
+    void SetCoastMode();
+
     frc::Field2d field;
 
     // right motor controllers
+    WPI_TalonFX& RightLead;
     WPI_TalonFX& RightFollow;
     TalonFXSimCollection& RightLeadSim;
     Encoders rightEncoders;
 
     // left motor controllers
+    WPI_TalonFX& LeftLead;
     WPI_TalonFX& LeftFollow;
     TalonFXSimCollection& LeftLeadSim;
     Encoders leftEncoders;
 
     frc::DifferentialDrive m_drive{RightLead, LeftLead};
+
+    BrakeSubsystem m_brake{RightLead, LeftLead};
 
     // The default (starting) values for the encoder
     double lEncoder = 0.0;

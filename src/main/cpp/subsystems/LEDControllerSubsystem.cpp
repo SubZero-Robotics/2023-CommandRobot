@@ -50,11 +50,13 @@ bool LEDControllerSubsystem::setColor(Colors color) {
     _currentColor = color;
     if (color == Colors::Yellow) {
         frc::SmartDashboard::PutString("LED State", "Yellow");
-        setColor(255, 255, 0);
+        return setColor(255, 255, 0);
     } else if (color == Colors::Purple) {
         frc::SmartDashboard::PutString("LED State", "Purple");
-        setColor(180, 0, 255);
+        return setColor(180, 0, 255);
     }
+
+    return false;
 }
 
 bool LEDControllerSubsystem::getPatternDone() {
