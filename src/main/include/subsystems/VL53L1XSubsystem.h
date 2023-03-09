@@ -23,9 +23,7 @@ class VL53L1XController : frc2::SubsystemBase {
         // memcpy the resulting receive buffer into _currentDistance
     }
 
-    inline double GetDistance() const {
-        return _currentDistance;
-    } 
+    inline double GetDistance() const { return _currentDistance; }
 
    private:
     std::unique_ptr<frc::SPI> _spi;
