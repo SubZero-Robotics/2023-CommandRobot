@@ -165,7 +165,7 @@ constexpr double kAutoDriveSpeed = 0.5;
 }  // namespace AutoConstants
 
 constexpr uint8_t kLEDCotrollerSlaveAddress = 0x01;
-constexpr int kClockSpeedSPISlaveHZ = 1000000;
+constexpr int kClockSpeedSPISlaveHz = 1000000;
 
 // XboxController enums.  Since the Trigger stuff works on the base Joystick
 // class, not the Xbox extension, these are undefined where we want to use them.

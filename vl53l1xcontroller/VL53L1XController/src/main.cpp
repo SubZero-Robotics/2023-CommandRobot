@@ -6,16 +6,38 @@
 #include <VL53L1X.h>
 #include <Wire.h>
 
-constexpr uint16_t minRangeMM = 20;
-constexpr uint16_t maxRangeMM = 150;
+constexpr uint8_t TRANSACTION_CONTINUE = 0;
+constexpr uint8_t TRANSACTION_START = 1;
 
-VL53L1X sensor;
-volatile double distance;
+static volatile double distance = 0.0;
+static volatile bool sendDataFlag = false;
+static volatile uint8_t curBytePos = 0;
+
+static VL53L1X sensor;
 
 // SPI interrupt routine
 ISR(SPI_STC_vect) {
-    for (uint8_t i = 0; i < sizeof(double); i++) {
-        SPI.transfer(*(uint8_t*)(&distance + i));
+    uint8_t rec = SPDR;
+
+    // master starting a new transaction; reset to first byte
+    if (rec == TRANSACTION_START) {
+        sendDataFlag = true;
+        curBytePos = 0;
+        SPDR = *((uint8_t*)(&distance));
+        return;
+    }
+
+    if (!sendDataFlag) {
+        SPDR = 0;   // send nothing if inactive
+        return;
+    }
+
+    // send the next byte
+    SPDR = *((uint8_t*)(&distance + curBytePos));
+    // stop after 8 bytes
+    if (++curBytePos >= sizeof(double)) {
+        curBytePos = 0;
+        sendDataFlag = false;
     }
 }
 
@@ -23,6 +45,7 @@ void setup() {
     Serial.begin(115200);
     Wire.begin();
     pinMode(MISO, OUTPUT);
+    // pull line high by default
     digitalWrite(MISO, HIGH);
     // turn on SPI in slave mode
     SPCR |= _BV(SPE);
@@ -69,6 +92,8 @@ void loop() {
 
     if (sensor.ranging_data.range_status == VL53L1X::RangeValid) {
         auto range = sensor.ranging_data.range_mm;
+        noInterrupts();
         distance = (double)range;
+        interrupts();
     }
 }
