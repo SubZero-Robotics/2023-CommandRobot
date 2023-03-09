@@ -22,7 +22,7 @@ ISR(SPI_STC_vect) {
     // master starting a new transaction; reset to first byte
     if (rec == TRANSACTION_START) {
         sendDataFlag = true;
-        curBytePos = 0;
+        curBytePos = 1;
         SPDR = *((uint8_t*)(&distance));
         return;
     }

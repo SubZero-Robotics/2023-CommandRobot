@@ -18,9 +18,13 @@ class VL53L1XController : frc2::SubsystemBase {
 
     void Periodic() override {
         // Our "send" buffer
+        uint8_t sendbuf[8] = {1,0,0,0,0,0,0,0};
         // Our empty receive buffer
+        uint8_t recievebuf[8];
         // Perform the SPI transaction
+        _spi->Transaction(sendbuf, recievebuf, sizeof(double));
         // memcpy the resulting receive buffer into _currentDistance
+        memcpy(&_currentDistance, recievebuf, sizeof(double));
     }
 
     inline double GetDistance() const { return _currentDistance; }
