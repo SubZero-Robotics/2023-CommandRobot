@@ -18,7 +18,7 @@ class VL53L1XController : frc2::SubsystemBase {
 
     void Periodic() override {
         // Our "send" buffer
-        uint8_t sendbuf[8] = {1,0,0,0,0,0,0,0};
+        uint8_t sendbuf[8] = {1, 0, 0, 0, 0, 0, 0, 0};
         // Our empty receive buffer
         uint8_t recievebuf[8];
         // Perform the SPI transaction
