@@ -42,6 +42,7 @@ inputShape = (inputDetails[0]['shape'][1], inputDetails[0]['shape'][2])
 destW, destH = inputShape
 colors = [modelClass.color for modelClass in modelClasses]
 
+
 def detectObjects():
     global outputFrame, lock, dataSource, interpreter, destW, destH, colors
 
@@ -56,13 +57,15 @@ def detectObjects():
                 if args['verbose']:
                     print('Found: ', output)
         if not args['noBoxes']:
-            frame = dataSource.drawBoundingBoxes(filteredOutputs, frame, colors)
+            frame = dataSource.drawBoundingBoxes(
+                filteredOutputs, frame, colors)
         if args['verbose'] and len(filteredOutputs) > 0:
             print('-' * 30)
         with lock:
             outputFrame = frame.copy()
         if not args['no_networking']:
             networking.write(filteredOutputs)
+
 
 def generate():
     global outputFrame, lock
