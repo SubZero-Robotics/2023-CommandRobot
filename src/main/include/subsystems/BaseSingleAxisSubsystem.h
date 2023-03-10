@@ -81,8 +81,8 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         double defaultMovementSpeed = 0.2;
     };
 
-    BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &&motor)
-        : _motor(std::move(motor)),
+    BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor)
+        : _motor(motor),
           _config(cfg),
           _controller(cfg.pid),
           _isHoming(false),
@@ -166,11 +166,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
 
     inline void ResetEncoder() const { _encoder->Reset(); }
 
-    inline Unit GetCurrentPosition() const {
-        if (_encoder) {
-            return _encoder->GetDistance();
-        }
-    }
+    virtual Unit GetCurrentPosition() const = 0;
 
     bool AtHome() const {
         if (_minLimitSwitch) {
@@ -252,7 +248,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     static inline bool IsValidPort(int port) { return port >= 0 && port < 10; }
 
    protected:
-    Motor _motor;
+    Motor &_motor;
     SingleAxisConfig _config;
     std::unique_ptr<frc::DutyCycleEncoder> _encoder;
     frc::ProfiledPIDController<Unit> _controller;

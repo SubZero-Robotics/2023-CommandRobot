@@ -1,6 +1,7 @@
 #include "subsystems/RotateArmSubsystem.h"
 
-RotateArmSubsystem::RotateArmSubsystem() {
+RotateArmSubsystem::RotateArmSubsystem(): 
+ BaseSingleAxisSubsystem(m_config, m_leadRotationMotor) {
     // Implementation of subsystem constructor goes here.
 
     // m_leadRotationMotor.EnableSoftLimit(
@@ -15,6 +16,8 @@ RotateArmSubsystem::RotateArmSubsystem() {
     // m_leadRotationMotor.SetSoftLimit(
     //     rev::CANSparkMax::SoftLimitDirection::kReverse,
     //     ArmConstants::kReverseRotationsSoftLimit);
+
+    
 
     m_followRotationMotor.Follow(m_leadRotationMotor);
 }

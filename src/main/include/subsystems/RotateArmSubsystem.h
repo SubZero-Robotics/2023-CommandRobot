@@ -3,11 +3,13 @@
 #include <frc/DigitalInput.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
+#include "subsystems/BaseSingleAxisSubsystem.h"
+#include <units/angle.h>
 
 #include "constants.h"
 #include "rev/CANSparkMax.h"
 
-class RotateArmSubsystem : public frc2::SubsystemBase {
+class RotateArmSubsystem : public BaseSingleAxisSubsystem<rev::CANSparkMax, units::degree> {
    public:
     RotateArmSubsystem();
     /**
@@ -52,9 +54,25 @@ class RotateArmSubsystem : public frc2::SubsystemBase {
 
     rev::SparkMaxRelativeEncoder m_encoder = m_leadRotationMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kHallSensor, 42);
+    rev::SparkMaxAbsoluteEncoder m_enc;
 
     frc::DigitalInput m_limitswitchHome{
         ArmConstants::kRotationLimitSwitchHomePort};
     frc::DigitalInput m_limitswitchMax{
         ArmConstants::kRotationLimitSwitchMaxPort};
+
+    SingleAxisConfig m_config = {
+        BaseSingleAxisSubsystem::AxisType::Rotational,
+        frc::ProfiledPIDController<units::degree>(1.3, 0.0, 0.7,
+        frc::TrapezoidProfile<units::degree>::Constraints(1.75_mps, 0.75_mps_sq)
+        ),
+        60,
+        125,
+        360,
+        BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
+        0,
+        1,
+        9,
+        0.1
+    };
 };
