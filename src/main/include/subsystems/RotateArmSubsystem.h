@@ -1,45 +1,23 @@
 #pragma once
 
-#include <frc/DigitalInput.h>
-#include <frc2/command/CommandPtr.h>
-#include <frc2/command/SubsystemBase.h>
 #include "subsystems/BaseSingleAxisSubsystem.h"
-#include <units/angle.h>
 
-#include "constants.h"
+#include "Constants.h"
 #include "rev/CANSparkMax.h"
 
-class RotateArmSubsystem : public BaseSingleAxisSubsystem<rev::CANSparkMax, units::degree> {
+class RotateArmSubsystem : public BaseSingleAxisSubsystem<rev::CANSparkMax, rev::SparkMaxAbsoluteEncoder, units::degree, units::degree_t> {
    public:
-    RotateArmSubsystem();
-    /**
-     * Will be called periodically whenever the CommandScheduler runs.
-     */
-    void Periodic() override;
-
-    bool AtHome() { return !m_limitswitchHome.Get(); }
-
-    bool AtMax() { return !m_limitswitchMax.Get(); }
-
-    void ResetEncoder() { m_encoder.SetPosition(0); }
-
-    void RunMotorHoming(double speed) {
-        // todo check direction for speed
-        m_leadRotationMotor.Set(speed);
+    RotateArmSubsystem() : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc) {
+        m_followRotationMotor.Follow(m_leadRotationMotor);
     }
 
-    float ArmRotationDegree() {
-        return (m_encoder.GetPosition() / ArmConstants::kArmTicksPerDegree) +
-               ArmConstants::kRotationHomeDegree;
+    void ResetEncoder() override {
+        m_enc.SetZeroOffset(0);
     }
 
-    /**
-     * Will be called periodically whenever the CommandScheduler runs during
-     * simulation.
-     */
-    void SimulationPeriodic() override;
-
-    void PercentOutput(double);
+    units::degree_t GetCurrentPosition() override {
+        return m_enc.GetPosition() * 360_deg;
+    }
 
    private:
     // Components (e.g. motor controllers and sensors) should generally be
@@ -52,27 +30,22 @@ class RotateArmSubsystem : public BaseSingleAxisSubsystem<rev::CANSparkMax, unit
         CANSparkMaxConstants::kArmRotationFollowMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
 
-    rev::SparkMaxRelativeEncoder m_encoder = m_leadRotationMotor.GetEncoder(
-        rev::SparkMaxRelativeEncoder::Type::kHallSensor, 42);
-    rev::SparkMaxAbsoluteEncoder m_enc;
-
-    frc::DigitalInput m_limitswitchHome{
-        ArmConstants::kRotationLimitSwitchHomePort};
-    frc::DigitalInput m_limitswitchMax{
-        ArmConstants::kRotationLimitSwitchMaxPort};
+    rev::SparkMaxAbsoluteEncoder m_enc = m_leadRotationMotor.GetAbsoluteEncoder(
+        rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle
+    );
 
     SingleAxisConfig m_config = {
         BaseSingleAxisSubsystem::AxisType::Rotational,
-        frc::ProfiledPIDController<units::degree>(1.3, 0.0, 0.7,
-        frc::TrapezoidProfile<units::degree>::Constraints(1.75_mps, 0.75_mps_sq)
+        frc::ProfiledPIDController<units::degree>(
+            1.3, 0.0, 0.7,
+            frc::TrapezoidProfile<units::angle::degree>::Constraints(1.75_deg_per_s, 0.75_deg_per_s_sq)
         ),
-        60,
-        125,
-        360,
+        ArmConstants::kRotationHomeDegree,
+        ArmConstants::kRotationMaxDegree,
+        360_deg,
         BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
-        0,
-        1,
-        9,
-        0.1
+        ArmConstants::kRotationLimitSwitchHomePort,
+        ArmConstants::kRotationLimitSwitchMaxPort,
+        ArmConstants::kRotationHomingSpeed
     };
 };

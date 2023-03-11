@@ -1,55 +1,39 @@
 #pragma once
 
-#include <frc/DigitalInput.h>
-#include <frc2/command/CommandPtr.h>
-#include <frc2/command/SubsystemBase.h>
-
-#include <iostream>
+#include "subsystems/BaseSingleAxisSubsystem.h"
 
 #include "Constants.h"
 #include "rev/CANSparkMax.h"
 
-class WristSubsystem : public frc2::SubsystemBase {
+class WristSubsystem : public BaseSingleAxisSubsystem<rev::CANSparkMax, rev::SparkMaxAbsoluteEncoder, units::degree, units::degree_t> {
    public:
-    WristSubsystem();
+    WristSubsystem() : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder) {}
 
-    /**
-     * Will be called periodically whenever the CommandScheduler runs.
-     */
-    void Periodic() override;
-    /**
-     * Will be called periodically whenever the CommandScheduler runs during
-     * simulation.
-     */
-    void SimulationPeriodic() override;
+    void ResetEncoder() override { m_encoder.SetZeroOffset(0); }
 
-    void Rotate(double);
-
-    void ResetWristEncoder() { m_encoder.SetPosition(0); }
-
-    void RunMotorHoming(double speed) { m_wristRotationMotor.Set(speed); }
-
-    double GetWristDistanceDegree() {
-        return m_encoder.GetPosition() * ArmConstants::kWristTicksPerDegree;
+    units::degree_t GetCurrentPosition() override {
+        return m_encoder.GetPosition() * 360_deg;
     }
-
-    bool AtLimit() {
-        return AtLimitSwitch();
-        //        GetWristDistanceDegree() >= kWristDegreeLimit;
-    }
-
-    bool AtLimitSwitch() { return !m_limitSwitch.Get(); }
 
    private:
-    // Components (e.g. motor controllers and sensors) should generally be
-    // declared private and exposed only through public methods.
+    rev::CANSparkMax m_wristMotor{CANSparkMaxConstants::kWristRotationMotorID,
+                                      rev::CANSparkMax::MotorType::kBrushless};
 
-    frc::DigitalInput m_limitSwitch{ArmConstants::kWristLimitSwitchPort};
+    rev::SparkMaxAbsoluteEncoder m_encoder = m_wristMotor.GetAbsoluteEncoder(
+        rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
-    rev::CANSparkMax m_wristRotationMotor{
-        CANSparkMaxConstants::kWristRotationMotorID,
-        rev::CANSparkMax::MotorType::kBrushless};
-
-    rev::SparkMaxRelativeEncoder m_encoder = m_wristRotationMotor.GetEncoder(
-        rev::SparkMaxRelativeEncoder::Type::kHallSensor, 42);
+    SingleAxisConfig m_config = {
+        BaseSingleAxisSubsystem::AxisType::Rotational,
+        frc::ProfiledPIDController<units::degree>(
+            1.3, 0.0, 0.7,
+            frc::TrapezoidProfile<units::degree>::Constraints(1.75_deg_per_s, 0.75_deg_per_s_sq)
+        ),
+        0_deg,
+        ArmConstants::kWristDegreeLimit,
+        360_deg,
+        BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
+        ArmConstants::kWristLimitSwitchPort,
+        BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
+        ArmConstants::kWristHomingSpeed
+    };
 };

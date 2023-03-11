@@ -6,21 +6,18 @@
 
 #include <iostream>
 
-#include "commands/BrakeSet.h"
-#include "commands/BrakeStop.h"
-#include "commands/DefaultDrive.h"
+#include "commands/BrakeSetCommand.h"
+#include "commands/BrakeStopCommand.h"
+#include "commands/DefaultDriveCommand.h"
 #include "commands/ExampleCommand.h"
-#include "commands/Extender.h"
-#include "commands/ExtenderHome.h"
-#include "commands/ExtenderStop.h"
-#include "commands/IntakeIn.h"
-#include "commands/IntakeOut.h"
-#include "commands/IntakeStop.h"
-#include "commands/LEDToggle.h"
-#include "commands/RotateArm.h"
-#include "commands/RotateArmHome.h"
-#include "commands/RotateWrist.h"
-#include "commands/WristHome.h"
+#include "commands/ExtenderCommand.h"
+#include "commands/ExtenderStopCommand.h"
+#include "commands/IntakeInCommand.h"
+#include "commands/IntakeOutCommand.h"
+#include "commands/IntakeStopCommand.h"
+#include "commands/LEDToggleCommand.h"
+#include "commands/RotateArmCommand.h"
+#include "commands/RotateWristCommand.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -49,8 +46,6 @@ void RobotContainer::ConfigureBindings() {
         },
         [this] { return DriverXbox.GetBButton(); }));
 
-    // TODO: bind buttons for calling commands
-
     m_effector.SetDefaultCommand(
         RotateArm(&m_effector, [this] { return ArmXbox.GetLeftY(); }));
 
@@ -63,12 +58,11 @@ void RobotContainer::ConfigureBindings() {
 
     m_intake.SetDefaultCommand(IntakeStop(&m_intake).ToPtr());
 
-    // TODO: add homing code
-    // DriverXbox.Y().OnTrue(RotateArmHome(&m_effector).ToPtr());
+    DriverXbox.Y().OnTrue(std::move(m_effector.GetHomeCommand()));
 
-    // DriverXbox.X().OnTrue(ExtenderHome(&m_extender).ToPtr());
+    DriverXbox.X().OnTrue(std::move(m_extender.GetHomeCommand()));
 
-    DriverXbox.A().OnTrue(WristHome(&m_wrist).ToPtr());
+    DriverXbox.A().OnTrue(std::move(m_wrist.GetHomeCommand()));
 
     ArmXbox.LeftBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 

@@ -28,7 +28,7 @@
 #include <networktables/NetworkTableInstance.h>
 
 #include "Constants.h"
-#include "commands/BrakeSet.h"
+#include "commands/BrakeSetCommand.h"
 #include "subsystems/BrakeSubsystem.h"
 
 struct Encoders {
