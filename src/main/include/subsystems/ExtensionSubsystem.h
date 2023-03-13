@@ -3,6 +3,7 @@
 #include "Constants.h"
 #include "rev/CANSparkMax.h"
 #include "subsystems/BaseSingleAxisSubsystem.h"
+#include "utils/Logging.h"
 
 class ExtensionSubsystem
     : public BaseSingleAxisSubsystem<rev::CANSparkMax,
@@ -15,7 +16,11 @@ class ExtensionSubsystem
     void ResetEncoder() override { m_encoder.SetPosition(0); }
 
     units::meter_t GetCurrentPosition() override {
-        return m_encoder.GetPosition() * ArmConstants::kInPerRotation;
+        auto position = m_encoder.GetPosition();
+
+        Logging::logToSmartDashboard("ExtensionPose", position, Logging::Level::INFO);
+
+        return position * ArmConstants::kInPerRotation;
     }
 
    private:

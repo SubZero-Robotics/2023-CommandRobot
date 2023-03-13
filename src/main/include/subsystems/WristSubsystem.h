@@ -15,7 +15,10 @@ class WristSubsystem
     void ResetEncoder() override { m_encoder.SetZeroOffset(0); }
 
     units::degree_t GetCurrentPosition() override {
-        return m_encoder.GetPosition() * 360_deg;
+        auto position = m_encoder.GetPosition();
+        Logging::logToSmartDashboard("Wrist Position", position, Logging::Level::INFO);
+       return position * 360_deg;
+
     }
 
    private:
