@@ -18,9 +18,9 @@ class RotateArmSubsystem
 
     units::degree_t GetCurrentPosition() override {
         auto position = m_enc.GetPosition();
-        Logging::logToSmartDashboard("RotatePose", position, Logging::Level::INFO);
+        Logging::logToSmartDashboard("RotatePose", position,
+                                     Logging::Level::INFO);
         return position * 360_deg;
-        
     }
 
    private:
