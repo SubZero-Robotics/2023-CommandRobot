@@ -17,8 +17,8 @@ void AssistSubsystem::Periodic() {
 // Limelight Stuff
 frc::Pose2d AssistSubsystem::GetPosition() {
     auto rawPose = nt::NetworkTableInstance::GetDefault()
-                      .GetTable("limelight")
-                      ->GetNumberArray("botpose", std::vector<double>(6));
+                       .GetTable("limelight")
+                       ->GetNumberArray("botpose", std::vector<double>(6));
     auto x = units::meter_t(rawPose[0]);
     auto y = units::meter_t(rawPose[1]);
     auto yaw = rawPose[5];

@@ -7,11 +7,11 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <networktables/NetworkTableInstance.h>
-
-#include <vector>
-#include <units/math.h>
 #include <units/angle.h>
 #include <units/length.h>
+#include <units/math.h>
+
+#include <vector>
 
 #include "utils/DetectionParser.h"
 
