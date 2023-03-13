@@ -90,6 +90,7 @@
     "typeinfo": "cpp",
     "variant": "cpp",
     "xstddef": "cpp",
-    "xtr1common": "cpp"
+    "xtr1common": "cpp",
+    "*.inc": "cpp"
 }
 }
