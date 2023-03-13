@@ -8,16 +8,18 @@
 #include <frc2/command/SubsystemBase.h>
 #include <networktables/NetworkTableInstance.h>
 
-#include <cmath>
 #include <vector>
+#include <units/math.h>
+#include <units/angle.h>
+#include <units/length.h>
 
 #include "utils/DetectionParser.h"
 
 class AssistSubsystem : public frc2::SubsystemBase {
    public:
     struct ArmPose {
-        double rotationDegree;
-        double armLengthIn;
+        units::degree_t rotationDegree;
+        units::inch_t armLengthIn;
     };
 
     AssistSubsystem();
@@ -37,10 +39,10 @@ class AssistSubsystem : public frc2::SubsystemBase {
      */
     void SimulationPeriodic() override;
 
-    static ArmPose GetArmPoseFromDistance(double distanceIn,
-                                          double poleHeightIn) {
-        return {atan(poleHeightIn / distanceIn),
-                hypot(distanceIn, poleHeightIn)};
+    static ArmPose GetArmPoseFromDistance(units::inch_t distance,
+                                          units::inch_t poleHeight) {
+        return {units::math::atan(poleHeight / distance),
+                units::math::hypot(distance, poleHeight)};
     }
 
    private:
