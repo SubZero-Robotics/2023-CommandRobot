@@ -5,14 +5,14 @@
 #include <frc/DutyCycleEncoder.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc2/command/CommandPtr.h>
-#include <frc2/command/SubsystemBase.h>
 #include <frc2/command/FunctionalCommand.h>
+#include <frc2/command/SubsystemBase.h>
+#include <units/acceleration.h>
 #include <units/angle.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
-#include <units/acceleration.h>
-#include <units/velocity.h>
 #include <units/length.h>
+#include <units/velocity.h>
 
 #include <memory>
 
@@ -86,7 +86,8 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         double defaultMovementSpeed = 0.2;
     };
 
-    BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor, Encoder &encoder)
+    BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor,
+                            Encoder &encoder)
         : _motor(motor),
           _enc(encoder),
           _config(cfg),
@@ -141,7 +142,8 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     }
 
     void RunMotorSpeedDefault(bool invertDirection = false) {
-        RunMotorSpeed(invertDirection ? -_config.defaultMovementSpeed : _config.defaultMovementSpeed);
+        RunMotorSpeed(invertDirection ? -_config.defaultMovementSpeed
+                                      : _config.defaultMovementSpeed);
     }
 
     /**

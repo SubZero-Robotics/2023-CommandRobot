@@ -1,19 +1,20 @@
 #pragma once
 
-#include "subsystems/BaseSingleAxisSubsystem.h"
-
 #include "Constants.h"
 #include "rev/CANSparkMax.h"
+#include "subsystems/BaseSingleAxisSubsystem.h"
 
-class RotateArmSubsystem : public BaseSingleAxisSubsystem<rev::CANSparkMax, rev::SparkMaxAbsoluteEncoder, units::degree, units::degree_t> {
+class RotateArmSubsystem
+    : public BaseSingleAxisSubsystem<rev::CANSparkMax,
+                                     rev::SparkMaxAbsoluteEncoder,
+                                     units::degree, units::degree_t> {
    public:
-    RotateArmSubsystem() : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc) {
+    RotateArmSubsystem()
+        : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc) {
         m_followRotationMotor.Follow(m_leadRotationMotor);
     }
 
-    void ResetEncoder() override {
-        m_enc.SetZeroOffset(0);
-    }
+    void ResetEncoder() override { m_enc.SetZeroOffset(0); }
 
     units::degree_t GetCurrentPosition() override {
         return m_enc.GetPosition() * 360_deg;
@@ -31,21 +32,19 @@ class RotateArmSubsystem : public BaseSingleAxisSubsystem<rev::CANSparkMax, rev:
         rev::CANSparkMax::MotorType::kBrushless};
 
     rev::SparkMaxAbsoluteEncoder m_enc = m_leadRotationMotor.GetAbsoluteEncoder(
-        rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle
-    );
+        rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     SingleAxisConfig m_config = {
         BaseSingleAxisSubsystem::AxisType::Rotational,
         frc::ProfiledPIDController<units::degree>(
             1.3, 0.0, 0.7,
-            frc::TrapezoidProfile<units::angle::degree>::Constraints(1.75_deg_per_s, 0.75_deg_per_s_sq)
-        ),
+            frc::TrapezoidProfile<units::angle::degree>::Constraints(
+                1.75_deg_per_s, 0.75_deg_per_s_sq)),
         ArmConstants::kRotationHomeDegree,
         ArmConstants::kRotationMaxDegree,
         360_deg,
         BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
         ArmConstants::kRotationLimitSwitchHomePort,
         ArmConstants::kRotationLimitSwitchMaxPort,
-        ArmConstants::kRotationHomingSpeed
-    };
+        ArmConstants::kRotationHomingSpeed};
 };

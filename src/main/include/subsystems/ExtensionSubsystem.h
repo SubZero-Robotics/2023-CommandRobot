@@ -1,13 +1,16 @@
 #pragma once
 
-#include "subsystems/BaseSingleAxisSubsystem.h"
-
 #include "Constants.h"
 #include "rev/CANSparkMax.h"
+#include "subsystems/BaseSingleAxisSubsystem.h"
 
-class ExtensionSubsystem : public BaseSingleAxisSubsystem<rev::CANSparkMax, rev::SparkMaxRelativeEncoder, units::meter, units::meter_t> {
+class ExtensionSubsystem
+    : public BaseSingleAxisSubsystem<rev::CANSparkMax,
+                                     rev::SparkMaxRelativeEncoder, units::meter,
+                                     units::meter_t> {
    public:
-    ExtensionSubsystem() : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder) {}
+    ExtensionSubsystem()
+        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder) {}
 
     void ResetEncoder() override { m_encoder.SetPosition(0); }
 
@@ -27,14 +30,13 @@ class ExtensionSubsystem : public BaseSingleAxisSubsystem<rev::CANSparkMax, rev:
         BaseSingleAxisSubsystem::AxisType::Linear,
         frc::ProfiledPIDController<units::meter>(
             1.3, 0.0, 0.7,
-            frc::TrapezoidProfile<units::meter>::Constraints(1.75_mps, 0.75_mps_sq)
-        ),
+            frc::TrapezoidProfile<units::meter>::Constraints(1.75_mps,
+                                                             0.75_mps_sq)),
         0_in,
         ArmConstants::kMaxArmDistance,
         ArmConstants::kInPerRotation,
         BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
         ArmConstants::kExtenderLimitSwitchPort,
         BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
-        ArmConstants::kExtenderHomingSpeed
-    };
+        ArmConstants::kExtenderHomingSpeed};
 };
