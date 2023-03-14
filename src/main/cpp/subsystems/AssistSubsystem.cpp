@@ -28,8 +28,10 @@ frc::Pose2d AssistSubsystem::GetPosition() {
 std::vector<DetectionParser::DetectedObject> AssistSubsystem::GetObjects() {
     auto detections = frc::SmartDashboard::GetNumberArray("detections", {});
 
-    Logging::logToStdOut("AssistSubsystem", "Raw detection array has " + std::to_string(detections.size()) +
-        " elements", Logging::Level::INFO);
+    Logging::logToStdOut("AssistSubsystem",
+                         "Raw detection array has " +
+                             std::to_string(detections.size()) + " elements",
+                         Logging::Level::INFO);
 
     return DetectionParser::DetectedObject::parse(detections);
 }
