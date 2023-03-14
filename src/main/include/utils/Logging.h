@@ -3,34 +3,36 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
-#include <format>
 #include <iostream>
 
 namespace Logging {
+const std::string keyPrefix = "log";
 enum class Level { VERBOSE, INFO, WARNING, ERROR };
+
+static std::string getLevelString(const std::string& msg, Level level);
 
 static void logToSmartDashboard(const std::string& key, const std::string& msg,
                                 Level level) {
-    frc::SmartDashboard::PutString(key, getLevelString(msg, level));
+    frc::SmartDashboard::PutString(keyPrefix + "-" + key, getLevelString(msg, level));
 }
 
 static void logToStdOut(const std::string& key, const std::string& msg,
                         Level level) {
-    std::cout << getLevelString(msg, level);
+    std::cout << key << ": " << getLevelString(msg, level);
 }
 
 static std::string getLevelString(const std::string& msg, Level level) {
     switch (level) {
         case Level::VERBOSE:
-            return std::format("VERBOSE: {}\n", msg);
+            return "VERBOSE: " + msg + "\n";
         case Level::INFO:
-            return std::format("INFO: {}\n", msg);
+            return "INFO: " + msg + "\n";
         case Level::WARNING:
-            return std::format("WARNING: {}\n", msg);
+            return "WARNING: " + msg + "\n";
         case Level::ERROR:
-            return std::format("ERROR: {}\n", msg);
+            return "ERROR: " + msg + "\n";
         default:
-            return std::format("LOG: {}\n", msg);
+            return "LOG: " + msg + "\n";
     }
 }
 }  // namespace Logging

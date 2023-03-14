@@ -24,7 +24,12 @@ frc::Pose2d AssistSubsystem::GetPosition() {
     auto y = (units::meter_t)rawbot[1];
     auto yaw = rawbot[5];
     auto temp = frc::Pose2d{x, y, frc::Rotation2d(sin(yaw), cos(yaw))};
-    Logging::logToSmartDashboard("AssistSub", temp, Logging::Level::INFO);
+    Logging::logToSmartDashboard(
+        "AssistSubsystem",
+        "X: " + std::to_string(x.value()) + "\n" +
+        "Y: " + std::to_string(y.value()) + "\n" +
+        "YAW: " + std::to_string(yaw) + "\n",
+        Logging::Level::INFO);
     return temp;
 }
 

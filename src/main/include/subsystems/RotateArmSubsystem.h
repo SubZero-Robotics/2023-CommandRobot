@@ -17,10 +17,12 @@ class RotateArmSubsystem
     void ResetEncoder() override { m_enc.SetZeroOffset(0); }
 
     units::degree_t GetCurrentPosition() override {
-        auto position = m_enc.GetPosition();
-        Logging::logToSmartDashboard("RotatePose", position,
+        auto position = m_enc.GetPosition() * 360_deg;
+
+        Logging::logToSmartDashboard("RotatePose", std::to_string(position.value()),
                                      Logging::Level::INFO);
-        return position * 360_deg;
+
+        return position;
     }
 
    private:

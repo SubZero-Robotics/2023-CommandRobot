@@ -16,12 +16,12 @@ class ExtensionSubsystem
     void ResetEncoder() override { m_encoder.SetPosition(0); }
 
     units::meter_t GetCurrentPosition() override {
-        auto position = m_encoder.GetPosition();
+        auto position = m_encoder.GetPosition() * ArmConstants::kInPerRotation;
 
-        Logging::logToSmartDashboard("ExtensionPose", position,
+        Logging::logToSmartDashboard("ExtensionPositon", std::to_string(position.value()),
                                      Logging::Level::INFO);
 
-        return position * ArmConstants::kInPerRotation;
+        return position;
     }
 
    private:

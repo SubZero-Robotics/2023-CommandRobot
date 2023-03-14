@@ -16,7 +16,8 @@
 
 #include <memory>
 
-#include "constants.h"
+#include "utils/Logging.h"
+#include "Constants.h"
 
 /**
  * @brief A base class for a single-axis subsystem
@@ -129,6 +130,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             _motor.Set(0);
             return;
         } else if (AtMax()) {
+            Logging::logToStdOut("BaseAxisSubsystem", "AT MAX", Logging::Level::INFO);
             if (speed < 0) {
                 _motor.Set(speed);
                 return;
@@ -164,6 +166,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             double res = std::clamp(
                 _controller.Calculate(GetCurrentPosition(), _targetPosition),
                 -_config.defaultMovementSpeed, _config.defaultMovementSpeed);
+            Logging::logToStdOut("BaseAxisSubsystem", "PID returned " + std::to_string(res), Logging::Level::INFO);
             if (!_controller.AtGoal()) {
                 RunMotorSpeed(res);
             } else {
@@ -180,12 +183,14 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         if (_minLimitSwitch) {
             if (AtLimitSwitchHome()) {
                 ResetEncoder();
+                Logging::logToStdOut("BaseAxisSubsystem", "AT HOME SWITCH", Logging::Level::INFO);
                 return true;
             }
         }
 
         if (GetCurrentPosition() <= _config.minDistance) {
             ResetEncoder();
+            Logging::logToStdOut("BaseAxisSubsystem", "AT HOME ENC", Logging::Level::INFO);
             return true;
         }
 
@@ -217,16 +222,21 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     }
 
     void MoveToPosition(Unit_t position) {
+        Logging::logToStdOut("BaseAxisSubsystem", "Moving to " + std::to_string(position.value()), Logging::Level::INFO);
         _isMovingToPosition = true;
         _targetPosition = position;
         _controller.SetGoal(position);
     }
 
-    void Home() { _isHoming = true; }
+    void Home() {
+        Logging::logToStdOut("BaseAxisSubsystem", "Set homing to true", Logging::Level::INFO);
+        _isHoming = true;
+    }
 
     inline bool GetIsMovingToPosition() const { return _isMovingToPosition; }
 
     inline void StopMovement() {
+        Logging::logToStdOut("BaseAxisSubsystem", "Movement stopped", Logging::Level::INFO);
         _isHoming = false;
         _isMovingToPosition = false;
         _motor.Set(0);
