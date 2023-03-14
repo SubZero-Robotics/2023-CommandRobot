@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "utils/DetectionParser.h"
+#include "utils/Logging.h"
 
 class AssistSubsystem : public frc2::SubsystemBase {
    public:
