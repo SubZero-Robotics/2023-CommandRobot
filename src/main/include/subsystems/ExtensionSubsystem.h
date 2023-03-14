@@ -18,7 +18,8 @@ class ExtensionSubsystem
     units::meter_t GetCurrentPosition() override {
         auto position = m_encoder.GetPosition() * ArmConstants::kInPerRotation;
 
-        Logging::logToSmartDashboard("ExtensionPositon", std::to_string(position.value()),
+        Logging::logToSmartDashboard("ExtensionPositon",
+                                     std::to_string(position.value()),
                                      Logging::Level::INFO);
 
         return position;

@@ -13,7 +13,8 @@ static std::string getLevelString(const std::string& msg, Level level);
 
 static void logToSmartDashboard(const std::string& key, const std::string& msg,
                                 Level level) {
-    frc::SmartDashboard::PutString(keyPrefix + "-" + key, getLevelString(msg, level));
+    frc::SmartDashboard::PutString(keyPrefix + "-" + key,
+                                   getLevelString(msg, level));
 }
 
 static void logToStdOut(const std::string& key, const std::string& msg,

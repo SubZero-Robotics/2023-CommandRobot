@@ -17,7 +17,8 @@ class WristSubsystem
     units::degree_t GetCurrentPosition() override {
         auto position = m_encoder.GetPosition() * 360_deg;
 
-        Logging::logToSmartDashboard("WristPosition", std::to_string(position.value()),
+        Logging::logToSmartDashboard("WristPosition",
+                                     std::to_string(position.value()),
                                      Logging::Level::INFO);
 
         return position;
