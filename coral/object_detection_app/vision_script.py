@@ -16,6 +16,12 @@ parser.add_argument('-t', '--threshold', metavar='THRESHOLD',
                     help='Set object detection threshold', default=0.5, type=float)
 parser.add_argument('-p', '--port', metavar='PORT',
                     help='Port for webserver', default=8080, type=int)
+parser.add_argument('-m', '--model', help='Path to TPU tflite model',
+                    default='../models/object_int8_edgetpu.tflite')
+parser.add_argument('-c', '--class-list', help='Path to CSV class list',
+                    default='../models/classes.csv')
+parser.add_argument('--no-boxes', help='Don\'t display bounding boxes on the stream',
+                    action='store_true')
 args = vars(parser.parse_args())
 
 THRESHOLD = args['threshold']
@@ -26,8 +32,8 @@ lock = threading.Lock()
 app = Flask(__name__)
 
 dataSource = DataSource(1, 'cvsource')
-interpreter = Interpreter('../models/conesandcubes_b1.tflite')
-modelClasses = DetectionModelClassParser.parse('../models/classes.csv')
+interpreter = Interpreter(args['model'])
+modelClasses = DetectionModelClassParser.parse(args['classList'])
 if not args['no_networking']:
     networking = Networking('56.90', 'shuffleboard', args['port'])
 
@@ -35,11 +41,6 @@ inputDetails = interpreter.input_details
 inputShape = (inputDetails[0]['shape'][1], inputDetails[0]['shape'][2])
 destW, destH = inputShape
 colors = [modelClass.color for modelClass in modelClasses]
-
-
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 
 def detectObjects():
@@ -55,7 +56,9 @@ def detectObjects():
                 filteredOutputs.append(output)
                 if args['verbose']:
                     print('Found: ', output)
-        frame = dataSource.drawBoundingBoxes(filteredOutputs, frame, colors)
+        if not args['noBoxes']:
+            frame = dataSource.drawBoundingBoxes(
+                filteredOutputs, frame, colors)
         if args['verbose'] and len(filteredOutputs) > 0:
             print('-' * 30)
         with lock:
@@ -81,7 +84,7 @@ def generate():
                bytearray(encodedImage) + b'\r\n')
 
 
-@app.route('/stream')
+@app.route('/')
 def stream():
     return Response(generate(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
