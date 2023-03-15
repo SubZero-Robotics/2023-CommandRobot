@@ -16,17 +16,18 @@ class ExtensionSubsystem
         _config = m_config;
         _config.motorMultiplier = 1.0;
         _config.distancePerRevolution = ArmConstants::kInPerRotation;
-                                  }
+    }
 
     void ResetEncoder() override {
-         if (_log)
-            Logging::logToStdOut(_prefix,
-                                 "RESET POSITION",
+        if (_log)
+            Logging::logToStdOut(_prefix, "RESET POSITION",
                                  Logging::Level::INFO);
-        m_encoder.SetPosition(0); }
+        m_encoder.SetPosition(0);
+    }
 
     double GetCurrentPosition() override {
-        auto position = m_encoder.GetPosition() * -_config.distancePerRevolution;
+        auto position =
+            m_encoder.GetPosition() * -_config.distancePerRevolution;
 
         Logging::logToSmartDashboard("ExtensionPosition",
                                      std::to_string(position) + " in",

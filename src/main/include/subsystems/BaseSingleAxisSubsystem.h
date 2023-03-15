@@ -116,8 +116,9 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      */
     void RunMotorSpeed(double speed) {
         if (_log)
-            Logging::logToStdOut(_prefix, "MUL IS " + std::to_string(_config.motorMultiplier),
-                                 Logging::Level::VERBOSE);
+            Logging::logToStdOut(
+                _prefix, "MUL IS " + std::to_string(_config.motorMultiplier),
+                Logging::Level::VERBOSE);
         speed *= _config.motorMultiplier;
         // speed = std::clamp(speed, -1.0, 1.0);
         if (_log)
