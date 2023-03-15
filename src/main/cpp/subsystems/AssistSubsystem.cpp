@@ -1,11 +1,5 @@
 #include "subsystems/AssistSubsystem.h"
 
-#include <frc/smartdashboard/SmartDashboard.h>
-
-#include <vector>
-
-#include "utils/DetectionParser.h"
-
 AssistSubsystem::AssistSubsystem() {
     // Implementation of subsystem constructor goes here.
 }
@@ -22,12 +16,24 @@ frc::Pose2d AssistSubsystem::GetPosition() {
     auto x = (units::meter_t)rawbot[0];
     auto y = (units::meter_t)rawbot[1];
     auto yaw = rawbot[5];
-    return frc::Pose2d{x, y, frc::Rotation2d(sin(yaw), cos(yaw))};
+    auto temp = frc::Pose2d{x, y, frc::Rotation2d(sin(yaw), cos(yaw))};
+    Logging::logToSmartDashboard("AssistSubsystem",
+                                 "X: " + std::to_string(x.value()) + "\n" +
+                                     "Y: " + std::to_string(y.value()) + "\n" +
+                                     "YAW: " + std::to_string(yaw) + "\n",
+                                 Logging::Level::INFO);
+    return temp;
 }
 
 std::vector<DetectionParser::DetectedObject> AssistSubsystem::GetObjects() {
-    auto DetectionArray = frc::SmartDashboard::GetNumberArray("detections", {});
-    return DetectionParser::DetectedObject::parse(DetectionArray);
+    auto detections = frc::SmartDashboard::GetNumberArray("detections", {});
+
+    Logging::logToStdOut("AssistSubsystem",
+                         "Raw detection array has " +
+                             std::to_string(detections.size()) + " elements",
+                         Logging::Level::INFO);
+
+    return DetectionParser::DetectedObject::parse(detections);
 }
 
 void AssistSubsystem::SimulationPeriodic() {

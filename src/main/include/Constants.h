@@ -38,15 +38,15 @@
 // Arm Extension Constants
 
 namespace ArmConstants {
-constexpr int kTicksPerIn = 12;
-constexpr double kMaxArmDistanceIn = 35;
-constexpr double kExtenderSoftLimit = kTicksPerIn * kMaxArmDistanceIn;
+constexpr double kExtensionGearRatio = 36;
+constexpr auto kInPerRotation = 10.285_in;
+constexpr auto kMaxArmDistance = 35_in;
 
 // Arm Rotation Constants
 constexpr int kRotationLimitSwitchHomePort = 0;
 constexpr int kRotationLimitSwitchMaxPort = 1;
-constexpr float kRotationHomeDegree = 60;
-constexpr float kRotationMaxDegree = 125;
+constexpr auto kRotationHomeDegree = 60_deg;
+constexpr auto kRotationMaxDegree = 125_deg;
 constexpr int kArmSoftLimitForwardDegrees = 65;
 constexpr int kArmGearRatio = 197.14;
 
@@ -68,12 +68,7 @@ constexpr double kIntakeSpeed = 1.0;
 // Wrist Constants
 constexpr int kWristLimitSwitchPort = 3;
 constexpr int kWristGearRatio = 125;
-constexpr int kWristDegreeLimit = 90;
-constexpr double kWristSoftLimit =
-    ((kWristDegreeLimit / 360.0) *
-     (kWristGearRatio * ArmConstants::kTicksPerMotorRotation));
-constexpr double kWristTicksPerDegree =
-    (kWristGearRatio * ArmConstants::kTicksPerMotorRotation) / 360.0;
+constexpr auto kWristDegreeLimit = 90_deg;
 
 constexpr int kExtenderLimitSwitchPort = 2;
 }  // namespace ArmConstants

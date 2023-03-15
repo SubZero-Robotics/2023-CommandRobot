@@ -21,6 +21,8 @@
     - [Pushing commits](#pushing-commits)
     - [Pulling branches](#pulling-branches)
     - [Pull requests](#pull-requests)
+  - [Necessary Hardware](#necessary-hardware)
+  - [Network Map](#network-map-1)
   - [Contact](#contact)
 
 ## About
@@ -73,13 +75,13 @@ Following the WPILib command based structure we have broken our robot up into a 
 
 ## Network Map
 
-|  Device   |   Address   |
-| :-------: | :---------: |
-|  Gateway  | 10.56.90.1  |
-|    RIO    | 10.56.90.2  |
-|   Coral   | 10.56.90.4  |
-| LimeLight | 10.56.90.11 |
-|  Laptop   |   Dynamic   |
+|  Device   |             Address              |
+| :-------: | :------------------------------: |
+|  Gateway  | 10.56.90.129 (subject to change) |
+|    RIO    |            10.56.90.2            |
+|   Coral   |            10.56.90.4            |
+| LimeLight |           10.56.90.11            |
+|  Laptop   |             Dynamic              |
 
 ## Getting started
 
@@ -145,12 +147,12 @@ The reviewer is responsible for looking over the PR, testing the changes themsel
 
 ## Network Map
 
-Device | Address
-|:---:|:---:|
-Gateway|10.56.90.1
-RIO|10.56.90.2
-Coral|10.56.90.4
-LimeLight|10.56.90.11
+|  Device   |   Address   |
+| :-------: | :---------: |
+|  Gateway  | 10.56.90.1  |
+|    RIO    | 10.56.90.2  |
+|   Coral   | 10.56.90.4  |
+| LimeLight | 10.56.90.11 |
 
 ## Contact
 

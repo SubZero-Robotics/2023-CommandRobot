@@ -57,12 +57,12 @@ class RobotContainer {
     ExampleSubsystem m_subsystem;
 
     // Arm Subsystem
-    RotateArmSubsystem m_effector;
-    ExtensionSubsystem m_extender;
+    std::unique_ptr<RotateArmSubsystem> m_effector;
+    std::unique_ptr<ExtensionSubsystem> m_extender;
     BrakeSubsystem m_Brake{RightLead, LeftLead};
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
     IntakeSubsystem m_intake{&m_leds};
-    WristSubsystem m_wrist;
+    std::unique_ptr<WristSubsystem> m_wrist;
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.

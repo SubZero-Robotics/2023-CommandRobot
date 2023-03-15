@@ -3,14 +3,21 @@
 
 #include <frc/DigitalInput.h>
 #include <frc/DutyCycleEncoder.h>
-#include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/FunctionalCommand.h>
 #include <frc2/command/SubsystemBase.h>
+#include <units/acceleration.h>
+#include <units/angle.h>
+#include <units/angular_acceleration.h>
+#include <units/angular_velocity.h>
+#include <units/length.h>
+#include <units/velocity.h>
 
 #include <memory>
 
-#include "constants.h"
+#include "Constants.h"
+#include "utils/Logging.h"
 
 /**
  * @brief A base class for a single-axis subsystem
@@ -43,7 +50,7 @@
  * @tparam Motor Any motor that supports Set(percent)
  * @tparam Unit Position unit (units::meters, etc.)
  */
-template <typename Motor, typename Unit>
+template <typename Motor, typename Encoder, typename Unit, typename Unit_t>
 class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
    public:
     enum ConfigConstants {
@@ -71,39 +78,28 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     struct SingleAxisConfig {
         AxisType type;
         frc::ProfiledPIDController<Unit> pid;
-        double minDistance;
-        double maxDistance;
-        double distancePerRevolution;
+        Unit_t minDistance;
+        Unit_t maxDistance;
+        Unit_t distancePerRevolution;
         ConfigConstants motorDirection = MOTOR_DIRECTION_NORMAL;
-        int minLimitSwitchPort = (int)UNUSED_DIO_PORT;
-        int maxLimitSwitchPort = (int)UNUSED_DIO_PORT;
-        int absoluteEncoderPort = (int)UNUSED_DIO_PORT;
+        int minLimitSwitchPort = UNUSED_DIO_PORT;
+        int maxLimitSwitchPort = UNUSED_DIO_PORT;
         double defaultMovementSpeed = 0.2;
     };
 
-    BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &&motor)
-        : _motor(std::move(motor)),
+    BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor,
+                            Encoder &encoder, frc::DigitalInput *minSwitch,
+                            frc::DigitalInput *maxSwitch, std::string prefix)
+        : _motor(motor),
+          _enc(encoder),
           _config(cfg),
           _controller(cfg.pid),
           _isHoming(false),
           _isMovingToPosition(false),
-          _targetPosition(0) {
-        if (IsValidPort(_config.absoluteEncoderPort)) {
-            _encoder = std::make_unique<frc::DutyCycleEncoder>(
-                _config.absoluteEncoderPort);
-            _encoder->SetDistancePerRotation(_config.distancePerRevolution);
-        }
-
-        if (IsValidPort(_config.minLimitSwitchPort)) {
-            _minLimitSwitch =
-                std::make_unique<frc::DigitalInput>(_config.minLimitSwitchPort);
-        }
-
-        if (IsValidPort(_config.maxLimitSwitchPort)) {
-            _maxLimitSwitch =
-                std::make_unique<frc::DigitalInput>(_config.maxLimitSwitchPort);
-        }
-
+          _targetPosition(0),
+          _minLimitSwitch(minSwitch),
+          _maxLimitSwitch(maxSwitch),
+          _prefix(prefix) {
         _config.defaultMovementSpeed =
             std::clamp(_config.defaultMovementSpeed, -1.0, 1.0);
     }
@@ -116,11 +112,14 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      *
      * @param speed Percentage speed
      */
-    void RunMotorSpeed(double speed) const {
-        speed = std::clamp(speed * (int)_config.motorDirection, -1.0, 1.0);
-
+    void RunMotorSpeed(double speed) {
+        speed *= _config.motorDirection == MOTOR_DIRECTION_NORMAL ? 1.0 : -1.0;
+        speed = std::clamp(speed, -1.0, 1.0);
+        Logging::logToStdOut(_prefix, "SPEED IS " + std::to_string(speed), Logging::Level::VERBOSE);
         if (AtHome()) {
+            Logging::logToStdOut(_prefix, "AT HOME", Logging::Level::INFO);
             if (speed > 0) {
+                Logging::logToStdOut(_prefix, "SETTING SPEED TO: " + std::to_string(speed), Logging::Level::VERBOSE);
                 _motor.Set(speed);
                 return;
             }
@@ -128,7 +127,10 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             _motor.Set(0);
             return;
         } else if (AtMax()) {
+            Logging::logToStdOut(_prefix, "AT MAX",
+                                 Logging::Level::INFO);
             if (speed < 0) {
+                Logging::logToStdOut(_prefix, "SETTING SPEED TO: " + std::to_string(speed), Logging::Level::VERBOSE);
                 _motor.Set(speed);
                 return;
             }
@@ -136,8 +138,14 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             _motor.Set(0);
             return;
         } else {
+            Logging::logToStdOut(_prefix, "SETTING SPEED TO: " + std::to_string(speed), Logging::Level::VERBOSE);
             _motor.Set(speed);
         }
+    }
+
+    void RunMotorSpeedDefault(bool invertDirection = false) {
+        RunMotorSpeed(invertDirection ? -_config.defaultMovementSpeed
+                                      : _config.defaultMovementSpeed);
     }
 
     /**
@@ -147,7 +155,9 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      * @param speed Percentage speed
      */
     void RunMotorExternal(double speed) {
-        StopMovement();
+        // if (_isMovingToPosition) {
+        //     StopMovement();
+        // }
         RunMotorSpeed(speed);
     }
 
@@ -156,6 +166,9 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             double res = std::clamp(
                 _controller.Calculate(GetCurrentPosition(), _targetPosition),
                 -_config.defaultMovementSpeed, _config.defaultMovementSpeed);
+            Logging::logToStdOut(_prefix,
+                                 "PID returned " + std::to_string(res),
+                                 Logging::Level::INFO);
             if (!_controller.AtGoal()) {
                 RunMotorSpeed(res);
             } else {
@@ -164,47 +177,41 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         }
     }
 
-    inline void ResetEncoder() const { _encoder->Reset(); }
+    virtual void ResetEncoder() = 0;
 
-    inline Unit GetCurrentPosition() const {
-        if (_encoder) {
-            return _encoder->GetDistance();
-        }
-    }
+    virtual Unit_t GetCurrentPosition() = 0;
 
-    bool AtHome() const {
-        if (_minLimitSwitch) {
-            if (AtLimitSwitchHome()) {
-                ResetEncoder();
-                return true;
-            }
+    bool AtHome() {
+        if (AtLimitSwitchHome()) {
+            ResetEncoder();
+            Logging::logToStdOut(_prefix, "AT HOME SWITCH",
+                                    Logging::Level::INFO);
+            return true;
         }
 
-        if (_encoder) {
-            if (GetCurrentPosition() <= _config.minDistance) {
-                ResetEncoder();
-                return true;
-            }
+        if (GetCurrentPosition() <= _config.minDistance) {
+            ResetEncoder();
+            Logging::logToStdOut(_prefix, "AT HOME ENC",
+                                 Logging::Level::INFO);
+            return true;
         }
 
         return false;
     }
 
-    inline bool AtMax() const {
+    inline bool AtMax() {
         if (_maxLimitSwitch) {
             return AtLimitSwitchMax();
         }
 
-        if (_encoder) {
-            return GetCurrentPosition() >= _config.maxDistance;
-        }
-
-        return false;
+        return GetCurrentPosition() >= _config.maxDistance;
     }
 
     inline bool AtLimitSwitchHome() const {
         if (_minLimitSwitch) {
-            return !_minLimitSwitch->Get();
+             auto state = !_minLimitSwitch->Get();
+            Logging::logToStdOut(_prefix, "MIN LIMIT SWITCH: " + std::to_string(state), Logging::Level::VERBOSE);
+            return state;
         }
 
         return false;
@@ -212,26 +219,37 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
 
     inline bool AtLimitSwitchMax() const {
         if (_maxLimitSwitch) {
-            return !_maxLimitSwitch->Get();
+            auto state = !_maxLimitSwitch->Get();
+            Logging::logToStdOut(_prefix, "MAX LIMIT SWITCH: " + std::to_string(state), Logging::Level::VERBOSE);
+            return state;
         }
 
         return false;
     }
 
-    void MoveToPosition(Unit position) {
+    void MoveToPosition(Unit_t position) {
+        Logging::logToStdOut(_prefix,
+                             "Moving to " + std::to_string(position.value()),
+                             Logging::Level::INFO);
         _isMovingToPosition = true;
         _targetPosition = position;
         _controller.SetGoal(position);
     }
 
-    void Home() { _isHoming = true; }
+    void Home() {
+        //Logging::logToStdOut(_prefix, "Set homing to true",
+                            // Logging::Level::INFO);
+        _isHoming = true;
+    }
 
     inline bool GetIsMovingToPosition() const { return _isMovingToPosition; }
 
     inline void StopMovement() {
+        Logging::logToStdOut(_prefix, "Movement stopped",
+                             Logging::Level::INFO);
         _isHoming = false;
         _isMovingToPosition = false;
-        _motor->Set(0);
+        _motor.Set(0);
     }
 
     frc2::CommandPtr GetHomeCommand() {
@@ -239,11 +257,10 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
                    [this] { Home(); },
                    [this] { RunMotorSpeed(-_config.defaultMovementSpeed); },
                    [this](bool interrupted) {
-                       RunMotorSpeed(0);
+                       StopMovement();
                        ResetEncoder();
-                       _isHoming = false;
                    },
-                   [this] { AtHome(); }, {this})
+                   [this] { return AtHome(); }, {this})
             .ToPtr();
     }
 
@@ -252,17 +269,18 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     static inline bool IsValidPort(int port) { return port >= 0 && port < 10; }
 
    protected:
-    Motor _motor;
+    Motor &_motor;
+    Encoder &_enc;
     SingleAxisConfig _config;
-    std::unique_ptr<frc::DutyCycleEncoder> _encoder;
     frc::ProfiledPIDController<Unit> _controller;
     bool _isHoming;
     bool _isMovingToPosition;
-    Unit _targetPosition;
+    Unit_t _targetPosition;
 
    private:
-    std::unique_ptr<frc::DigitalInput> _minLimitSwitch;
-    std::unique_ptr<frc::DigitalInput> _maxLimitSwitch;
+    frc::DigitalInput *_minLimitSwitch = nullptr;
+    frc::DigitalInput *_maxLimitSwitch = nullptr;
+    std::string _prefix;
 };
 
 #endif
