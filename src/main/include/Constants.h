@@ -87,8 +87,8 @@ constexpr int kWristRotationMotorID = 15;
 namespace DriveConstants {
 constexpr auto kTrackWidth = 0.6096_m;
 constexpr int kRightLeadMotorID = 8;
-constexpr int kLeftLeadMotorID = 6;
 constexpr int kRightFollowMotorID = 7;
+constexpr int kLeftLeadMotorID = 6;
 constexpr int kLeftFollowMotorID = 5;
 constexpr int kEncoderCPR = 22241.28;  // Counts Per Rotation. 2048 (talonfx
                                        // cpr) multiplied by gear ratio (10.86)
