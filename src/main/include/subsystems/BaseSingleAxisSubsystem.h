@@ -224,8 +224,8 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         if (_maxLimitSwitch) {
             if (AtLimitSwitchMax()) {
                 if (_log)
-                Logging::logToStdOut(_prefix, "AT MAX SWITCH",
-                                     Logging::Level::INFO);
+                    Logging::logToStdOut(_prefix, "AT MAX SWITCH",
+                                         Logging::Level::INFO);
                 return true;
             }
         }
