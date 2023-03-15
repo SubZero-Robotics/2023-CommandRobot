@@ -22,7 +22,8 @@ class RotateArm : public frc2::CommandHelper<frc2::CommandBase, RotateArm> {
     void Execute() override {
         double rotation = m_rotation();
 
-        Logging::logToStdOut("arm rotate", std::to_string(rotation), Logging::Level::VERBOSE);
+        Logging::logToStdOut("arm rotate", std::to_string(rotation),
+                             Logging::Level::VERBOSE);
 
         if (abs(rotation) < kDeadzone) rotation = 0.0;
 

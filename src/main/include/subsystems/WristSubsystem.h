@@ -10,7 +10,8 @@ class WristSubsystem
                                      units::degree, units::degree_t> {
    public:
     WristSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min, nullptr, "ROTATE WRIST") {}
+        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min,
+                                  nullptr, "ROTATE WRIST") {}
 
     void ResetEncoder() override {}
 
