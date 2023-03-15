@@ -11,6 +11,8 @@
 *.o
 *.obj
 
+*.pyc
+
 # Precompiled Headers
 *.gch
 *.pch

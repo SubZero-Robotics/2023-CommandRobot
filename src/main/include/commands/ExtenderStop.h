@@ -13,9 +13,13 @@ class ExtenderStop
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit ExtenderStop(ExtensionSubsystem* subsystem);
+    explicit ExtenderStop(ExtensionSubsystem* subsystem)
+        : m_extension{subsystem} {
+        // Register that this command requires the subsystem.
+        AddRequirements(m_extension);
+    }
 
-    void Execute() override;
+    void Execute() override { m_extension->PercentOutput(0.0); }
 
    private:
     ExtensionSubsystem* m_extension;

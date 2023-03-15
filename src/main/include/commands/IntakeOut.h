@@ -12,10 +12,17 @@ class IntakeOut : public frc2::CommandHelper<frc2::CommandBase, IntakeOut> {
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit IntakeOut(IntakeSubsystem* subsystem);
+    explicit IntakeOut(IntakeSubsystem* subsystem)
+        : m_intake{subsystem}, isFinished{false} {
+        // Register that this command requires the subsystem.
+        AddRequirements(m_intake);
+    }
 
-    void Execute() override;
+    void Execute() override { m_intake->Out(); }
+
+    bool IsFinished() override { return isFinished; }
 
    private:
-    IntakeSubsystem* m_Intake;
+    IntakeSubsystem* m_intake;
+    bool isFinished;
 };

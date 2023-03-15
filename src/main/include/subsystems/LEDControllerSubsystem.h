@@ -2,6 +2,7 @@
 #define LED_CONTROLLER_H
 
 #include <frc/I2C.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include <memory>
 
@@ -24,6 +25,8 @@ class LEDControllerSubsystem {
         Chase = 5,
         Wipe = 6
     };
+
+    enum class Colors { Yellow, Purple };
 
     LEDControllerSubsystem(uint8_t slaveAddress,
                            frc::I2C::Port port = frc::I2C::kOnboard);
@@ -76,6 +79,8 @@ class LEDControllerSubsystem {
      */
     bool setColor(uint32_t color);
 
+    bool setColor(Colors color);
+
     /**
      * @brief Send the READPATTERNDONE command
      *
@@ -83,11 +88,14 @@ class LEDControllerSubsystem {
      */
     bool getPatternDone();
 
+    inline Colors getCurrentColor() const { return _currentColor; }
+
    private:
     std::unique_ptr<frc::I2C> _i2c;
     uint8_t _slaveAddress;
     CommandType _lastCommand;
     PatternType _lastPattern;
+    Colors _currentColor;
 };
 
 #endif

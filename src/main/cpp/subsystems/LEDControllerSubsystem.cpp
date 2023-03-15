@@ -5,7 +5,10 @@ LEDControllerSubsystem::LEDControllerSubsystem(uint8_t slaveAddress,
     : _i2c(std::make_unique<frc::I2C>(port, slaveAddress)),
       _slaveAddress(slaveAddress),
       _lastCommand(LEDControllerSubsystem::CommandType::Off),
-      _lastPattern(LEDControllerSubsystem::PatternType::None) {}
+      _lastPattern(LEDControllerSubsystem::PatternType::None) {
+    setColor(Colors::Yellow);
+    setPattern(LEDControllerSubsystem::PatternType::SetAll, true);
+}
 
 bool LEDControllerSubsystem::initialize() { return !_i2c->AddressOnly(); }
 
@@ -41,6 +44,19 @@ bool LEDControllerSubsystem::setColor(uint32_t color) {
     uint8_t b = color & 0xFF;
 
     return setColor(r, g, b);
+}
+
+bool LEDControllerSubsystem::setColor(Colors color) {
+    _currentColor = color;
+    if (color == Colors::Yellow) {
+        frc::SmartDashboard::PutString("LED State", "Yellow");
+        return setColor(255, 255, 0);
+    } else if (color == Colors::Purple) {
+        frc::SmartDashboard::PutString("LED State", "Purple");
+        return setColor(180, 0, 255);
+    }
+
+    return false;
 }
 
 bool LEDControllerSubsystem::getPatternDone() {

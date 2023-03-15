@@ -1,6 +1,5 @@
 #pragma once
 
-#include <frc/AnalogInput.h>
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 
@@ -16,13 +15,37 @@ class Extender : public frc2::CommandHelper<frc2::CommandBase, Extender> {
      */
     explicit Extender(ExtensionSubsystem* subsystem,
                       std::function<double()> outExtent,
-                      std::function<double()> inExtent);
+                      std::function<double()> inExtent)
+        : m_extension{subsystem}, m_outExtent{outExtent}, m_inExtent{inExtent} {
+        // Register that this command requires the subsystem.
+        AddRequirements(m_extension);
+    }
 
-    void Execute() override;
+    void Execute() override {
+        double outExtent = m_outExtent();
+        double inExtent = m_inExtent();
+        auto rotation = outExtent >= inExtent ? outExtent : -inExtent;
+
+        // if (!m_extension->AtLimit() ||
+        //     m_extension->GetExtenderDistanceIn() >=
+        //     ArmConstants::kMaxArmDistanceIn) { m_extension->PercentOutput(0);
+        //     return;
+        // }
+
+        if (m_extension->AtLimit()) {
+            m_extension->ResetEncoder();
+            if (rotation > 0) {
+                m_extension->PercentOutput(rotation);
+            } else {
+                m_extension->PercentOutput(0.0);
+            }
+        } else {
+            m_extension->PercentOutput(rotation);
+        }
+    }
 
    private:
     ExtensionSubsystem* m_extension;
     std::function<double()> m_outExtent;
     std::function<double()> m_inExtent;
-    frc::AnalogInput extenderMagneticStop{extenderMagneticStopPort};
 };

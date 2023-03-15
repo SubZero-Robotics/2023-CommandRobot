@@ -7,6 +7,8 @@
 #include <frc/Compressor.h>
 #include <frc/XboxController.h>
 #include <frc/controller/RamseteController.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/Trigger.h>
@@ -16,13 +18,15 @@
 #include <memory>
 
 #include "Constants.h"
+#include "commands/Autos.h"
+#include "subsystems/BrakeSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/EffectorSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/ExtensionSubsystem.h"
-#include "subsystems/GripperSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
+#include "subsystems/RotateArmSubsystem.h"
+#include "subsystems/WristSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -40,16 +44,13 @@ class RobotContainer {
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
     frc2::CommandXboxController DriverXbox{0};
-    // TODO: Second Xbox controller
     frc2::CommandXboxController ArmXbox{1};
 
-    frc::Compressor phCompressor{4, frc::PneumaticsModuleType::REVPH};
+    WPI_TalonFX RightLead{DriveConstants::kRightLeadMotorID};
+    WPI_TalonFX RightFollow{DriveConstants::kRightFollowMotorID};
 
-    WPI_TalonFX RightLead{8};
-    WPI_TalonFX RightFollow{7};
-
-    WPI_TalonFX LeftLead{6};
-    WPI_TalonFX LeftFollow{5};
+    WPI_TalonFX LeftLead{DriveConstants::kLeftLeadMotorID};
+    WPI_TalonFX LeftFollow{DriveConstants::kLeftFollowMotorID};
 
     // The robot's subsystems are defined here...
 
@@ -58,16 +59,22 @@ class RobotContainer {
     ExampleSubsystem m_subsystem;
 
     // Arm Subsystem
-    EffectorSubsystem m_effector;
+    RotateArmSubsystem m_effector;
     ExtensionSubsystem m_extender;
-    GripperSubsystem m_gripper;
-    IntakeSubsystem m_intake;
+    BrakeSubsystem m_Brake{RightLead, LeftLead};
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
+    IntakeSubsystem m_intake{&m_leds};
+    WristSubsystem m_wrist;
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
     std::unique_ptr<DriveSubsystem> drive;
-    DriveSubsystem *m_drive;
+    DriveSubsystem* m_drive;
+
+    frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
+    frc2::CommandPtr m_nothing = autos::DoesNothing(m_drive);
+
+    frc::SendableChooser<frc2::Command*> m_chooser;
 
     // Auto Builder
     std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
