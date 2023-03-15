@@ -72,16 +72,16 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      * rotational units
      * @param distancePerRevolution Distance the axis moves per revolution of
      * the motor
-     * @param motorDirection Set to 1 or -1 to reverse motor direction. Negative
-     * is always less distance
+     * @param motorMultiplier Set to 1.0 or -1.0 to reverse motor direction. Negative
+     * is always decreasing distance
      */
     struct SingleAxisConfig {
         AxisType type;
         frc::ProfiledPIDController<Unit> pid;
-        Unit_t minDistance;
-        Unit_t maxDistance;
-        Unit_t distancePerRevolution;
-        ConfigConstants motorDirection = MOTOR_DIRECTION_NORMAL;
+        double minDistance;
+        double maxDistance;
+        double distancePerRevolution;
+        double motorMultiplier = 1.0;
         int minLimitSwitchPort = UNUSED_DIO_PORT;
         int maxLimitSwitchPort = UNUSED_DIO_PORT;
         double defaultMovementSpeed = 0.2;
@@ -90,7 +90,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor,
                             Encoder &encoder, frc::DigitalInput *minSwitch,
                             frc::DigitalInput *maxSwitch, std::string prefix,
-                            bool _log = false)
+                            bool log = false)
         : _motor(motor),
           _enc(encoder),
           _config(cfg),
@@ -98,33 +98,34 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
           _isHoming(false),
           _isMovingToPosition(false),
           _targetPosition(0),
-          _minLimitSwitch(minSwitch),
-          _maxLimitSwitch(maxSwitch),
+          _log(log),
           _prefix(prefix),
-          log(_log) {
+          _minLimitSwitch(minSwitch),
+          _maxLimitSwitch(maxSwitch)
+           {
         _config.defaultMovementSpeed =
             std::clamp(_config.defaultMovementSpeed, -1.0, 1.0);
     }
 
     /**
      * @brief Run motor at the specified speed.
-     * ! Make sure to use _config.motorDirection to invert if needed!
+     * ! Make sure to use _config.motorMultiplier to invert if needed!
      * This method will also prevent movement in certain directions if at a
      * limit. Use RunMotorExternal if moving the motor from an external command
      *
      * @param speed Percentage speed
      */
     void RunMotorSpeed(double speed) {
-        speed *= _config.motorDirection == MOTOR_DIRECTION_NORMAL ? 1.0 : -1.0;
+        speed *= _config.motorMultiplier;
         speed = std::clamp(speed, -1.0, 1.0);
-        if (log)
+        if (_log)
             Logging::logToStdOut(_prefix, "SPEED IS " + std::to_string(speed),
                                  Logging::Level::VERBOSE);
         if (AtHome()) {
-            if (log)
+            if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME", Logging::Level::INFO);
             if (speed > 0) {
-                if (log)
+                if (_log)
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
@@ -135,10 +136,10 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             _motor.Set(0);
             return;
         } else if (AtMax()) {
-            if (log)
+            if (_log)
                 Logging::logToStdOut(_prefix, "AT MAX", Logging::Level::INFO);
             if (speed < 0) {
-                if (log)
+                if (_log)
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
@@ -149,7 +150,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             _motor.Set(0);
             return;
         } else {
-            if (log)
+            if (_log)
                 Logging::logToStdOut(
                     _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                     Logging::Level::VERBOSE);
@@ -169,9 +170,9 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      * @param speed Percentage speed
      */
     void RunMotorExternal(double speed) {
-        // if (_isMovingToPosition) {
-        //     StopMovement();
-        // }
+        if (_isMovingToPosition) {
+            StopMovement();
+        }
 
         RunMotorSpeed(speed);
     }
@@ -179,9 +180,9 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     void UpdateMovement() {
         if (_isMovingToPosition) {
             double res = std::clamp(
-                _controller.Calculate(GetCurrentPosition(), _targetPosition),
+                _controller.Calculate(Unit_t(GetCurrentPosition()), Unit_t(_targetPosition)),
                 -_config.defaultMovementSpeed, _config.defaultMovementSpeed);
-            if (log)
+            if (_log)
                 Logging::logToStdOut(_prefix,
                                      "PID returned " + std::to_string(res),
                                      Logging::Level::INFO);
@@ -195,20 +196,22 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
 
     virtual void ResetEncoder() = 0;
 
-    virtual Unit_t GetCurrentPosition() = 0;
+    virtual double GetCurrentPosition() = 0;
 
     bool AtHome() {
-        if (AtLimitSwitchHome()) {
-            ResetEncoder();
-            if (log)
-                Logging::logToStdOut(_prefix, "AT HOME SWITCH",
-                                     Logging::Level::INFO);
-            return true;
+        if (_minLimitSwitch) {
+            if (AtLimitSwitchHome()) {
+                ResetEncoder();
+                if (_log)
+                    Logging::logToStdOut(_prefix, "AT HOME SWITCH",
+                                        Logging::Level::INFO);
+                return true;
+            }
         }
 
-        if (GetCurrentPosition().value() <= _config.minDistance.value()) {
+        if (GetCurrentPosition() <= _config.minDistance) {
             ResetEncoder();
-            if (log)
+            if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME ENC",
                                      Logging::Level::INFO);
             return true;
@@ -219,19 +222,21 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
 
     inline bool AtMax() {
         if (_maxLimitSwitch) {
-            if (log)
+            if (_log)
                 Logging::logToStdOut(_prefix, "in at max lim switch",
                                      Logging::Level::INFO);
-            return AtLimitSwitchMax();
+            if (AtLimitSwitchMax()) {
+                return true;
+            }
         }
 
-        return GetCurrentPosition().value() >= _config.maxDistance.value();
+        return GetCurrentPosition() >= _config.maxDistance;
     }
 
     inline bool AtLimitSwitchHome() const {
         if (_minLimitSwitch) {
             auto state = !_minLimitSwitch->Get();
-            if (log)
+            if (_log)
                 Logging::logToStdOut(
                     _prefix, "MIN LIMIT SWITCH: " + std::to_string(state),
                     Logging::Level::VERBOSE);
@@ -244,7 +249,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     inline bool AtLimitSwitchMax() const {
         if (_maxLimitSwitch) {
             auto state = !_maxLimitSwitch->Get();
-            if (log)
+            if (_log)
                 Logging::logToStdOut(
                     _prefix, "MAX LIMIT SWITCH: " + std::to_string(state),
                     Logging::Level::VERBOSE);
@@ -254,10 +259,10 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         return false;
     }
 
-    void MoveToPosition(Unit_t position) {
-        if (log)
+    void MoveToPosition(double position) {
+        if (_log)
             Logging::logToStdOut(
-                _prefix, "Moving to " + std::to_string(position.value()),
+                _prefix, "Moving to " + std::to_string(position),
                 Logging::Level::INFO);
         _isMovingToPosition = true;
         _targetPosition = position;
@@ -265,15 +270,15 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     }
 
     void Home() {
-        // Logging::logToStdOut(_prefix, "Set homing to true",
-        //  Logging::Level::INFO);
+        if (_log) Logging::logToStdOut(_prefix, "Set homing to true",
+         Logging::Level::INFO);
         _isHoming = true;
     }
 
     inline bool GetIsMovingToPosition() const { return _isMovingToPosition; }
 
     inline void StopMovement() {
-        if (log)
+        if (_log)
             Logging::logToStdOut(_prefix, "Movement stopped",
                                  Logging::Level::INFO);
         _isHoming = false;
@@ -304,13 +309,13 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     frc::ProfiledPIDController<Unit> _controller;
     bool _isHoming;
     bool _isMovingToPosition;
-    Unit_t _targetPosition;
-    bool log;
+    double _targetPosition;
+    bool _log;
+    std::string _prefix;
 
    private:
     frc::DigitalInput *_minLimitSwitch = nullptr;
     frc::DigitalInput *_maxLimitSwitch = nullptr;
-    std::string _prefix;
 };
 
 #endif

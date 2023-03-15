@@ -11,15 +11,22 @@ class WristSubsystem
    public:
     WristSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min,
-                                  nullptr, "ROTATE WRIST", true) {}
+                                  nullptr, "WRIST", true) {}
 
+    // Wrist has zero offset set in SparkMax
     void ResetEncoder() override {}
 
-    units::degree_t GetCurrentPosition() override {
-        auto position = m_encoder.GetPosition() * 360_deg;
+    double GetCurrentPosition() override {
+        auto position = m_encoder.GetPosition() * _config.distancePerRevolution;
 
         Logging::logToSmartDashboard("WristPosition",
-                                     std::to_string(position.value()),
+                                     std::to_string(position) + " deg",
+                                     Logging::Level::INFO);
+
+        if (_log)
+        Logging::logToStdOut(_prefix,
+                                     std::to_string(position) + "/" +
+                                     std::to_string(_config.maxDistance) + " deg",
                                      Logging::Level::INFO);
 
         return position;
@@ -38,11 +45,10 @@ class WristSubsystem
             1.3, 0.0, 0.7,
             frc::TrapezoidProfile<units::degree>::Constraints(
                 1.75_deg_per_s, 0.75_deg_per_s_sq)),
-        .minDistance = 0_deg,
+        .minDistance = 0,
         .maxDistance = ArmConstants::kWristDegreeLimit,
-        .distancePerRevolution = 360_deg,
-        .motorDirection =
-            BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
+        .distancePerRevolution = 360,
+        .motorMultiplier = 1.0,
         .minLimitSwitchPort = ArmConstants::kWristLimitSwitchPort,
         .maxLimitSwitchPort = BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
         .defaultMovementSpeed = ArmConstants::kWristHomingSpeed};

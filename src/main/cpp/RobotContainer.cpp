@@ -54,7 +54,7 @@ void RobotContainer::ConfigureBindings() {
         RotateArm(m_effector.get(), [this] { return ArmXbox.GetLeftY(); }));
 
     m_wrist->SetDefaultCommand(
-        RotateWrist(m_wrist.get(), [this] { return -ArmXbox.GetRightY(); }));
+        RotateWrist(m_wrist.get(), [this] { return ArmXbox.GetRightY(); }));
 
     m_extender->SetDefaultCommand(Extender(
         m_extender.get(), [this] { return ArmXbox.GetLeftTriggerAxis(); },

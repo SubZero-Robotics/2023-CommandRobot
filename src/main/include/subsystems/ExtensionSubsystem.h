@@ -12,16 +12,22 @@ class ExtensionSubsystem
    public:
     ExtensionSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
-                                  nullptr, "EXTEND ARM", false) {}
+                                  nullptr, "EXTEND", false) {}
 
     void ResetEncoder() override { m_encoder.SetPosition(0); }
 
-    units::meter_t GetCurrentPosition() override {
-        auto position = m_encoder.GetPosition() * ArmConstants::kInPerRotation;
+    double GetCurrentPosition() override {
+        auto position = m_encoder.GetPosition() * _config.distancePerRevolution;
 
-        // Logging::logToSmartDashboard("ExtensionPositon",
-        //                              std::to_string(position.value()),
-        //                              Logging::Level::INFO);
+        Logging::logToSmartDashboard("ExtensionPosition",
+                                     std::to_string(position) + " deg",
+                                     Logging::Level::INFO);
+
+        if (_log)
+        Logging::logToStdOut(_prefix,
+                                     std::to_string(position) + "/" +
+                                     std::to_string(_config.maxDistance) + " deg",
+                                     Logging::Level::INFO);
 
         return position;
     }
@@ -35,18 +41,18 @@ class ExtensionSubsystem
         ArmConstants::kTicksPerMotorRotation);
 
     SingleAxisConfig m_config = {
-        BaseSingleAxisSubsystem::AxisType::Linear,
-        frc::ProfiledPIDController<units::meter>(
+        .type = BaseSingleAxisSubsystem::AxisType::Linear,
+        .pid = frc::ProfiledPIDController<units::meter>(
             1.3, 0.0, 0.7,
             frc::TrapezoidProfile<units::meter>::Constraints(1.75_mps,
                                                              0.75_mps_sq)),
-        0_in,
-        ArmConstants::kMaxArmDistance,
-        ArmConstants::kInPerRotation,
-        BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
-        ArmConstants::kExtenderLimitSwitchPort,
-        BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
-        ArmConstants::kExtenderHomingSpeed};
+        .minDistance = 0,
+        .maxDistance = ArmConstants::kMaxArmDistance,
+        .distancePerRevolution = ArmConstants::kInPerRotation,
+        .motorMultiplier = 1.0,
+        .minLimitSwitchPort = ArmConstants::kExtenderLimitSwitchPort,
+        .maxLimitSwitchPort = BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
+        .defaultMovementSpeed = ArmConstants::kExtenderHomingSpeed};
 
     frc::DigitalInput min{ArmConstants::kExtenderLimitSwitchPort};
 };

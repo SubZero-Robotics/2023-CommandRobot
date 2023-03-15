@@ -11,18 +11,24 @@ class RotateArmSubsystem
    public:
     RotateArmSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min,
-                                  &max, "ROTATE ARM", false) {
+                                  &max, "ARM", false) {
         m_followRotationMotor.Follow(m_leadRotationMotor);
     }
 
+    // Rotate arm has zero offset set in SparkMax
     void ResetEncoder() override {}
 
-    units::degree_t GetCurrentPosition() override {
-        auto position = m_enc.GetPosition() * 360_deg;
+    double GetCurrentPosition() override {
+        auto position = m_enc.GetPosition() * _config.distancePerRevolution;
 
-        // Logging::logToSmartDashboard("RotatePose",
-        //                              std::to_string(position.value()),
-        //                              Logging::Level::INFO);
+        Logging::logToSmartDashboard("ArmPosition",
+                                     std::to_string(position) + " deg",
+                                     Logging::Level::INFO);
+
+        if (_log)
+        Logging::logToStdOut(_prefix, std::to_string(position) + "/" +
+                                     std::to_string(_config.maxDistance) + " deg",
+                                     Logging::Level::INFO);
 
         return position;
     }
@@ -50,9 +56,8 @@ class RotateArmSubsystem
                 1.75_deg_per_s, 0.75_deg_per_s_sq)),
         .minDistance = ArmConstants::kRotationHomeDegree,
         .maxDistance = ArmConstants::kRotationMaxDegree,
-        .distancePerRevolution = 360_deg,
-        .motorDirection =
-            BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
+        .distancePerRevolution = 360,
+        .motorMultiplier = 1.0,
         .minLimitSwitchPort = ArmConstants::kRotationLimitSwitchHomePort,
         .maxLimitSwitchPort = ArmConstants::kRotationLimitSwitchMaxPort,
         .defaultMovementSpeed = ArmConstants::kRotationHomingSpeed};
