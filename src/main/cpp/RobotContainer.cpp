@@ -25,6 +25,10 @@ RobotContainer::RobotContainer() {
                                              LeftFollow);
     m_drive = drive.get();
 
+    m_effector = std::make_unique<RotateArmSubsystem>();
+    m_extender = std::make_unique<ExtensionSubsystem>();
+    m_wrist = std::make_unique<WristSubsystem>();
+
     // Configure the button bindings
     ConfigureBindings();
 
@@ -46,23 +50,23 @@ void RobotContainer::ConfigureBindings() {
         },
         [this] { return DriverXbox.GetBButton(); }));
 
-    m_effector.SetDefaultCommand(
-        RotateArm(&m_effector, [this] { return ArmXbox.GetLeftY(); }));
+    m_effector->SetDefaultCommand(
+        RotateArm(m_effector.get(), [this] { return ArmXbox.GetLeftY(); }));
 
-    m_wrist.SetDefaultCommand(
-        RotateWrist(&m_wrist, [this] { return -ArmXbox.GetRightY(); }));
+    m_wrist->SetDefaultCommand(
+        RotateWrist(m_wrist.get(), [this] { return -ArmXbox.GetRightY(); }));
 
-    m_extender.SetDefaultCommand(Extender(
-        &m_extender, [this] { return ArmXbox.GetLeftTriggerAxis(); },
+    m_extender->SetDefaultCommand(Extender(
+        m_extender.get(), [this] { return ArmXbox.GetLeftTriggerAxis(); },
         [this] { return ArmXbox.GetRightTriggerAxis(); }));
 
     m_intake.SetDefaultCommand(IntakeStop(&m_intake).ToPtr());
 
-    DriverXbox.Y().OnTrue(std::move(m_effector.GetHomeCommand()));
+    DriverXbox.Y().OnTrue(std::move(m_effector->GetHomeCommand()));
 
-    DriverXbox.X().OnTrue(std::move(m_extender.GetHomeCommand()));
+    DriverXbox.X().OnTrue(std::move(m_extender->GetHomeCommand()));
 
-    DriverXbox.A().OnTrue(std::move(m_wrist.GetHomeCommand()));
+    DriverXbox.A().OnTrue(std::move(m_wrist->GetHomeCommand()));
 
     ArmXbox.LeftBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 

@@ -10,9 +10,9 @@ class WristSubsystem
                                      units::degree, units::degree_t> {
    public:
     WristSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder) {}
+        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min, nullptr, "ROTATE WRIST") {}
 
-    void ResetEncoder() override { m_encoder.SetZeroOffset(0); }
+    void ResetEncoder() override {}
 
     units::degree_t GetCurrentPosition() override {
         auto position = m_encoder.GetPosition() * 360_deg;
@@ -44,4 +44,6 @@ class WristSubsystem
         ArmConstants::kWristLimitSwitchPort,
         BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
         ArmConstants::kWristHomingSpeed};
+
+    frc::DigitalInput min{ArmConstants::kWristLimitSwitchPort};
 };

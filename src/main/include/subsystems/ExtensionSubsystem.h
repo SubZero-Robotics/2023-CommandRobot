@@ -11,7 +11,7 @@ class ExtensionSubsystem
                                      units::meter_t> {
    public:
     ExtensionSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder) {}
+        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min, nullptr, "EXTEND ARM") {}
 
     void ResetEncoder() override { m_encoder.SetPosition(0); }
 
@@ -46,4 +46,6 @@ class ExtensionSubsystem
         ArmConstants::kExtenderLimitSwitchPort,
         BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
         ArmConstants::kExtenderHomingSpeed};
+
+    frc::DigitalInput min{ArmConstants::kExtenderLimitSwitchPort};
 };
