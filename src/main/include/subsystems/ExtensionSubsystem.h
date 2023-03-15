@@ -12,22 +12,31 @@ class ExtensionSubsystem
    public:
     ExtensionSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
-                                  nullptr, "EXTEND", false) {}
+                                  nullptr, "EXTEND", true) {
+        _config = m_config;
+        _config.motorMultiplier = 1.0;
+        _config.distancePerRevolution = ArmConstants::kInPerRotation;
+                                  }
 
-    void ResetEncoder() override { m_encoder.SetPosition(0); }
+    void ResetEncoder() override {
+         if (_log)
+            Logging::logToStdOut(_prefix,
+                                 "RESET POSITION",
+                                 Logging::Level::INFO);
+        m_encoder.SetPosition(0); }
 
     double GetCurrentPosition() override {
-        auto position = m_encoder.GetPosition() * _config.distancePerRevolution;
+        auto position = m_encoder.GetPosition() * -_config.distancePerRevolution;
 
         Logging::logToSmartDashboard("ExtensionPosition",
-                                     std::to_string(position) + " deg",
+                                     std::to_string(position) + " in",
                                      Logging::Level::INFO);
 
         if (_log)
             Logging::logToStdOut(_prefix,
                                  std::to_string(position) + "/" +
                                      std::to_string(_config.maxDistance) +
-                                     " deg",
+                                     " in",
                                  Logging::Level::INFO);
 
         return position;

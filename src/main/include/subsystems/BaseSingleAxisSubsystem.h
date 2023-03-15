@@ -115,15 +115,18 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      * @param speed Percentage speed
      */
     void RunMotorSpeed(double speed) {
+        if (_log)
+            Logging::logToStdOut(_prefix, "MUL IS " + std::to_string(_config.motorMultiplier),
+                                 Logging::Level::VERBOSE);
         speed *= _config.motorMultiplier;
-        speed = std::clamp(speed, -1.0, 1.0);
+        // speed = std::clamp(speed, -1.0, 1.0);
         if (_log)
             Logging::logToStdOut(_prefix, "SPEED IS " + std::to_string(speed),
                                  Logging::Level::VERBOSE);
         if (AtHome()) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME", Logging::Level::INFO);
-            if (speed > 0) {
+            if (speed < 0) {
                 if (_log)
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
@@ -141,7 +144,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         } else if (AtMax()) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT MAX", Logging::Level::INFO);
-            if (speed < 0) {
+            if (speed > 0) {
                 if (_log)
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
@@ -177,9 +180,9 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      * @param speed Percentage speed
      */
     void RunMotorExternal(double speed) {
-        if (_isMovingToPosition) {
-            StopMovement();
-        }
+        // if (_isMovingToPosition) {
+        //     StopMovement();
+        // }
 
         RunMotorSpeed(speed);
     }
@@ -218,7 +221,6 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         }
 
         if (GetCurrentPosition() <= _config.minDistance) {
-            ResetEncoder();
             if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME ENC",
                                      Logging::Level::INFO);

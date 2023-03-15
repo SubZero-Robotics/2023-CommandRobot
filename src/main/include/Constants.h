@@ -47,8 +47,8 @@ constexpr int kExtenderLimitSwitchPort = 2;
 // Arm Rotation Constants
 constexpr int kRotationLimitSwitchHomePort = 0;
 constexpr int kRotationLimitSwitchMaxPort = 1;
-constexpr double kRotationHomeDegree = 60;
-constexpr double kRotationMaxDegree = 125;
+constexpr double kRotationHomeDegree = 0;
+constexpr double kRotationMaxDegree = 65;
 constexpr int kArmSoftLimitForwardDegrees = 65;
 constexpr double kArmGearRatio = 197.14;
 
@@ -71,7 +71,7 @@ constexpr double kIntakeSpeed = 1.0;
 // Wrist Constants
 constexpr int kWristLimitSwitchPort = 3;
 constexpr int kWristGearRatio = 125;
-constexpr auto kWristDegreeLimit = 300;
+constexpr auto kWristDegreeLimit = 160.0;
 }  // namespace ArmConstants
 
 // Motor IDs

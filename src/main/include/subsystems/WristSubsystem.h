@@ -11,13 +11,17 @@ class WristSubsystem
    public:
     WristSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min,
-                                  nullptr, "WRIST", true) {}
+                                  nullptr, "WRIST", false) {
+        _config = m_config;
+        _config.motorMultiplier = 1.0;
+        _config.maxDistance = 160.0;
+    }
 
     // Wrist has zero offset set in SparkMax
     void ResetEncoder() override {}
 
     double GetCurrentPosition() override {
-        auto position = m_encoder.GetPosition() * _config.distancePerRevolution;
+        auto position = m_encoder.GetPosition() * 360.0;
 
         Logging::logToSmartDashboard("WristPosition",
                                      std::to_string(position) + " deg",
@@ -48,7 +52,7 @@ class WristSubsystem
                 1.75_deg_per_s, 0.75_deg_per_s_sq)),
         .minDistance = 0,
         .maxDistance = ArmConstants::kWristDegreeLimit,
-        .distancePerRevolution = 360,
+        .distancePerRevolution = 360.0,
         .motorMultiplier = 1.0,
         .minLimitSwitchPort = ArmConstants::kWristLimitSwitchPort,
         .maxLimitSwitchPort = BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
