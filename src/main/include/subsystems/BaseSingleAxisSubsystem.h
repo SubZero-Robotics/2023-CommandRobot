@@ -133,9 +133,9 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             }
 
             if (_log)
-                    Logging::logToStdOut(
-                        _prefix, "NOT MOVING; AT HOME" + std::to_string(speed),
-                        Logging::Level::VERBOSE);
+                Logging::logToStdOut(
+                    _prefix, "NOT MOVING; AT HOME" + std::to_string(speed),
+                    Logging::Level::VERBOSE);
             _motor.Set(0);
             return;
         } else if (AtMax()) {
@@ -151,9 +151,9 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
             }
 
             if (_log)
-                    Logging::logToStdOut(
-                        _prefix, "NOT MOVING; AT MAX" + std::to_string(speed),
-                        Logging::Level::VERBOSE);
+                Logging::logToStdOut(
+                    _prefix, "NOT MOVING; AT MAX" + std::to_string(speed),
+                    Logging::Level::VERBOSE);
             _motor.Set(0);
             return;
         } else {
