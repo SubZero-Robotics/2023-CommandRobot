@@ -11,16 +11,16 @@ class ExtensionSubsystem
                                      units::meter_t> {
    public:
     ExtensionSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min, nullptr, "EXTEND ARM") {}
+        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min, nullptr, "EXTEND ARM", false) {}
 
     void ResetEncoder() override { m_encoder.SetPosition(0); }
 
     units::meter_t GetCurrentPosition() override {
         auto position = m_encoder.GetPosition() * ArmConstants::kInPerRotation;
 
-        Logging::logToSmartDashboard("ExtensionPositon",
-                                     std::to_string(position.value()),
-                                     Logging::Level::INFO);
+        // Logging::logToSmartDashboard("ExtensionPositon",
+        //                              std::to_string(position.value()),
+        //                              Logging::Level::INFO);
 
         return position;
     }

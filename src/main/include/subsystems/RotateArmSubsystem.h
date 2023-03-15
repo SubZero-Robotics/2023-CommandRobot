@@ -10,7 +10,7 @@ class RotateArmSubsystem
                                      units::degree, units::degree_t> {
    public:
     RotateArmSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min, &max, "ROTATE ARM") {
+        : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min, &max, "ROTATE ARM", false) {
         m_followRotationMotor.Follow(m_leadRotationMotor);
     }
 
@@ -19,9 +19,9 @@ class RotateArmSubsystem
     units::degree_t GetCurrentPosition() override {
         auto position = m_enc.GetPosition() * 360_deg;
 
-        Logging::logToSmartDashboard("RotatePose",
-                                     std::to_string(position.value()),
-                                     Logging::Level::INFO);
+        // Logging::logToSmartDashboard("RotatePose",
+        //                              std::to_string(position.value()),
+        //                              Logging::Level::INFO);
 
         return position;
     }
@@ -49,7 +49,7 @@ class RotateArmSubsystem
         .minDistance = ArmConstants::kRotationHomeDegree,
         .maxDistance = ArmConstants::kRotationMaxDegree,
         .distancePerRevolution = 360_deg,
-        .motorDirection = BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_REVERSED,
+        .motorDirection = BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
         .minLimitSwitchPort = ArmConstants::kRotationLimitSwitchHomePort,
         .maxLimitSwitchPort = ArmConstants::kRotationLimitSwitchMaxPort,
         .defaultMovementSpeed = ArmConstants::kRotationHomingSpeed};

@@ -68,7 +68,7 @@ constexpr double kIntakeSpeed = 1.0;
 // Wrist Constants
 constexpr int kWristLimitSwitchPort = 3;
 constexpr int kWristGearRatio = 125;
-constexpr auto kWristDegreeLimit = 90_deg;
+constexpr auto kWristDegreeLimit = 300_deg;
 
 constexpr int kExtenderLimitSwitchPort = 2;
 }  // namespace ArmConstants
@@ -86,8 +86,8 @@ constexpr int kWristRotationMotorID = 15;
 namespace DriveConstants {
 constexpr auto kTrackWidth = 0.6096_m;
 constexpr int kRightLeadMotorID = 8;
-constexpr int kLeftLeadMotorID = 7;
-constexpr int kRightFollowMotorID = 6;
+constexpr int kLeftLeadMotorID = 6;
+constexpr int kRightFollowMotorID = 7;
 constexpr int kLeftFollowMotorID = 5;
 constexpr int kEncoderCPR = 22241.28;  // Counts Per Rotation. 2048 (talonfx
                                        // cpr) multiplied by gear ratio (10.86)
