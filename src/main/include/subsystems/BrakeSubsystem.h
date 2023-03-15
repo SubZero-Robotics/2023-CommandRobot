@@ -43,7 +43,8 @@ class BrakeSubsystem : public frc2::SubsystemBase {
     // frc::Compressor m_compressor{DriveConstants::kPenumaticsModuleID,
     //                              frc::PneumaticsModuleType::CTREPCM};
     // frc::DoubleSolenoid exampleDoublePH{
-    //     DriveConstants::kPenumaticsModuleID, frc::PneumaticsModuleType::CTREPCM,
+    //     DriveConstants::kPenumaticsModuleID,
+    //     frc::PneumaticsModuleType::CTREPCM,
     //     DriveConstants::kSolenoidForwardChannel,
     //     DriveConstants::kSolenoidReverseChannel};
     WPI_TalonFX &_rTalon;

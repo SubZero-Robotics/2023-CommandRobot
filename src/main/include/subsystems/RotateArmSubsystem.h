@@ -37,8 +37,9 @@ class RotateArmSubsystem
         CANSparkMaxConstants::kArmRotationFollowMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
 
-    rev::SparkMaxAbsoluteEncoder m_enc = m_followRotationMotor.GetAbsoluteEncoder(
-        rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
+    rev::SparkMaxAbsoluteEncoder m_enc =
+        m_followRotationMotor.GetAbsoluteEncoder(
+            rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Rotational,
@@ -53,7 +54,7 @@ class RotateArmSubsystem
         .minLimitSwitchPort = ArmConstants::kRotationLimitSwitchHomePort,
         .maxLimitSwitchPort = ArmConstants::kRotationLimitSwitchMaxPort,
         .defaultMovementSpeed = ArmConstants::kRotationHomingSpeed};
-    
+
     frc::DigitalInput min{ArmConstants::kRotationLimitSwitchHomePort};
     frc::DigitalInput max{ArmConstants::kRotationLimitSwitchMaxPort};
 };

@@ -241,8 +241,8 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     }
 
     void Home() {
-        //Logging::logToStdOut(_prefix, "Set homing to true",
-                            // Logging::Level::INFO);
+        // Logging::logToStdOut(_prefix, "Set homing to true",
+        //  Logging::Level::INFO);
         _isHoming = true;
     }
 
