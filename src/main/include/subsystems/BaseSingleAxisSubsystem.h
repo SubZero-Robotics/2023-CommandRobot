@@ -222,15 +222,23 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
 
     inline bool AtMax() {
         if (_maxLimitSwitch) {
-            if (_log)
-                Logging::logToStdOut(_prefix, "in at max lim switch",
-                                     Logging::Level::INFO);
             if (AtLimitSwitchMax()) {
+                if (_log)
+                Logging::logToStdOut(_prefix, "AT MAX SWITCH",
+                                     Logging::Level::INFO);
                 return true;
             }
         }
 
-        return GetCurrentPosition() >= _config.maxDistance;
+        if (GetCurrentPosition() >= _config.maxDistance) {
+            if (_log)
+                Logging::logToStdOut(_prefix, "AT MAX ENC",
+                                     Logging::Level::INFO);
+
+            return true;
+        }
+
+        return false;
     }
 
     inline bool AtLimitSwitchHome() const {
@@ -266,7 +274,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
                 Logging::Level::INFO);
         _isMovingToPosition = true;
         _targetPosition = position;
-        _controller.SetGoal(position);
+        _controller.SetGoal(Unit_t(position));
     }
 
     void Home() {
