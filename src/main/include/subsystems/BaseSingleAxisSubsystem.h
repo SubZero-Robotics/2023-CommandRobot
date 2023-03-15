@@ -72,8 +72,8 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      * rotational units
      * @param distancePerRevolution Distance the axis moves per revolution of
      * the motor
-     * @param motorMultiplier Set to 1.0 or -1.0 to reverse motor direction. Negative
-     * is always decreasing distance
+     * @param motorMultiplier Set to 1.0 or -1.0 to reverse motor direction.
+     * Negative is always decreasing distance
      */
     struct SingleAxisConfig {
         AxisType type;
@@ -101,8 +101,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
           _log(log),
           _prefix(prefix),
           _minLimitSwitch(minSwitch),
-          _maxLimitSwitch(maxSwitch)
-           {
+          _maxLimitSwitch(maxSwitch) {
         _config.defaultMovementSpeed =
             std::clamp(_config.defaultMovementSpeed, -1.0, 1.0);
     }
@@ -180,7 +179,8 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
     void UpdateMovement() {
         if (_isMovingToPosition) {
             double res = std::clamp(
-                _controller.Calculate(Unit_t(GetCurrentPosition()), Unit_t(_targetPosition)),
+                _controller.Calculate(Unit_t(GetCurrentPosition()),
+                                      Unit_t(_targetPosition)),
                 -_config.defaultMovementSpeed, _config.defaultMovementSpeed);
             if (_log)
                 Logging::logToStdOut(_prefix,
@@ -204,7 +204,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
                 ResetEncoder();
                 if (_log)
                     Logging::logToStdOut(_prefix, "AT HOME SWITCH",
-                                        Logging::Level::INFO);
+                                         Logging::Level::INFO);
                 return true;
             }
         }
@@ -261,17 +261,18 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
 
     void MoveToPosition(double position) {
         if (_log)
-            Logging::logToStdOut(
-                _prefix, "Moving to " + std::to_string(position),
-                Logging::Level::INFO);
+            Logging::logToStdOut(_prefix,
+                                 "Moving to " + std::to_string(position),
+                                 Logging::Level::INFO);
         _isMovingToPosition = true;
         _targetPosition = position;
         _controller.SetGoal(position);
     }
 
     void Home() {
-        if (_log) Logging::logToStdOut(_prefix, "Set homing to true",
-         Logging::Level::INFO);
+        if (_log)
+            Logging::logToStdOut(_prefix, "Set homing to true",
+                                 Logging::Level::INFO);
         _isHoming = true;
     }
 

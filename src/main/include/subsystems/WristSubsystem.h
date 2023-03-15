@@ -24,10 +24,11 @@ class WristSubsystem
                                      Logging::Level::INFO);
 
         if (_log)
-        Logging::logToStdOut(_prefix,
-                                     std::to_string(position) + "/" +
-                                     std::to_string(_config.maxDistance) + " deg",
-                                     Logging::Level::INFO);
+            Logging::logToStdOut(_prefix,
+                                 std::to_string(position) + "/" +
+                                     std::to_string(_config.maxDistance) +
+                                     " deg",
+                                 Logging::Level::INFO);
 
         return position;
     }
