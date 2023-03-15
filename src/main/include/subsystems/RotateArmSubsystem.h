@@ -10,7 +10,8 @@ class RotateArmSubsystem
                                      units::degree, units::degree_t> {
    public:
     RotateArmSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min, &max, "ROTATE ARM", false) {
+        : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min,
+                                  &max, "ROTATE ARM", false) {
         m_followRotationMotor.Follow(m_leadRotationMotor);
     }
 
@@ -50,7 +51,8 @@ class RotateArmSubsystem
         .minDistance = ArmConstants::kRotationHomeDegree,
         .maxDistance = ArmConstants::kRotationMaxDegree,
         .distancePerRevolution = 360_deg,
-        .motorDirection = BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
+        .motorDirection =
+            BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
         .minLimitSwitchPort = ArmConstants::kRotationLimitSwitchHomePort,
         .maxLimitSwitchPort = ArmConstants::kRotationLimitSwitchMaxPort,
         .defaultMovementSpeed = ArmConstants::kRotationHomingSpeed};

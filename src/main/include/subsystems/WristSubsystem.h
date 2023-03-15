@@ -10,7 +10,8 @@ class WristSubsystem
                                      units::degree, units::degree_t> {
    public:
     WristSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min, nullptr, "ROTATE WRIST", true) {}
+        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min,
+                                  nullptr, "ROTATE WRIST", true) {}
 
     void ResetEncoder() override {}
 
@@ -40,7 +41,8 @@ class WristSubsystem
         .minDistance = 0_deg,
         .maxDistance = ArmConstants::kWristDegreeLimit,
         .distancePerRevolution = 360_deg,
-        .motorDirection = BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
+        .motorDirection =
+            BaseSingleAxisSubsystem::ConfigConstants::MOTOR_DIRECTION_NORMAL,
         .minLimitSwitchPort = ArmConstants::kWristLimitSwitchPort,
         .maxLimitSwitchPort = BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
         .defaultMovementSpeed = ArmConstants::kWristHomingSpeed};

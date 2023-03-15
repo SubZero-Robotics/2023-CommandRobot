@@ -11,7 +11,8 @@ class ExtensionSubsystem
                                      units::meter_t> {
    public:
     ExtensionSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min, nullptr, "EXTEND ARM", false) {}
+        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
+                                  nullptr, "EXTEND ARM", false) {}
 
     void ResetEncoder() override { m_encoder.SetPosition(0); }
 
