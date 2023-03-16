@@ -83,8 +83,7 @@ void RobotContainer::ConfigureBindings() {
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
+    // m_Brake.Unset();
     return autos::Test(autoBuilder, m_drive);
     // TODO: return correct auto
-    m_Brake.Set();
-    return autos::StraightBack(m_drive);
 }

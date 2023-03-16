@@ -108,7 +108,7 @@ constexpr double kPulsesPerMeter = 1 / kEncoderDistancePerPulse;
 constexpr double kCurbRotation = 0.70;
 constexpr double kPrecisionModeYCoEff = .45;
 constexpr double kPrecisionModeXCoEff = .525;
-constexpr auto kMaxDriveVelocity = 3_mps;
+constexpr auto kMaxDriveVelocity = 4_mps;
 
 // These characterization values MUST be determined either experimentally or
 // theoretically for *your* robot's drive. The Robot Characterization
@@ -142,6 +142,10 @@ constexpr double kStabilizationI =
     0.36;  // Then tune this to stop the osolating .36
 constexpr double kStabilizationD =
     0.01;  // Finaly tune this to fix final error  .01
+
+constexpr double kAutoP = 0.12;
+constexpr double kAutoI = 0.36;
+constexpr double kAutoD = 0.01;
 
 constexpr double kTurnP =
     0.0396;  // tune This to start oscillating.  0.2 made 0.667s periods .12

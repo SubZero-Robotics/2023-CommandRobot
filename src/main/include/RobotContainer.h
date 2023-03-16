@@ -83,9 +83,11 @@ class RobotContainer {
         [this](frc::Pose2d initPose) { m_drive->ResetOdometry(initPose); },
         frc::RamseteController(),
         (frc::DifferentialDriveKinematics)DriveConstants::kDriveKinematics,
-        [this](units::meters_per_second_t left,
-               units::meters_per_second_t right) {
-            m_drive->TankDrive(left, right);
+        frc::SimpleMotorFeedforward<units::meters>(DriveConstants::ks, DriveConstants::kv),
+        [this]() {return m_drive->GetWheelSpeeds();},
+        frc::PIDController(kAutoP, kAutoI, kAutoD),
+        [this](units::volt_t left, units::volt_t right) {
+            m_drive->TankDriveVolts(left, right);
         },
         eventMap,
         {m_drive},
