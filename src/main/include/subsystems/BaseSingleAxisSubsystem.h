@@ -313,18 +313,19 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     }
 
     frc2::CommandPtr GetHomeCommand() override {
-        return
-            frc2::FunctionalCommand(
-                [this] { Home(); },
-                // Ignore the home encoder value since it starts at 0
-                [this] { RunMotorSpeed(-_config.defaultMovementSpeed, true); },
-                [this](bool interrupted) {
-                    StopMovement();
-                    ResetEncoder();
-                },
-                // Finish once limit switch is hit
-                [this] { return AtLimitSwitchHome(); }, {this})
-        .ToPtr();
+        return frc2::FunctionalCommand(
+                   [this] { Home(); },
+                   // Ignore the home encoder value since it starts at 0
+                   [this] {
+                       RunMotorSpeed(-_config.defaultMovementSpeed, true);
+                   },
+                   [this](bool interrupted) {
+                       StopMovement();
+                       ResetEncoder();
+                   },
+                   // Finish once limit switch is hit
+                   [this] { return AtLimitSwitchHome(); }, {this})
+            .ToPtr();
     }
 
     void Periodic() override { UpdateMovement(); }

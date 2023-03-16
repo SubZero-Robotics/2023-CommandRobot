@@ -8,7 +8,8 @@ void MultiAxisOrhestratorSubsystem::SetPoses(std::vector<MultiAxisPose> poses) {
     // TODO
 }
 
-bool MultiAxisOrhestratorSubsystem::GetIsMoving(ISingleAxisSubsystem* axis) const {
+bool MultiAxisOrhestratorSubsystem::GetIsMoving(
+    ISingleAxisSubsystem* axis) const {
     // TODO
     return false;
 }
