@@ -8,7 +8,6 @@
 #include <vector>
 
 #include "subsystems/BaseSingleAxisSubsystem.h"
-#include "utils/Logging.h"
 
 class MultiAxisOrhestratorSubsystem : public frc2::SubsystemBase {
    public:
@@ -38,11 +37,10 @@ class MultiAxisOrhestratorSubsystem : public frc2::SubsystemBase {
      */
     frc2::CommandPtr Home() {
         // ? Not sure if this is right...
-        return this->RunOnce([this] {
+        return 
             m_rotateArm->GetHomeCommand()
                 .AndThen(m_wrist->GetHomeCommand())
                 .AndThen(m_extension->GetHomeCommand());
-        });
     }
 
     void SetPoses(std::vector<MultiAxisPose> poses);
