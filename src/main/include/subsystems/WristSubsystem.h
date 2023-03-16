@@ -11,10 +11,8 @@ class WristSubsystem
    public:
     WristSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min,
-                                  nullptr, "WRIST", false) {
+                                  nullptr, "WRIST") {
         _config = m_config;
-        _config.motorMultiplier = 1.0;
-        _config.maxDistance = 160.0;
     }
 
     // Wrist has zero offset set in SparkMax

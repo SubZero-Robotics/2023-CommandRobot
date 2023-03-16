@@ -16,6 +16,7 @@
 
 #include <memory>
 
+#include "subsystems/ISingleAxisSubsystem.h"
 #include "Constants.h"
 #include "utils/Logging.h"
 
@@ -51,7 +52,7 @@
  * @tparam Unit Position unit (units::meters, etc.)
  */
 template <typename Motor, typename Encoder, typename Unit, typename Unit_t>
-class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
+class BaseSingleAxisSubsystem : public ISingleAxisSubsystem, public frc2::SubsystemBase {
    public:
     enum ConfigConstants {
         MOTOR_DIRECTION_NORMAL = 1,
@@ -114,17 +115,19 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      *
      * @param speed Percentage speed
      */
-    void RunMotorSpeed(double speed) {
+    void RunMotorSpeed(double speed, bool ignoreEncoder = false) override {
         if (_log)
             Logging::logToStdOut(
                 _prefix, "MUL IS " + std::to_string(_config.motorMultiplier),
                 Logging::Level::VERBOSE);
         speed *= _config.motorMultiplier;
-        // speed = std::clamp(speed, -1.0, 1.0);
+        speed = std::clamp(speed, -1.0, 1.0);
         if (_log)
             Logging::logToStdOut(_prefix, "SPEED IS " + std::to_string(speed),
                                  Logging::Level::VERBOSE);
-        if (AtHome()) {
+
+        bool homeState = ignoreEncoder ? AtLimitSwitchHome() : AtHome();
+        if (homeState) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME", Logging::Level::INFO);
             if (speed < 0) {
@@ -142,7 +145,9 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
                     Logging::Level::VERBOSE);
             _motor.Set(0);
             return;
-        } else if (AtMax()) {
+        }
+        
+        if (AtMax()) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT MAX", Logging::Level::INFO);
             if (speed > 0) {
@@ -160,16 +165,16 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
                     Logging::Level::VERBOSE);
             _motor.Set(0);
             return;
-        } else {
-            if (_log)
-                Logging::logToStdOut(
-                    _prefix, "SETTING SPEED TO: " + std::to_string(speed),
-                    Logging::Level::VERBOSE);
-            _motor.Set(speed);
         }
+
+        if (_log)
+            Logging::logToStdOut(
+                _prefix, "SETTING SPEED TO: " + std::to_string(speed),
+                Logging::Level::VERBOSE);
+        _motor.Set(speed);
     }
 
-    void RunMotorSpeedDefault(bool invertDirection = false) {
+    void RunMotorSpeedDefault(bool invertDirection = false) override {
         RunMotorSpeed(invertDirection ? -_config.defaultMovementSpeed
                                       : _config.defaultMovementSpeed);
     }
@@ -180,15 +185,15 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      *
      * @param speed Percentage speed
      */
-    void RunMotorExternal(double speed) {
-        // if (_isMovingToPosition) {
-        //     StopMovement();
-        // }
+    void RunMotorExternal(double speed) override {
+        if (_isMovingToPosition) {
+            StopMovement();
+        }
 
         RunMotorSpeed(speed);
     }
 
-    void UpdateMovement() {
+    void UpdateMovement() override {
         if (_isMovingToPosition) {
             double res = std::clamp(
                 _controller.Calculate(Unit_t(GetCurrentPosition()),
@@ -210,7 +215,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
 
     virtual double GetCurrentPosition() = 0;
 
-    bool AtHome() {
+    bool AtHome() override {
         if (_minLimitSwitch) {
             if (AtLimitSwitchHome()) {
                 ResetEncoder();
@@ -231,7 +236,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         return false;
     }
 
-    inline bool AtMax() {
+    inline bool AtMax() override {
         if (_maxLimitSwitch) {
             if (AtLimitSwitchMax()) {
                 if (_log)
@@ -252,7 +257,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         return false;
     }
 
-    inline bool AtLimitSwitchHome() const {
+    inline bool AtLimitSwitchHome() override {
         if (_minLimitSwitch) {
             auto state = !_minLimitSwitch->Get();
             if (_log)
@@ -265,7 +270,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         return false;
     }
 
-    inline bool AtLimitSwitchMax() const {
+    inline bool AtLimitSwitchMax() override {
         if (_maxLimitSwitch) {
             auto state = !_maxLimitSwitch->Get();
             if (_log)
@@ -278,7 +283,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         return false;
     }
 
-    void MoveToPosition(double position) {
+    void MoveToPosition(double position) override {
         if (_log)
             Logging::logToStdOut(_prefix,
                                  "Moving to " + std::to_string(position),
@@ -288,16 +293,16 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         _controller.SetGoal(Unit_t(position));
     }
 
-    void Home() {
+    void Home() override {
         if (_log)
             Logging::logToStdOut(_prefix, "Set homing to true",
                                  Logging::Level::INFO);
         _isHoming = true;
     }
 
-    inline bool GetIsMovingToPosition() const { return _isMovingToPosition; }
+    inline bool GetIsMovingToPosition() override { return _isMovingToPosition; }
 
-    inline void StopMovement() {
+    inline void StopMovement() override {
         if (_log)
             Logging::logToStdOut(_prefix, "Movement stopped",
                                  Logging::Level::INFO);
@@ -306,16 +311,18 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
         _motor.Set(0);
     }
 
-    frc2::CommandPtr GetHomeCommand() {
-        return frc2::FunctionalCommand(
+    frc2::CommandPtr&& GetHomeCommand() override {
+        return std::move(frc2::FunctionalCommand(
                    [this] { Home(); },
-                   [this] { RunMotorSpeed(-_config.defaultMovementSpeed); },
+                   // Ignore the home encoder value since it starts at 0
+                   [this] { RunMotorSpeed(-_config.defaultMovementSpeed, true); },
                    [this](bool interrupted) {
                        StopMovement();
                        ResetEncoder();
                    },
-                   [this] { return AtHome(); }, {this})
-            .ToPtr();
+                   // Finish once limit switch is hit
+                   [this] { return AtLimitSwitchHome(); }, {this}
+        ).ToPtr());
     }
 
     void Periodic() override { UpdateMovement(); }

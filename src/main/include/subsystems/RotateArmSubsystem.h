@@ -11,17 +11,17 @@ class RotateArmSubsystem
    public:
     RotateArmSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min,
-                                  &max, "ARM", false) {
+                                  &max, "ARM") {
         m_followRotationMotor.Follow(m_leadRotationMotor);
         _config = m_config;
-        _config.motorMultiplier = -1.0;
     }
 
     // Rotate arm has zero offset set in SparkMax
     void ResetEncoder() override {}
 
     double GetCurrentPosition() override {
-        auto position = m_enc.GetPosition() * 360.0;
+        // "Home" is at 60 deg relative to ground
+        auto position = m_enc.GetPosition() * 360.0 + _config.minDistance;
 
         Logging::logToSmartDashboard("ArmPosition",
                                      std::to_string(position) + " deg",
@@ -61,7 +61,7 @@ class RotateArmSubsystem
         .minDistance = ArmConstants::kRotationHomeDegree,
         .maxDistance = ArmConstants::kRotationMaxDegree,
         .distancePerRevolution = 360.0,
-        .motorMultiplier = 1.0,
+        .motorMultiplier = -1.0,
         .minLimitSwitchPort = ArmConstants::kRotationLimitSwitchHomePort,
         .maxLimitSwitchPort = ArmConstants::kRotationLimitSwitchMaxPort,
         .defaultMovementSpeed = ArmConstants::kRotationHomingSpeed};

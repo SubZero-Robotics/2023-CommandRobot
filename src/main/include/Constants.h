@@ -47,8 +47,8 @@ constexpr int kExtenderLimitSwitchPort = 2;
 // Arm Rotation Constants
 constexpr int kRotationLimitSwitchHomePort = 0;
 constexpr int kRotationLimitSwitchMaxPort = 1;
-constexpr double kRotationHomeDegree = 0;
-constexpr double kRotationMaxDegree = 65;
+constexpr double kRotationHomeDegree = 60;
+constexpr double kRotationMaxDegree = 125;
 constexpr int kArmSoftLimitForwardDegrees = 65;
 constexpr double kArmGearRatio = 197.14;
 

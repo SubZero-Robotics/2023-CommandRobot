@@ -14,8 +14,6 @@ class ExtensionSubsystem
         : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
                                   nullptr, "EXTEND", true) {
         _config = m_config;
-        _config.motorMultiplier = 1.0;
-        _config.distancePerRevolution = ArmConstants::kInPerRotation;
     }
 
     void ResetEncoder() override {
