@@ -29,8 +29,8 @@ RobotContainer::RobotContainer() {
     m_extender = std::make_unique<ExtensionSubsystem>();
     m_wrist = std::make_unique<WristSubsystem>();
 
-    m_multiAxis = std::make_unique<MultiAxisOrhestratorSubsystem>(
-        m_effector.get(), m_wrist.get(), m_extender.get());
+    // m_multiAxis = std::make_unique<MultiAxisOrhestratorSubsystem>(
+    //     m_effector.get(), m_wrist.get(), m_extender.get());
 
     // Configure the button bindings
     ConfigureBindings();
@@ -71,7 +71,7 @@ void RobotContainer::ConfigureBindings() {
 
     ArmXbox.B().OnTrue(std::move(m_wrist->GetHomeCommand()));
 
-    ArmXbox.A().OnTrue(std::move(m_multiAxis->Home()));
+    // ArmXbox.A().OnTrue(std::move(m_multiAxis->Home()));
 
     ArmXbox.LeftBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 

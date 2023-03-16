@@ -93,7 +93,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     };
 
     BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor,
-                            Encoder &encoder, rev::SparkMaxPIDController pid,
+                            Encoder &encoder, rev::SparkMaxPIDController &pid,
                             frc::DigitalInput *minSwitch,
                             frc::DigitalInput *maxSwitch, std::string prefix,
                             bool log = false)
@@ -336,7 +336,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
    protected:
     Motor &_motor;
     Encoder &_enc;
-    rev::SparkMaxPIDController _pid;
+    rev::SparkMaxPIDController &_pid;
     SingleAxisConfig _config;
     frc::ProfiledPIDController<Unit> _controller;
     bool _isHoming;
