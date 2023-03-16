@@ -140,8 +140,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                _motor.set(_pid.Calculate(GetCurrentPosition(), _targetPosition))
-                return;
+                _motor.set(_pid.Calculate(GetCurrentPosition(),
+                                          _targetPosition)) return;
             }
 
             if (_log)

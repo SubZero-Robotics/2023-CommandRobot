@@ -58,7 +58,9 @@ class RotateArmSubsystem
         CANSparkMaxConstants::kArmRotationFollowMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
 
-    frc2::PIDController pid{ArmConstants::kArmRotationSetP, ArmConstants::kArmRotationSetI, ArmConstants::kArmRotationSetD};
+    frc2::PIDController pid{ArmConstants::kArmRotationSetP,
+                            ArmConstants::kArmRotationSetI,
+                            ArmConstants::kArmRotationSetD};
 
     rev::SparkMaxAbsoluteEncoder m_enc =
         m_followRotationMotor.GetAbsoluteEncoder(
