@@ -2,8 +2,8 @@
 #define VL53L1X_SUBSYSTEM_H
 
 #include <frc/SPI.h>
-#include <frc2/command/SubsystemBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/SubsystemBase.h>
 
 #include <memory>
 
