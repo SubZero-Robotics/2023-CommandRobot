@@ -55,6 +55,8 @@ template <typename Motor, typename Encoder, typename Unit, typename Unit_t>
 class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                                 public frc2::SubsystemBase {
    public:
+   // Extract to constant
+   constexpr double MaxRPM = 4000;
     enum ConfigConstants {
         MOTOR_DIRECTION_NORMAL = 1,
         MOTOR_DIRECTION_REVERSED = -1,
@@ -90,11 +92,13 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     };
 
     BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor,
-                            Encoder &encoder, frc::DigitalInput *minSwitch,
+                            Encoder &encoder, rev::SparkMaxPIDController pid,
+                            frc::DigitalInput *minSwitch,
                             frc::DigitalInput *maxSwitch, std::string prefix,
                             bool log = false)
         : _motor(motor),
           _enc(encoder),
+          _pid(pid),
           _config(cfg),
           _controller(cfg.pid),
           _isHoming(false),
@@ -106,6 +110,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
           _maxLimitSwitch(maxSwitch) {
         _config.defaultMovementSpeed =
             std::clamp(_config.defaultMovementSpeed, -1.0, 1.0);
+        // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
+        _pid.SetOutputRange(-1.0, 1.0);
     }
 
     /**
@@ -123,6 +129,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                 Logging::Level::VERBOSE);
         speed *= _config.motorMultiplier;
         speed = std::clamp(speed, -1.0, 1.0);
+        speed *= MaxRPM;
         if (_log)
             Logging::logToStdOut(_prefix, "SPEED IS " + std::to_string(speed),
                                  Logging::Level::VERBOSE);
@@ -136,7 +143,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                _motor.Set(speed);
+                _pid.SetReference(speed, rev::CANSparkMax::ControlType::kVelocity);
                 return;
             }
 
@@ -156,7 +163,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                _motor.Set(speed);
+                _pid.SetReference(speed, rev::CANSparkMax::ControlType::kVelocity);
                 return;
             }
 
@@ -172,7 +179,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             Logging::logToStdOut(_prefix,
                                  "SETTING SPEED TO: " + std::to_string(speed),
                                  Logging::Level::VERBOSE);
-        _motor.Set(speed);
+        _pid.SetReference(speed, rev::CANSparkMax::ControlType::kVelocity);
     }
 
     void RunMotorSpeedDefault(bool invertDirection = false) override {
@@ -196,19 +203,10 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
 
     void UpdateMovement() override {
         if (_isMovingToPosition) {
-            double res = std::clamp(
-                _controller.Calculate(Unit_t(GetCurrentPosition()),
-                                      Unit_t(_targetPosition)),
-                -_config.defaultMovementSpeed, _config.defaultMovementSpeed);
-            if (_log)
-                Logging::logToStdOut(_prefix,
-                                     "PID returned " + std::to_string(res),
+            _pid.SetReference(_targetPosition, rev::CANSparkMax::ControlType::kPosition);
+                Logging::logToSmartDashboard("TargetPosition",
+                                     std::to_string(_targetPosition),
                                      Logging::Level::INFO);
-            if (!_controller.AtGoal()) {
-                RunMotorSpeed(res);
-            } else {
-                _isMovingToPosition = false;
-            }
         }
     }
 
@@ -291,7 +289,6 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                                  Logging::Level::INFO);
         _isMovingToPosition = true;
         _targetPosition = position;
-        _controller.SetGoal(Unit_t(position));
     }
 
     void Home() override {
@@ -335,6 +332,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
    protected:
     Motor &_motor;
     Encoder &_enc;
+    rev::SparkMaxPIDController _pid;
     SingleAxisConfig _config;
     frc::ProfiledPIDController<Unit> _controller;
     bool _isHoming;

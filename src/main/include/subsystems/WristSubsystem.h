@@ -10,16 +10,24 @@ class WristSubsystem
                                      units::degree, units::degree_t> {
    public:
     WristSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min,
+        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, m_pid, &min,
                                   nullptr, "WRIST") {
+        m_pid.SetFeedbackDevice(m_encoder);
+        // TODO
+        m_pid.SetP();
+        m_pid.SetI();
+        m_pid.SetD();
+        m_pid.SetIZone();
+        m_pid.SetFF();
         _config = m_config;
+        m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
     }
 
     // Wrist has zero offset set in SparkMax
     void ResetEncoder() override {}
 
     double GetCurrentPosition() override {
-        auto position = m_encoder.GetPosition() * 360.0;
+        auto position = m_encoder.GetPosition();
 
         Logging::logToSmartDashboard("WristPosition",
                                      std::to_string(position) + " deg",
@@ -38,6 +46,9 @@ class WristSubsystem
    private:
     rev::CANSparkMax m_wristMotor{CANSparkMaxConstants::kWristRotationMotorID,
                                   rev::CANSparkMax::MotorType::kBrushless};
+
+    rev::SparkMaxPIDController m_pid =
+        m_wristMotor.GetPIDController();
 
     rev::SparkMaxAbsoluteEncoder m_encoder = m_wristMotor.GetAbsoluteEncoder(
         rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);

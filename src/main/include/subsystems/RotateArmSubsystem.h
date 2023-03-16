@@ -10,10 +10,18 @@ class RotateArmSubsystem
                                      units::degree, units::degree_t> {
    public:
     RotateArmSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min,
+        : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, m_pid, &min,
                                   &max, "ARM") {
         m_followRotationMotor.Follow(m_leadRotationMotor);
+        m_pid.SetFeedbackDevice(m_enc);
+        // TODO
+        m_pid.SetP();
+        m_pid.SetI();
+        m_pid.SetD();
+        m_pid.SetIZone();
+        m_pid.SetFF();
         _config = m_config;
+        m_enc.SetPositionConversionFactor(_config.distancePerRevolution);
     }
 
     // Rotate arm has zero offset set in SparkMax
@@ -21,7 +29,7 @@ class RotateArmSubsystem
 
     double GetCurrentPosition() override {
         // "Home" is at 60 deg relative to ground
-        auto position = m_enc.GetPosition() * 360.0 + _config.minDistance;
+        auto position = m_enc.GetPosition() + _config.minDistance;
 
         Logging::logToSmartDashboard("ArmPosition",
                                      std::to_string(position) + " deg",
@@ -47,6 +55,9 @@ class RotateArmSubsystem
     rev::CANSparkMax m_followRotationMotor{
         CANSparkMaxConstants::kArmRotationFollowMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
+
+    rev::SparkMaxPIDController m_pid =
+        m_followRotationMotor.GetPIDController();
 
     rev::SparkMaxAbsoluteEncoder m_enc =
         m_followRotationMotor.GetAbsoluteEncoder(

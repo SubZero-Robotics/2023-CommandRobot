@@ -11,9 +11,17 @@ class ExtensionSubsystem
                                      units::meter_t> {
    public:
     ExtensionSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
+        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, m_pid, &min,
                                   nullptr, "EXTEND", true) {
+        m_pid.SetFeedbackDevice(m_encoder);
+        // TODO
+        m_pid.SetP();
+        m_pid.SetI();
+        m_pid.SetD();
+        m_pid.SetIZone();
+        m_pid.SetFF();
         _config = m_config;
+        m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
     }
 
     void ResetEncoder() override {
@@ -24,8 +32,7 @@ class ExtensionSubsystem
     }
 
     double GetCurrentPosition() override {
-        auto position =
-            m_encoder.GetPosition() * -_config.distancePerRevolution;
+        auto position = m_encoder.GetPosition();
 
         Logging::logToSmartDashboard("ExtensionPosition",
                                      std::to_string(position) + " in",
@@ -44,6 +51,9 @@ class ExtensionSubsystem
    private:
     rev::CANSparkMax m_extensionMotor{CANSparkMaxConstants::kExtensionMotorID,
                                       rev::CANSparkMax::MotorType::kBrushless};
+
+    rev::SparkMaxPIDController m_pid =
+        m_extensionMotor.GetPIDController();
 
     rev::SparkMaxRelativeEncoder m_encoder = m_extensionMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kHallSensor,
