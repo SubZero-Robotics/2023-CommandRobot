@@ -37,10 +37,9 @@ class MultiAxisOrhestratorSubsystem : public frc2::SubsystemBase {
      */
     frc2::CommandPtr Home() {
         // ? Not sure if this is right...
-        return 
-            m_rotateArm->GetHomeCommand()
-                .AndThen(m_wrist->GetHomeCommand())
-                .AndThen(m_extension->GetHomeCommand());
+        return m_rotateArm->GetHomeCommand()
+            .AndThen(m_wrist->GetHomeCommand())
+            .AndThen(m_extension->GetHomeCommand());
     }
 
     void SetPoses(std::vector<MultiAxisPose> poses);
