@@ -86,10 +86,10 @@ constexpr int kWristLimitSwitchPort = 3;
 constexpr int kWristGearRatio = 125;
 constexpr auto kWristDegreeLimit = 160.0;
 
-constexpr double kWristSetP = 6e-5;
-constexpr double kWristSetI = 1e-6;
+constexpr double kWristSetP = 0.03;
+constexpr double kWristSetI = 0.005;
 constexpr double kWristSetD = 0;
-constexpr double kWristSetIZone = 0;
+constexpr double kWristSetIZone = 0.01;
 constexpr double kWristSetFF = 0.000015;
 }  // namespace ArmConstants
 

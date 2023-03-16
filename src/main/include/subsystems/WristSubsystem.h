@@ -13,6 +13,8 @@ class WristSubsystem
         : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, m_pid,
                                   &min, nullptr, "WRIST", true) {
         m_pid.SetFeedbackDevice(m_encoder);
+        // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
+        m_pid.SetOutputRange(-1.0, 1.0);
         // TODO
         m_pid.SetP(ArmConstants::kWristSetP);
         m_pid.SetI(ArmConstants::kWristSetI);

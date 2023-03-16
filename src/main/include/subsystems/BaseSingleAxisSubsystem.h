@@ -93,7 +93,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     };
 
     BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor,
-                            Encoder &encoder, rev::SparkMaxPIDController &pid,
+                            Encoder &encoder, frc2::PIDController &pid,
                             frc::DigitalInput *minSwitch,
                             frc::DigitalInput *maxSwitch, std::string prefix,
                             bool log = false)
@@ -111,8 +111,6 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
           _maxLimitSwitch(maxSwitch) {
         _config.defaultMovementSpeed =
             std::clamp(_config.defaultMovementSpeed, -1.0, 1.0);
-        // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
-        _pid.SetOutputRange(-1.0, 1.0);
     }
 
     /**
@@ -130,7 +128,6 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                 Logging::Level::VERBOSE);
         speed *= _config.motorMultiplier;
         speed = std::clamp(speed, -1.0, 1.0);
-        speed *= ArmConstants::kMaxRPM;
         if (_log)
             Logging::logToStdOut(_prefix, "SPEED IS " + std::to_string(speed),
                                  Logging::Level::VERBOSE);
@@ -144,8 +141,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                _pid.SetReference(speed,
-                                  rev::CANSparkMax::ControlType::kVelocity);
+                _motor.set(_pid.Calculate(GetCurrentPosition(), _targetPosition))
                 return;
             }
 
@@ -336,7 +332,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
    protected:
     Motor &_motor;
     Encoder &_enc;
-    rev::SparkMaxPIDController &_pid;
+    frc2::PIDController &_pid;
     SingleAxisConfig _config;
     frc::ProfiledPIDController<Unit> _controller;
     bool _isHoming;

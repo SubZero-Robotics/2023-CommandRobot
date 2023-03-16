@@ -13,6 +13,8 @@ class RotateArmSubsystem
         : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, m_pid,
                                   &min, &max, "ARM") {
         m_followRotationMotor.Follow(m_leadRotationMotor);
+        // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
+        m_pid.SetOutputRange(-1.0, 1.0);
         m_pid.SetFeedbackDevice(m_enc);
         // TODO
         m_pid.SetP(ArmConstants::kArmRotationSetP);
@@ -56,7 +58,7 @@ class RotateArmSubsystem
         CANSparkMaxConstants::kArmRotationFollowMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
 
-    rev::SparkMaxPIDController m_pid = m_followRotationMotor.GetPIDController();
+    frc2::PIDController pid{ArmConstants::kArmRotationSetP, ArmConstants::kArmRotationSetI, ArmConstants::kArmRotationSetD};
 
     rev::SparkMaxAbsoluteEncoder m_enc =
         m_followRotationMotor.GetAbsoluteEncoder(
