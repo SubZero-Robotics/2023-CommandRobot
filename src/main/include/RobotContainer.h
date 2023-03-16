@@ -26,6 +26,7 @@
 #include "subsystems/RotateArmSubsystem.h"
 #include "subsystems/VL53L1XSubsystem.h"
 #include "subsystems/WristSubsystem.h"
+#include "subsystems/VL53L1XSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -64,6 +65,7 @@ class RobotContainer {
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
     IntakeSubsystem m_intake{&m_leds};
     WristSubsystem m_wrist;
+    VL53L1XController m_lidar{frc::SPI::Port::kOnboardCS0};
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
