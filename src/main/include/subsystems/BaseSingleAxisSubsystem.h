@@ -7,14 +7,14 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/FunctionalCommand.h>
 #include <frc2/command/SubsystemBase.h>
+#include <rev/CANSparkMax.h>
+#include <rev/SparkMaxPIDController.h>
 #include <units/acceleration.h>
 #include <units/angle.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
 #include <units/length.h>
 #include <units/velocity.h>
-#include <rev/SparkMaxPIDController.h>
-#include <rev/CANSparkMax.h>
 
 #include <memory>
 
@@ -57,7 +57,6 @@ template <typename Motor, typename Encoder, typename Unit, typename Unit_t>
 class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                                 public frc2::SubsystemBase {
    public:
-    
     enum ConfigConstants {
         MOTOR_DIRECTION_NORMAL = 1,
         MOTOR_DIRECTION_REVERSED = -1,
