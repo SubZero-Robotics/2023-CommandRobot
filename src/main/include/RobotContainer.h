@@ -64,6 +64,7 @@ class RobotContainer {
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
     IntakeSubsystem m_intake{&m_leds};
     std::unique_ptr<WristSubsystem> m_wrist;
+    std::unique_ptr<MultiAxisOrhestratorSubsystem> m_multiAxis;
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.

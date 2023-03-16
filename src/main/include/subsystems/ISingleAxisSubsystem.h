@@ -21,7 +21,7 @@ class ISingleAxisSubsystem {
     virtual void Home() = 0;
     virtual bool GetIsMovingToPosition() = 0;
     virtual void StopMovement() = 0;
-    virtual frc2::CommandPtr&& GetHomeCommand() = 0;
+    virtual frc2::CommandPtr GetHomeCommand() = 0;
 };
 
 #endif

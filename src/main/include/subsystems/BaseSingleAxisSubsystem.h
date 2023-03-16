@@ -312,8 +312,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
         _motor.Set(0);
     }
 
-    frc2::CommandPtr &&GetHomeCommand() override {
-        return std::move(
+    frc2::CommandPtr GetHomeCommand() override {
+        return
             frc2::FunctionalCommand(
                 [this] { Home(); },
                 // Ignore the home encoder value since it starts at 0
@@ -324,7 +324,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                 },
                 // Finish once limit switch is hit
                 [this] { return AtLimitSwitchHome(); }, {this})
-                .ToPtr());
+        .ToPtr();
     }
 
     void Periodic() override { UpdateMovement(); }
