@@ -13,6 +13,8 @@
 #include <units/angular_velocity.h>
 #include <units/length.h>
 #include <units/velocity.h>
+#include <rev/SparkMaxPIDController.h>
+#include <rev/CANSparkMax.h>
 
 #include <memory>
 
@@ -55,8 +57,7 @@ template <typename Motor, typename Encoder, typename Unit, typename Unit_t>
 class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                                 public frc2::SubsystemBase {
    public:
-    // Extract to constant
-    constexpr double MaxRPM = 4000;
+    
     enum ConfigConstants {
         MOTOR_DIRECTION_NORMAL = 1,
         MOTOR_DIRECTION_REVERSED = -1,
@@ -129,7 +130,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                 Logging::Level::VERBOSE);
         speed *= _config.motorMultiplier;
         speed = std::clamp(speed, -1.0, 1.0);
-        speed *= MaxRPM;
+        speed *= ArmConstants::kMaxRPM;
         if (_log)
             Logging::logToStdOut(_prefix, "SPEED IS " + std::to_string(speed),
                                  Logging::Level::VERBOSE);

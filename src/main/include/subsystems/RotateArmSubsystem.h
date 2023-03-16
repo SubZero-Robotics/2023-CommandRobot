@@ -15,11 +15,11 @@ class RotateArmSubsystem
         m_followRotationMotor.Follow(m_leadRotationMotor);
         m_pid.SetFeedbackDevice(m_enc);
         // TODO
-        m_pid.SetP();
-        m_pid.SetI();
-        m_pid.SetD();
-        m_pid.SetIZone();
-        m_pid.SetFF();
+        m_pid.SetP(ArmConstants::kArmRotationSetP);
+        m_pid.SetI(ArmConstants::kArmRotationSetI);
+        m_pid.SetD(ArmConstants::kArmRotationSetD);
+        m_pid.SetIZone(ArmConstants::kArmRotationSetIZone);
+        m_pid.SetFF(ArmConstants::kArmRotationSetFF);
         _config = m_config;
         m_enc.SetPositionConversionFactor(_config.distancePerRevolution);
     }

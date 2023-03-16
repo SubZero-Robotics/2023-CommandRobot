@@ -12,14 +12,14 @@ class ExtensionSubsystem
    public:
     ExtensionSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, m_pid,
-                                  &min, nullptr, "EXTEND", true) {
+                                  &min, nullptr, "EXTEND") {
         m_pid.SetFeedbackDevice(m_encoder);
         // TODO
-        m_pid.SetP();
-        m_pid.SetI();
-        m_pid.SetD();
-        m_pid.SetIZone();
-        m_pid.SetFF();
+        m_pid.SetP(ArmConstants::kExtenderSetP);
+        m_pid.SetI(ArmConstants::kExtenderSetI);
+        m_pid.SetD(ArmConstants::kExtenderSetD);
+        m_pid.SetIZone(ArmConstants::kExtenderSetIZone);
+        m_pid.SetFF(ArmConstants::kExtenderSetFF);
         _config = m_config;
         m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
     }

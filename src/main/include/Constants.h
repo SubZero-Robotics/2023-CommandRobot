@@ -38,11 +38,18 @@
 // Arm Extension Constants
 
 namespace ArmConstants {
+constexpr double kMaxRPM = 4000;
 // Extension Constants
 constexpr double kExtensionGearRatio = 36;
 constexpr double kInPerRotation = 3.5 / kExtensionGearRatio;
 constexpr double kMaxArmDistance = 35;
 constexpr int kExtenderLimitSwitchPort = 2;
+
+constexpr double kExtenderSetP = 6e-5;
+constexpr double kExtenderSetI = 1e-6;
+constexpr double kExtenderSetD = 0;
+constexpr double kExtenderSetIZone = 0;
+constexpr double kExtenderSetFF = 0.000015;
 
 // Arm Rotation Constants
 constexpr int kRotationLimitSwitchHomePort = 0;
@@ -51,6 +58,12 @@ constexpr double kRotationHomeDegree = 60;
 constexpr double kRotationMaxDegree = 125;
 constexpr int kArmSoftLimitForwardDegrees = 65;
 constexpr double kArmGearRatio = 197.14;
+
+constexpr double kArmRotationSetP = 6e-5;
+constexpr double kArmRotationSetI = 1e-6;
+constexpr double kArmRotationSetD = 0;
+constexpr double kArmRotationSetIZone = 0;
+constexpr double kArmRotationSetFF = 0.000015;
 
 // Motor Constants
 constexpr int kTicksPerMotorRotation = 42;
@@ -72,6 +85,12 @@ constexpr double kIntakeSpeed = 1.0;
 constexpr int kWristLimitSwitchPort = 3;
 constexpr int kWristGearRatio = 125;
 constexpr auto kWristDegreeLimit = 160.0;
+
+constexpr double kWristSetP = 6e-5;
+constexpr double kWristSetI = 1e-6;
+constexpr double kWristSetD = 0;
+constexpr double kWristSetIZone = 0;
+constexpr double kWristSetFF = 0.000015;
 }  // namespace ArmConstants
 
 // Motor IDs

@@ -11,14 +11,14 @@ class WristSubsystem
    public:
     WristSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, m_pid,
-                                  &min, nullptr, "WRIST") {
+                                  &min, nullptr, "WRIST", true) {
         m_pid.SetFeedbackDevice(m_encoder);
         // TODO
-        m_pid.SetP();
-        m_pid.SetI();
-        m_pid.SetD();
-        m_pid.SetIZone();
-        m_pid.SetFF();
+        m_pid.SetP(ArmConstants::kWristSetP);
+        m_pid.SetI(ArmConstants::kWristSetI);
+        m_pid.SetD(ArmConstants::kWristSetD);
+        m_pid.SetIZone(ArmConstants::kWristSetIZone);
+        m_pid.SetFF(ArmConstants::kWristSetFF);
         _config = m_config;
         m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
     }
