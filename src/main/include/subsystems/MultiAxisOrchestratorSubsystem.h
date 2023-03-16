@@ -13,19 +13,18 @@
 class MultiAxisOrhestratorSubsystem : public frc2::SubsystemBase {
    public:
     struct MultiAxisPose {
-        ISingleAxisSubsystem *axis;
+        ISingleAxisSubsystem* axis;
         double position;
     };
 
     /**
-     * @param axes List of axes to control. Order when homing depends on order within list
-     * (Axis 1 -> Axis 2 -> ... -> Axis n)
+     * @param axes List of axes to control. Order when homing depends on order
+     * within list (Axis 1 -> Axis 2 -> ... -> Axis n)
      */
-    MultiAxisOrhestratorSubsystem(ISingleAxisSubsystem* rotateArm, ISingleAxisSubsystem* wrist, ISingleAxisSubsystem* extension) :
-        m_rotateArm(rotateArm),
-        m_wrist(wrist),
-        m_extension(extension) {
-    }
+    MultiAxisOrhestratorSubsystem(ISingleAxisSubsystem* rotateArm,
+                                  ISingleAxisSubsystem* wrist,
+                                  ISingleAxisSubsystem* extension)
+        : m_rotateArm(rotateArm), m_wrist(wrist), m_extension(extension) {}
 
     /**
      * @brief Stop movement on all axes
@@ -35,32 +34,32 @@ class MultiAxisOrhestratorSubsystem : public frc2::SubsystemBase {
 
     /**
      * @brief Homes all axes in order
-     * 
+     *
      */
     frc2::CommandPtr Home() {
         // ? Not sure if this is right...
-        return this->RunOnce(
-            [this] {
-                m_rotateArm->GetHomeCommand().AndThen(m_wrist->GetHomeCommand()).AndThen(m_extension->GetHomeCommand());
-            }
-        );
+        return this->RunOnce([this] {
+            m_rotateArm->GetHomeCommand()
+                .AndThen(m_wrist->GetHomeCommand())
+                .AndThen(m_extension->GetHomeCommand());
+        });
     }
 
     void SetPoses(std::vector<MultiAxisPose> poses);
 
     /**
      * @brief True if axis is moving
-     * 
+     *
      * @return bool
      */
     bool GetIsMoving(ISingleAxisSubsystem* axis) const;
 
     void Periodic() override;
 
-    private:
-        ISingleAxisSubsystem* m_rotateArm;
-        ISingleAxisSubsystem* m_wrist;
-        ISingleAxisSubsystem* m_extension;
+   private:
+    ISingleAxisSubsystem* m_rotateArm;
+    ISingleAxisSubsystem* m_wrist;
+    ISingleAxisSubsystem* m_extension;
 };
 
 #endif
