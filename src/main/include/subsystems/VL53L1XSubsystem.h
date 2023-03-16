@@ -24,12 +24,12 @@ class VL53L1XController : frc2::SubsystemBase {
     }
 
     inline double GetDistance() const {
-        return _currentDistance;
+        return (double)_currentDistance;
     } 
 
    private:
     std::unique_ptr<frc::SPI> _spi;
-    double _currentDistance;
+    uint16_t _currentDistance;
 };
 
 #endif

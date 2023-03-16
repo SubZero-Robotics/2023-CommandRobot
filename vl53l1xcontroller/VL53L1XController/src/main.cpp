@@ -9,7 +9,7 @@
 constexpr uint8_t TRANSACTION_CONTINUE = 0;
 constexpr uint8_t TRANSACTION_START = 1;
 
-static volatile double distance = 0.0;
+static volatile uint16_t distance = 0;
 static volatile bool sendDataFlag = false;
 static volatile uint8_t curBytePos = 0;
 
@@ -22,7 +22,7 @@ ISR(SPI_STC_vect) {
     // master starting a new transaction; reset to first byte
     if (rec == TRANSACTION_START) {
         sendDataFlag = true;
-        curBytePos = 0;
+        curBytePos = 1;
         SPDR = *((uint8_t*)(&distance));
         return;
     }
@@ -35,7 +35,7 @@ ISR(SPI_STC_vect) {
     // send the next byte
     SPDR = *((uint8_t*)(&distance + curBytePos));
     // stop after 8 bytes
-    if (++curBytePos >= sizeof(double)) {
+    if (++curBytePos >= sizeof(uint16_t)) {
         curBytePos = 0;
         sendDataFlag = false;
     }
@@ -93,7 +93,7 @@ void loop() {
     if (sensor.ranging_data.range_status == VL53L1X::RangeValid) {
         auto range = sensor.ranging_data.range_mm;
         noInterrupts();
-        distance = (double)range;
+        distance = range;
         interrupts();
     }
 }
