@@ -55,8 +55,8 @@ template <typename Motor, typename Encoder, typename Unit, typename Unit_t>
 class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                                 public frc2::SubsystemBase {
    public:
-   // Extract to constant
-   constexpr double MaxRPM = 4000;
+    // Extract to constant
+    constexpr double MaxRPM = 4000;
     enum ConfigConstants {
         MOTOR_DIRECTION_NORMAL = 1,
         MOTOR_DIRECTION_REVERSED = -1,
@@ -143,7 +143,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                _pid.SetReference(speed, rev::CANSparkMax::ControlType::kVelocity);
+                _pid.SetReference(speed,
+                                  rev::CANSparkMax::ControlType::kVelocity);
                 return;
             }
 
@@ -163,7 +164,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                _pid.SetReference(speed, rev::CANSparkMax::ControlType::kVelocity);
+                _pid.SetReference(speed,
+                                  rev::CANSparkMax::ControlType::kVelocity);
                 return;
             }
 
@@ -203,10 +205,11 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
 
     void UpdateMovement() override {
         if (_isMovingToPosition) {
-            _pid.SetReference(_targetPosition, rev::CANSparkMax::ControlType::kPosition);
-                Logging::logToSmartDashboard("TargetPosition",
-                                     std::to_string(_targetPosition),
-                                     Logging::Level::INFO);
+            _pid.SetReference(_targetPosition,
+                              rev::CANSparkMax::ControlType::kPosition);
+            Logging::logToSmartDashboard("TargetPosition",
+                                         std::to_string(_targetPosition),
+                                         Logging::Level::INFO);
         }
     }
 

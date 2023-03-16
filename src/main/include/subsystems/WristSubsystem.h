@@ -10,8 +10,8 @@ class WristSubsystem
                                      units::degree, units::degree_t> {
    public:
     WristSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, m_pid, &min,
-                                  nullptr, "WRIST") {
+        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, m_pid,
+                                  &min, nullptr, "WRIST") {
         m_pid.SetFeedbackDevice(m_encoder);
         // TODO
         m_pid.SetP();
@@ -47,8 +47,7 @@ class WristSubsystem
     rev::CANSparkMax m_wristMotor{CANSparkMaxConstants::kWristRotationMotorID,
                                   rev::CANSparkMax::MotorType::kBrushless};
 
-    rev::SparkMaxPIDController m_pid =
-        m_wristMotor.GetPIDController();
+    rev::SparkMaxPIDController m_pid = m_wristMotor.GetPIDController();
 
     rev::SparkMaxAbsoluteEncoder m_encoder = m_wristMotor.GetAbsoluteEncoder(
         rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);

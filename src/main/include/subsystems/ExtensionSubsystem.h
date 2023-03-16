@@ -11,8 +11,8 @@ class ExtensionSubsystem
                                      units::meter_t> {
    public:
     ExtensionSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, m_pid, &min,
-                                  nullptr, "EXTEND", true) {
+        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, m_pid,
+                                  &min, nullptr, "EXTEND", true) {
         m_pid.SetFeedbackDevice(m_encoder);
         // TODO
         m_pid.SetP();
@@ -52,8 +52,7 @@ class ExtensionSubsystem
     rev::CANSparkMax m_extensionMotor{CANSparkMaxConstants::kExtensionMotorID,
                                       rev::CANSparkMax::MotorType::kBrushless};
 
-    rev::SparkMaxPIDController m_pid =
-        m_extensionMotor.GetPIDController();
+    rev::SparkMaxPIDController m_pid = m_extensionMotor.GetPIDController();
 
     rev::SparkMaxRelativeEncoder m_encoder = m_extensionMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kHallSensor,

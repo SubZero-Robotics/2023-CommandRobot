@@ -10,8 +10,8 @@ class RotateArmSubsystem
                                      units::degree, units::degree_t> {
    public:
     RotateArmSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, m_pid, &min,
-                                  &max, "ARM") {
+        : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, m_pid,
+                                  &min, &max, "ARM") {
         m_followRotationMotor.Follow(m_leadRotationMotor);
         m_pid.SetFeedbackDevice(m_enc);
         // TODO
@@ -56,8 +56,7 @@ class RotateArmSubsystem
         CANSparkMaxConstants::kArmRotationFollowMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
 
-    rev::SparkMaxPIDController m_pid =
-        m_followRotationMotor.GetPIDController();
+    rev::SparkMaxPIDController m_pid = m_followRotationMotor.GetPIDController();
 
     rev::SparkMaxAbsoluteEncoder m_enc =
         m_followRotationMotor.GetAbsoluteEncoder(
