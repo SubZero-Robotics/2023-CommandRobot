@@ -19,14 +19,14 @@ class VL53L1XController : frc2::SubsystemBase {
 
     void Periodic() override {
         // Our "send" buffer
-        uint8_t sendbuf[8] = {1, 0, 0, 0, 0, 0, 0, 0};
+        uint8_t sendbuf[2] = {1, 0};
         // Our empty receive buffer
-        uint8_t receivebuf[8];
+        uint8_t receivebuf[2];
         // Perform the SPI transaction
-        _spi->Transaction(sendbuf, receivebuf, sizeof(double));
+        _spi->Transaction(sendbuf, receivebuf, sizeof(uint16_t));
         // memcpy the resulting receive buffer into _currentDistance
-        memcpy(&_currentDistance, receivebuf, sizeof(double));
-        auto vec = std::vector<uint8_t>(receivebuf, receivebuf + 8);
+        memcpy(&_currentDistance, receivebuf, sizeof(uint16_t));
+        auto vec = std::vector<uint8_t>(receivebuf, receivebuf + 2);
         frc::SmartDashboard::PutRaw("Lidar Data", vec);
         frc::SmartDashboard::PutNumber("Lidar MM", GetDistance());
     }
