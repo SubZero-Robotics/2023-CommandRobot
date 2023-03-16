@@ -10,8 +10,8 @@ class WristSubsystem
                                      units::degree, units::degree_t> {
    public:
     WristSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder,
-                                  &min, nullptr, "WRIST", true) {
+        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min,
+                                  nullptr, "WRIST", true) {
         _config = m_config;
         m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
     }

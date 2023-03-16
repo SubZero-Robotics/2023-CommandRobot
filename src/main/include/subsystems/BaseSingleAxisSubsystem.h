@@ -92,8 +92,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     };
 
     BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor,
-                            Encoder &encoder,
-                            frc::DigitalInput *minSwitch,
+                            Encoder &encoder, frc::DigitalInput *minSwitch,
                             frc::DigitalInput *maxSwitch, std::string prefix,
                             bool log = false)
         : _motor(motor),
@@ -139,8 +138,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                _motor.set(_controller.Calculate(GetCurrentPosition(), _targetPosition))
-                return;
+                _motor.set(_controller.Calculate(GetCurrentPosition(),
+                                                 _targetPosition)) return;
             }
 
             if (_log)

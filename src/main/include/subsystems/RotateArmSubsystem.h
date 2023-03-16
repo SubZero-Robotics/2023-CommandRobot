@@ -10,8 +10,8 @@ class RotateArmSubsystem
                                      units::degree, units::degree_t> {
    public:
     RotateArmSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc,
-                                  &min, &max, "ARM") {
+        : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min,
+                                  &max, "ARM") {
         m_followRotationMotor.Follow(m_leadRotationMotor);
         // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
         _config = m_config;
@@ -49,7 +49,6 @@ class RotateArmSubsystem
     rev::CANSparkMax m_followRotationMotor{
         CANSparkMaxConstants::kArmRotationFollowMotorID,
         rev::CANSparkMax::MotorType::kBrushless};
-
 
     rev::SparkMaxAbsoluteEncoder m_enc =
         m_followRotationMotor.GetAbsoluteEncoder(
