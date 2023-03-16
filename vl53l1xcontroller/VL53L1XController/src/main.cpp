@@ -28,7 +28,7 @@ ISR(SPI_STC_vect) {
     }
 
     if (!sendDataFlag) {
-        SPDR = 0;   // send nothing if inactive
+        SPDR = 0;  // send nothing if inactive
         return;
     }
 

@@ -2,6 +2,7 @@
 #define VL53L1X_SUBSYSTEM_H
 
 #include <frc/SPI.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/SubsystemBase.h>
 
 #include <memory>
@@ -18,9 +19,16 @@ class VL53L1XController : frc2::SubsystemBase {
 
     void Periodic() override {
         // Our "send" buffer
+        uint8_t sendbuf[8] = {1, 0, 0, 0, 0, 0, 0, 0};
         // Our empty receive buffer
+        uint8_t receivebuf[8];
         // Perform the SPI transaction
+        _spi->Transaction(sendbuf, receivebuf, sizeof(double));
         // memcpy the resulting receive buffer into _currentDistance
+        memcpy(&_currentDistance, receivebuf, sizeof(double));
+        auto vec = std::vector<uint8_t>(receivebuf, receivebuf + 8);
+        frc::SmartDashboard::PutRaw("Lidar Data", vec);
+        frc::SmartDashboard::PutNumber("Lidar MM", GetDistance());
     }
 
     inline double GetDistance() const {
