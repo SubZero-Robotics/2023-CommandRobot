@@ -10,17 +10,8 @@ class WristSubsystem
                                      units::degree, units::degree_t> {
    public:
     WristSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, m_pid,
+        : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder,
                                   &min, nullptr, "WRIST", true) {
-        m_pid.SetFeedbackDevice(m_encoder);
-        // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
-        m_pid.SetOutputRange(-1.0, 1.0);
-        // TODO
-        m_pid.SetP(ArmConstants::kWristSetP);
-        m_pid.SetI(ArmConstants::kWristSetI);
-        m_pid.SetD(ArmConstants::kWristSetD);
-        m_pid.SetIZone(ArmConstants::kWristSetIZone);
-        m_pid.SetFF(ArmConstants::kWristSetFF);
         _config = m_config;
         m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
     }
@@ -48,8 +39,6 @@ class WristSubsystem
    private:
     rev::CANSparkMax m_wristMotor{CANSparkMaxConstants::kWristRotationMotorID,
                                   rev::CANSparkMax::MotorType::kBrushless};
-
-    rev::SparkMaxPIDController m_pid = m_wristMotor.GetPIDController();
 
     rev::SparkMaxAbsoluteEncoder m_encoder = m_wristMotor.GetAbsoluteEncoder(
         rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);

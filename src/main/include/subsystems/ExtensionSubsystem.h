@@ -11,17 +11,9 @@ class ExtensionSubsystem
                                      units::meter_t> {
    public:
     ExtensionSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, m_pid,
+        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder,
                                   &min, nullptr, "EXTEND") {
-        m_pid.SetFeedbackDevice(m_encoder);
-        // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
-        m_pid.SetOutputRange(-1.0, 1.0);
-        // TODO
-        m_pid.SetP(ArmConstants::kExtenderSetP);
-        m_pid.SetI(ArmConstants::kExtenderSetI);
-        m_pid.SetD(ArmConstants::kExtenderSetD);
-        m_pid.SetIZone(ArmConstants::kExtenderSetIZone);
-        m_pid.SetFF(ArmConstants::kExtenderSetFF);
+        
         _config = m_config;
         m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
     }
@@ -54,7 +46,6 @@ class ExtensionSubsystem
     rev::CANSparkMax m_extensionMotor{CANSparkMaxConstants::kExtensionMotorID,
                                       rev::CANSparkMax::MotorType::kBrushless};
 
-    rev::SparkMaxPIDController m_pid = m_extensionMotor.GetPIDController();
 
     rev::SparkMaxRelativeEncoder m_encoder = m_extensionMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kHallSensor,

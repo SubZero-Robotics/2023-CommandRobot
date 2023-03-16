@@ -92,13 +92,12 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     };
 
     BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor,
-                            Encoder &encoder, frc2::PIDController &pid,
+                            Encoder &encoder,
                             frc::DigitalInput *minSwitch,
                             frc::DigitalInput *maxSwitch, std::string prefix,
                             bool log = false)
         : _motor(motor),
           _enc(encoder),
-          _pid(pid),
           _config(cfg),
           _controller(cfg.pid),
           _isHoming(false),
@@ -140,7 +139,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                _motor.set(_pid.Calculate(GetCurrentPosition(), _targetPosition))
+                _motor.set(_controller.Calculate(GetCurrentPosition(), _targetPosition))
                 return;
             }
 
@@ -160,8 +159,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                _pid.SetReference(speed,
-                                  rev::CANSparkMax::ControlType::kVelocity);
+
                 return;
             }
 
@@ -177,7 +175,6 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             Logging::logToStdOut(_prefix,
                                  "SETTING SPEED TO: " + std::to_string(speed),
                                  Logging::Level::VERBOSE);
-        _pid.SetReference(speed, rev::CANSparkMax::ControlType::kVelocity);
     }
 
     void RunMotorSpeedDefault(bool invertDirection = false) override {
@@ -201,8 +198,6 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
 
     void UpdateMovement() override {
         if (_isMovingToPosition) {
-            _pid.SetReference(_targetPosition,
-                              rev::CANSparkMax::ControlType::kPosition);
             Logging::logToSmartDashboard("TargetPosition",
                                          std::to_string(_targetPosition),
                                          Logging::Level::INFO);
@@ -331,7 +326,6 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
    protected:
     Motor &_motor;
     Encoder &_enc;
-    frc2::PIDController &_pid;
     SingleAxisConfig _config;
     frc::ProfiledPIDController<Unit> _controller;
     bool _isHoming;
