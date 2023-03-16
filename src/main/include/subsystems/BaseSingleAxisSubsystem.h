@@ -16,8 +16,8 @@
 
 #include <memory>
 
-#include "subsystems/ISingleAxisSubsystem.h"
 #include "Constants.h"
+#include "subsystems/ISingleAxisSubsystem.h"
 #include "utils/Logging.h"
 
 /**
@@ -52,7 +52,8 @@
  * @tparam Unit Position unit (units::meters, etc.)
  */
 template <typename Motor, typename Encoder, typename Unit, typename Unit_t>
-class BaseSingleAxisSubsystem : public ISingleAxisSubsystem, public frc2::SubsystemBase {
+class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
+                                public frc2::SubsystemBase {
    public:
     enum ConfigConstants {
         MOTOR_DIRECTION_NORMAL = 1,
@@ -146,7 +147,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem, public frc2::Subsys
             _motor.Set(0);
             return;
         }
-        
+
         if (AtMax()) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT MAX", Logging::Level::INFO);
@@ -168,9 +169,9 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem, public frc2::Subsys
         }
 
         if (_log)
-            Logging::logToStdOut(
-                _prefix, "SETTING SPEED TO: " + std::to_string(speed),
-                Logging::Level::VERBOSE);
+            Logging::logToStdOut(_prefix,
+                                 "SETTING SPEED TO: " + std::to_string(speed),
+                                 Logging::Level::VERBOSE);
         _motor.Set(speed);
     }
 
@@ -311,18 +312,19 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem, public frc2::Subsys
         _motor.Set(0);
     }
 
-    frc2::CommandPtr&& GetHomeCommand() override {
-        return std::move(frc2::FunctionalCommand(
-                   [this] { Home(); },
-                   // Ignore the home encoder value since it starts at 0
-                   [this] { RunMotorSpeed(-_config.defaultMovementSpeed, true); },
-                   [this](bool interrupted) {
-                       StopMovement();
-                       ResetEncoder();
-                   },
-                   // Finish once limit switch is hit
-                   [this] { return AtLimitSwitchHome(); }, {this}
-        ).ToPtr());
+    frc2::CommandPtr &&GetHomeCommand() override {
+        return std::move(
+            frc2::FunctionalCommand(
+                [this] { Home(); },
+                // Ignore the home encoder value since it starts at 0
+                [this] { RunMotorSpeed(-_config.defaultMovementSpeed, true); },
+                [this](bool interrupted) {
+                    StopMovement();
+                    ResetEncoder();
+                },
+                // Finish once limit switch is hit
+                [this] { return AtLimitSwitchHome(); }, {this})
+                .ToPtr());
     }
 
     void Periodic() override { UpdateMovement(); }
