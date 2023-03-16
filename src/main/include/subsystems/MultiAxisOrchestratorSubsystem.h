@@ -36,6 +36,7 @@ class MultiAxisOrhestratorSubsystem : public frc2::SubsystemBase {
          * 
          */
         void Home() {
+            // * I tried to get too fancy here :(
             if (!m_axes.empty()) {
                 auto commandChain = m_axes.front()->GetHomeCommand();
                 for (auto it = m_axes.begin() + 1; it != m_axes.end(); it++) {
