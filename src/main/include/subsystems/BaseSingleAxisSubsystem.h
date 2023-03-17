@@ -213,11 +213,19 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
 
     void UpdateMovement() override {
         if (_isMovingToPosition) {
-            if (_log) Logging::logToStdOut(_prefix, "Target Position: " + std::to_string(Unit_t(_targetPosition).value()), Logging::Level::INFO);
+            if (_log)
+                Logging::logToStdOut(
+                    _prefix,
+                    "Target Position: " +
+                        std::to_string(Unit_t(_targetPosition).value()),
+                    Logging::Level::INFO);
             auto res = _controller.Calculate(Unit_t(GetCurrentPosition()),
                                              Unit_t(_targetPosition));
             auto clampedRes = std::clamp(res, -1.0, 1.0);
-            if (_log) Logging::logToStdOut(_prefix, "Clamped Res: " + std::to_string(res), Logging::Level::INFO);
+            if (_log)
+                Logging::logToStdOut(_prefix,
+                                     "Clamped Res: " + std::to_string(res),
+                                     Logging::Level::INFO);
             Logging::logToSmartDashboard(_prefix + " TargetPosition",
                                          std::to_string(_targetPosition),
                                          Logging::Level::INFO);
@@ -341,10 +349,11 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             .ToPtr();
     }
 
-    void Periodic() override { 
-        // auto res = frc::SmartDashboard::GetNumber(_prefix + " Position Set", 0);
-        // if (_log)
-        //     Logging::logToStdOut(_prefix, "Shuffleboard Position" + std::to_string(res),
+    void Periodic() override {
+        // auto res = frc::SmartDashboard::GetNumber(_prefix + " Position Set",
+        // 0); if (_log)
+        //     Logging::logToStdOut(_prefix, "Shuffleboard Position" +
+        //     std::to_string(res),
         //                          Logging::Level::INFO);
         // MoveToPosition(res);
         UpdateMovement();

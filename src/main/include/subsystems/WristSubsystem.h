@@ -46,7 +46,8 @@ class WristSubsystem
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Rotational,
         .pid = frc::ProfiledPIDController<units::degree>(
-            ArmConstants::kWristSetP, ArmConstants::kWristSetI, ArmConstants::kWristSetD,
+            ArmConstants::kWristSetP, ArmConstants::kWristSetI,
+            ArmConstants::kWristSetD,
             frc::TrapezoidProfile<units::degree>::Constraints(
                 1.75_deg_per_s, 0.75_deg_per_s_sq)),
         .minDistance = 0,

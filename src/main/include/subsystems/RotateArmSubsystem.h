@@ -57,7 +57,8 @@ class RotateArmSubsystem
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Rotational,
         .pid = frc::ProfiledPIDController<units::degree>(
-            ArmConstants::kArmRotationSetP, ArmConstants::kArmRotationSetI, ArmConstants::kArmRotationSetD,
+            ArmConstants::kArmRotationSetP, ArmConstants::kArmRotationSetI,
+            ArmConstants::kArmRotationSetD,
             frc::TrapezoidProfile<units::angle::degree>::Constraints(
                 1.75_deg_per_s, 0.75_deg_per_s_sq)),
         .minDistance = ArmConstants::kRotationHomeDegree,
