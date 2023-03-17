@@ -1,8 +1,8 @@
 #ifndef VL53L1X_SUBSYSTEM_H
 #define VL53L1X_SUBSYSTEM_H
 
-#include <frc/DutyCycle.h>
 #include <frc/DigitalInput.h>
+#include <frc/DutyCycle.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/SubsystemBase.h>
 
