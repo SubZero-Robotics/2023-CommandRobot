@@ -140,7 +140,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
                 _motor.Set(speed);
-                
+
                 return;
             }
 
@@ -161,7 +161,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                
+
                 _motor.Set(speed);
                 return;
             }
@@ -207,13 +207,14 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     }
 
     double IncrementTargetPosition(double steps) override {
-        return std::clamp(_targetPosition + steps,
-                                     _config.minDistance, _config.maxDistance);
+        return std::clamp(_targetPosition + steps, _config.minDistance,
+                          _config.maxDistance);
     }
 
     void UpdateMovement() override {
         if (_isMovingToPosition) {
-            auto res = _controller.Calculate(Unit_t(GetCurrentPosition()), Unit_t(_targetPosition));
+            auto res = _controller.Calculate(Unit_t(GetCurrentPosition()),
+                                             Unit_t(_targetPosition));
             auto clampedRes = std::clamp(res, -1.0, 1.0);
             Logging::logToSmartDashboard(_prefix + " TargetPosition",
                                          std::to_string(_targetPosition),
