@@ -27,8 +27,8 @@ class CompleteArmSubsystem : public frc2::SubsystemBase {
      * within list (Axis 1 -> Axis 2 -> ... -> Axis n)
      */
     CompleteArmSubsystem(ISingleAxisSubsystem* rotateArm,
-                                  ISingleAxisSubsystem* wrist,
-                                  ISingleAxisSubsystem* extension)
+                         ISingleAxisSubsystem* wrist,
+                         ISingleAxisSubsystem* extension)
         : m_rotateArm(rotateArm), m_wrist(wrist), m_extension(extension) {}
 
     /**
