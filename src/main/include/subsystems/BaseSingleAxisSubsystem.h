@@ -85,6 +85,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
         double minDistance;
         double maxDistance;
         double distancePerRevolution;
+        double stepSize;
         double motorMultiplier = 1.0;
         int minLimitSwitchPort = UNUSED_DIO_PORT;
         int maxLimitSwitchPort = UNUSED_DIO_PORT;
@@ -195,6 +196,15 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
 
         RunMotorSpeed(speed);
     }
+
+    double MapJoystickToStep(double rotation) override {
+        return rotation * _config.stepSize;
+    }
+
+    void IncrementTargetPosition(double steps) override {
+        _targetPosition = std::clamp(_targetPosition + steps, _config.minDistance, _config.maxDistance);
+    }
+
 
     void UpdateMovement() override {
         if (_isMovingToPosition) {

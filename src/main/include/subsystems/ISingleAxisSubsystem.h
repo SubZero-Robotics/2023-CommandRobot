@@ -7,6 +7,7 @@
 
 class ISingleAxisSubsystem {
    public:
+   // Need controller input
     virtual void RunMotorSpeed(double speed, bool ignoreEncoder) = 0;
     virtual void RunMotorSpeedDefault(bool invertDirection) = 0;
     virtual void RunMotorExternal(double speed) = 0;
@@ -22,6 +23,8 @@ class ISingleAxisSubsystem {
     virtual bool GetIsMovingToPosition() = 0;
     virtual void StopMovement() = 0;
     virtual frc2::CommandPtr GetHomeCommand() = 0;
+    virtual double MapJoystickToStep(double rotation) = 0; 
+    virtual void IncrementTargetPosition(double steps) = 0;
 };
 
 #endif

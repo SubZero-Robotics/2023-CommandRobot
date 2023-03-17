@@ -44,6 +44,7 @@ constexpr double kExtensionGearRatio = 36;
 constexpr double kInPerRotation = 3.5 / kExtensionGearRatio;
 constexpr double kMaxArmDistance = 35;
 constexpr int kExtenderLimitSwitchPort = 2;
+constexpr double kExtenderStepSize = 1;
 
 constexpr double kExtenderSetP = 6e-5;
 constexpr double kExtenderSetI = 1e-6;
@@ -58,6 +59,8 @@ constexpr double kRotationHomeDegree = 60;
 constexpr double kRotationMaxDegree = 125;
 constexpr int kArmSoftLimitForwardDegrees = 65;
 constexpr double kArmGearRatio = 197.14;
+constexpr double kArmStepSize = 4;
+
 
 constexpr double kArmRotationSetP = 6e-5;
 constexpr double kArmRotationSetI = 1e-6;
@@ -85,6 +88,7 @@ constexpr double kIntakeSpeed = 1.0;
 constexpr int kWristLimitSwitchPort = 3;
 constexpr int kWristGearRatio = 125;
 constexpr auto kWristDegreeLimit = 160.0;
+constexpr double kWristStepSize = 4;
 
 constexpr double kWristSetP = 0.03;
 constexpr double kWristSetI = 0.005;
