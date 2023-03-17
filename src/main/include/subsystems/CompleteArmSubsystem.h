@@ -9,18 +9,24 @@
 
 #include "subsystems/BaseSingleAxisSubsystem.h"
 
-class MultiAxisOrhestratorSubsystem : public frc2::SubsystemBase {
+class CompleteArmSubsystem : public frc2::SubsystemBase {
    public:
-    struct MultiAxisPose {
+    struct ArmAxisPose {
         ISingleAxisSubsystem* axis;
         double position;
+    };
+
+    struct WholeArmPose {
+        ArmAxisPose arm;
+        ArmAxisPose wrist;
+        ArmAxisPose extension;
     };
 
     /**
      * @param axes List of axes to control. Order when homing depends on order
      * within list (Axis 1 -> Axis 2 -> ... -> Axis n)
      */
-    MultiAxisOrhestratorSubsystem(ISingleAxisSubsystem* rotateArm,
+    CompleteArmSubsystem(ISingleAxisSubsystem* rotateArm,
                                   ISingleAxisSubsystem* wrist,
                                   ISingleAxisSubsystem* extension)
         : m_rotateArm(rotateArm), m_wrist(wrist), m_extension(extension) {}
@@ -42,7 +48,7 @@ class MultiAxisOrhestratorSubsystem : public frc2::SubsystemBase {
             .AndThen(m_extension->GetHomeCommand());
     }
 
-    void SetPoses(std::vector<MultiAxisPose> poses);
+    void SetPoses(WholeArmPose pose);
 
     /**
      * @brief True if axis is moving

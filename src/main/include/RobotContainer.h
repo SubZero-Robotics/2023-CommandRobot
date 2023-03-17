@@ -23,9 +23,9 @@
 #include "subsystems/ExtensionSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
-#include "subsystems/MultiAxisOrchestratorSubsystem.h"
 #include "subsystems/RotateArmSubsystem.h"
 #include "subsystems/WristSubsystem.h"
+#include "subsystems/CompleteArmSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -64,7 +64,7 @@ class RobotContainer {
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
     IntakeSubsystem m_intake{&m_leds};
     std::unique_ptr<WristSubsystem> m_wrist;
-    // std::unique_ptr<MultiAxisOrhestratorSubsystem> m_multiAxis;
+    // std::unique_ptr<CompleteArmSubsystem> m_arm;
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.

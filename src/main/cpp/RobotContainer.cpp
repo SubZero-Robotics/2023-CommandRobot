@@ -28,7 +28,7 @@ RobotContainer::RobotContainer() {
     m_extender = std::make_unique<ExtensionSubsystem>();
     m_wrist = std::make_unique<WristSubsystem>();
 
-    // m_multiAxis = std::make_unique<MultiAxisOrhestratorSubsystem>(
+    // m_arm = std::make_unique<CompleteArmSubsystem>(
     //     m_effector.get(), m_wrist.get(), m_extender.get());
 
     // Configure the button bindings
