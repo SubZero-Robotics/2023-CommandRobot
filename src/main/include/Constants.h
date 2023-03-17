@@ -61,7 +61,6 @@ constexpr int kArmSoftLimitForwardDegrees = 65;
 constexpr double kArmGearRatio = 197.14;
 constexpr double kArmStepSize = 4;
 
-
 constexpr double kArmRotationSetP = 6e-5;
 constexpr double kArmRotationSetI = 1e-6;
 constexpr double kArmRotationSetD = 0;

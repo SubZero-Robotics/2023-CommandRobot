@@ -201,9 +201,9 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     }
 
     void IncrementTargetPosition(double steps) override {
-        _targetPosition = std::clamp(_targetPosition + steps, _config.minDistance, _config.maxDistance);
+        _targetPosition = std::clamp(_targetPosition + steps,
+                                     _config.minDistance, _config.maxDistance);
     }
-
 
     void UpdateMovement() override {
         if (_isMovingToPosition) {
