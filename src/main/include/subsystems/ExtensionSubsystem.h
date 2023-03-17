@@ -52,7 +52,7 @@ class ExtensionSubsystem
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Linear,
         .pid = frc::ProfiledPIDController<units::meter>(
-            1.3, 0.0, 0.7,
+            ArmConstants::kExtenderSetP, ArmConstants::kExtenderSetI, ArmConstants::kExtenderSetD,
             frc::TrapezoidProfile<units::meter>::Constraints(1.75_mps,
                                                              0.75_mps_sq)),
         .minDistance = 0,
