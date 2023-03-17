@@ -11,7 +11,6 @@
 #include "commands/DefaultDriveCommand.h"
 #include "commands/ExampleCommand.h"
 #include "commands/ExtenderCommand.h"
-#include "commands/ExtenderStopCommand.h"
 #include "commands/IntakeInCommand.h"
 #include "commands/IntakeOutCommand.h"
 #include "commands/IntakeStopCommand.h"
