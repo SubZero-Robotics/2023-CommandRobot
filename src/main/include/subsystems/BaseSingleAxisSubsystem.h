@@ -139,14 +139,16 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                _motor.set(_controller.Calculate(GetCurrentPosition(),
-                                                 _targetPosition)) return;
+                _motor.Set(speed);
+                
+                return;
             }
 
             if (_log)
                 Logging::logToStdOut(
                     _prefix, "NOT MOVING; AT HOME" + std::to_string(speed),
                     Logging::Level::VERBOSE);
+
             _motor.Set(0);
             return;
         }
@@ -159,7 +161,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-
+                
+                _motor.Set(speed);
                 return;
             }
 
@@ -175,6 +178,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             Logging::logToStdOut(_prefix,
                                  "SETTING SPEED TO: " + std::to_string(speed),
                                  Logging::Level::VERBOSE);
+        _motor.Set(speed);
     }
 
     void RunMotorSpeedDefault(bool invertDirection = false) override {
@@ -196,20 +200,25 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
         RunMotorSpeed(speed);
     }
 
-    double MapJoystickToStep(double rotation) override {
-        return rotation * _config.stepSize;
+    void JoystickMoveStep(double rotation) override {
+        auto steps = rotation * _config.stepSize;
+        auto newTarget = IncrementTargetPosition(steps);
+        MoveToPosition(newTarget);
     }
 
-    void IncrementTargetPosition(double steps) override {
-        _targetPosition = std::clamp(_targetPosition + steps,
+    double IncrementTargetPosition(double steps) override {
+        return std::clamp(_targetPosition + steps,
                                      _config.minDistance, _config.maxDistance);
     }
 
     void UpdateMovement() override {
         if (_isMovingToPosition) {
-            Logging::logToSmartDashboard("TargetPosition",
+            auto res = _controller.Calculate(Unit_t(GetCurrentPosition()), Unit_t(_targetPosition));
+            auto clampedRes = std::clamp(res, -1.0, 1.0);
+            Logging::logToSmartDashboard(_prefix + " TargetPosition",
                                          std::to_string(_targetPosition),
                                          Logging::Level::INFO);
+            RunMotorSpeed(clampedRes);
         }
     }
 
@@ -298,6 +307,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
         if (_log)
             Logging::logToStdOut(_prefix, "Set homing to true",
                                  Logging::Level::INFO);
+        _isMovingToPosition = false;
         _isHoming = true;
     }
 

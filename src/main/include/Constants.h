@@ -82,6 +82,7 @@ constexpr double kWristHomingSpeed = .1;
 
 // Intake Constants
 constexpr double kIntakeSpeed = 1.0;
+constexpr double kOuttakeSpeed = 0.66;
 
 // Wrist Constants
 constexpr int kWristLimitSwitchPort = 3;

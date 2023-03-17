@@ -63,6 +63,7 @@ class RotateArmSubsystem
         .minDistance = ArmConstants::kRotationHomeDegree,
         .maxDistance = ArmConstants::kRotationMaxDegree,
         .distancePerRevolution = 360.0,
+        .stepSize = ArmConstants::kArmStepSize,
         .motorMultiplier = -1.0,
         .minLimitSwitchPort = ArmConstants::kRotationLimitSwitchHomePort,
         .maxLimitSwitchPort = ArmConstants::kRotationLimitSwitchMaxPort,

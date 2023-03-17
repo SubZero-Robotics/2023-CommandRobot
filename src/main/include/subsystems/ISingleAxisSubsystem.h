@@ -23,8 +23,8 @@ class ISingleAxisSubsystem {
     virtual bool GetIsMovingToPosition() = 0;
     virtual void StopMovement() = 0;
     virtual frc2::CommandPtr GetHomeCommand() = 0;
-    virtual double MapJoystickToStep(double rotation) = 0;
-    virtual void IncrementTargetPosition(double steps) = 0;
+    virtual void JoystickMoveStep(double rotation) = 0;
+    virtual double IncrementTargetPosition(double steps) = 0;
 };
 
 #endif
