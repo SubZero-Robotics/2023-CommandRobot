@@ -64,7 +64,7 @@ class RobotContainer {
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
     IntakeSubsystem m_intake{&m_leds};
     WristSubsystem m_wrist;
-    VL53L1XController m_lidar{frc::SPI::Port::kOnboardCS0};
+    VL53L1XController m_lidar{kLidarInputPin};
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.

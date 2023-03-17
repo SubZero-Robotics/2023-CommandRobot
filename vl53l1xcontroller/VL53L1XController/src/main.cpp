@@ -2,55 +2,22 @@
 // https://www.st.com/resource/en/user_manual/um2555-vl53l1x-ultra-lite-driver-multiple-zone-implementation-stmicroelectronics.pdf
 
 #include <Arduino.h>
-#include <SPI.h>
 #include <VL53L1X.h>
 #include <Wire.h>
 
-constexpr uint8_t TRANSACTION_CONTINUE = 0;
-constexpr uint8_t TRANSACTION_START = 1;
+// Must be pin 5 or 6
+constexpr uint8_t outPin = 5;
+constexpr uint16_t maxDistance = 2000;
 
-static volatile uint16_t distance = 0;
-static volatile bool sendDataFlag = false;
-static volatile uint8_t curBytePos = 0;
+static uint16_t distance = 0;
 
 static VL53L1X sensor;
-
-// SPI interrupt routine
-ISR(SPI_STC_vect) {
-    uint8_t rec = SPDR;
-
-    // master starting a new transaction; reset to first byte
-    if (rec == TRANSACTION_START) {
-        sendDataFlag = true;
-        curBytePos = 1;
-        SPDR = *((uint8_t*)(&distance));
-        return;
-    }
-
-    if (!sendDataFlag) {
-        SPDR = 0;  // send nothing if inactive
-        return;
-    }
-
-    // send the next byte
-    SPDR = *((uint8_t*)(&distance + curBytePos));
-    // stop after 8 bytes
-    if (++curBytePos >= sizeof(uint16_t)) {
-        curBytePos = 0;
-        sendDataFlag = false;
-    }
-}
 
 void setup() {
     Serial.begin(115200);
     Wire.begin();
-    pinMode(MISO, OUTPUT);
-    // pull line high by default
-    digitalWrite(MISO, HIGH);
-    // turn on SPI in slave mode
-    SPCR |= _BV(SPE);
-    // turn on interrupts
-    SPI.attachInterrupt();
+
+    pinMode(outPin, OUTPUT);
 
     sensor.setTimeout(500);
     if (!sensor.init()) {
@@ -92,8 +59,7 @@ void loop() {
 
     if (sensor.ranging_data.range_status == VL53L1X::RangeValid) {
         auto range = sensor.ranging_data.range_mm;
-        noInterrupts();
-        distance = range;
-        interrupts();
+        distance = range <= maxDistance ? range : distance;
+        analogWrite(outPin, map(distance, 0, maxDistance, 0, 255));
     }
 }
