@@ -11,9 +11,8 @@ class ExtensionSubsystem
                                      units::meter_t> {
    public:
     ExtensionSubsystem()
-        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder,
-                                  &min, nullptr, "EXTEND") {
-        
+        : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
+                                  nullptr, "EXTEND") {
         _config = m_config;
         m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
     }
@@ -45,7 +44,6 @@ class ExtensionSubsystem
    private:
     rev::CANSparkMax m_extensionMotor{CANSparkMaxConstants::kExtensionMotorID,
                                       rev::CANSparkMax::MotorType::kBrushless};
-
 
     rev::SparkMaxRelativeEncoder m_encoder = m_extensionMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kHallSensor,
