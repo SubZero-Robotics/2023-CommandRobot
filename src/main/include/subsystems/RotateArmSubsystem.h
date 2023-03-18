@@ -11,12 +11,12 @@ class RotateArmSubsystem
    public:
     RotateArmSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min,
-                                  &max, "ARM") {
+                                  &max, "ARM", true) {
         m_followRotationMotor.Follow(m_leadRotationMotor);
         // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
         _config = m_config;
         _controller = m_config.pid;
-        // m_enc.SetPositionConversionFactor(_config.distancePerRevolution);
+        m_enc.SetPositionConversionFactor(1);
     }
 
     // Rotate arm has zero offset set in SparkMax

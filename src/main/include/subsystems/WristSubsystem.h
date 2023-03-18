@@ -14,7 +14,7 @@ class WristSubsystem
                                   nullptr, "WRIST", true) {
         _config = m_config;
         _controller = m_config.pid;
-        // m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
+        m_encoder.SetPositionConversionFactor(1);
     }
 
     // Wrist has zero offset set in SparkMax

@@ -12,10 +12,11 @@ class ExtensionSubsystem
    public:
     ExtensionSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
-                                  nullptr, "EXTEND") {
+                                  nullptr, "EXTEND", true) {
         _config = m_config;
         _controller = m_config.pid;
-        // m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
+        _config.distancePerRevolution = ArmConstants::kInPerRotation;
+        m_encoder.SetPositionConversionFactor(1);
     }
 
     void ResetEncoder() override {
@@ -61,7 +62,7 @@ class ExtensionSubsystem
         .maxDistance = ArmConstants::kMaxArmDistance,
         .distancePerRevolution = ArmConstants::kInPerRotation,
         .stepSize = ArmConstants::kExtenderStepSize,
-        .motorMultiplier = 1.0,
+        .motorMultiplier = -.5,
         .minLimitSwitchPort = ArmConstants::kExtenderLimitSwitchPort,
         .maxLimitSwitchPort = BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
         .defaultMovementSpeed = ArmConstants::kExtenderHomingSpeed};
