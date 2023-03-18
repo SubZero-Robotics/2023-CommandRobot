@@ -21,7 +21,7 @@ class IntakeOutAuto : public frc2::CommandHelper<frc2::CommandBase, IntakeOutAut
     void Execute() override { 
         m_intake->Out();
         ++loops;
-        if (loops >= 50) isFinished = true;
+        if (loops >= 70) isFinished = true;
      }
 
     bool IsFinished() override { return isFinished; }

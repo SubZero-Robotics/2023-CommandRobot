@@ -85,5 +85,7 @@ void RobotContainer::ConfigureBindings() {
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
     // m_Brake.Unset();
-    return autos::PlaceAndLeave(m_drive, &m_intake);
+    m_Brake.SetBrakeMode();
+    //return autos::PlaceAndLeave(m_drive, &m_intake);
+    return autos::PlaceAndBalance(m_drive, &m_intake);
 }

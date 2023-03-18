@@ -165,7 +165,7 @@ namespace AutoConstants {
 constexpr double kStraightBackDivisor = 44.95;
 constexpr double kAutoDriveDistanceInches = 66;
 constexpr double kAutoBackupDistanceInches = 20;
-constexpr double kAutoDriveSpeed = 0.5;
+constexpr double kAutoDriveSpeed = 0.7;
 }  // namespace AutoConstants
 
 constexpr uint8_t kLEDCotrollerSlaveAddress = 0x01;

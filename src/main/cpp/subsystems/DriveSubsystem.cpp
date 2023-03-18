@@ -125,6 +125,7 @@ void DriveSubsystem::TeleopInit() { m_brake.Unset(); }
 void DriveSubsystem::BrakeInit() { SetBrakeMode(); }
 
 void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
+    rotation += 0.01;
     if (abs(currentPercentage) >
         previousPercentage) {  // speeding up, accel filter
         m_drive.ArcadeDrive(accelfilter.Calculate(currentPercentage), rotation,

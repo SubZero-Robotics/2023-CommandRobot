@@ -67,3 +67,9 @@ frc2::CommandPtr autos::PlaceAndLeave(DriveSubsystem* m_drive, IntakeSubsystem* 
         autos::StraightBack(m_drive, 155)
     );
 }
+
+frc2::CommandPtr autos::PlaceAndBalance(DriveSubsystem* m_drive, IntakeSubsystem* m_intake){
+    return IntakeOutAuto(m_intake).ToPtr().AndThen(
+        autos::StraightBack(m_drive, 97)
+    );
+}
