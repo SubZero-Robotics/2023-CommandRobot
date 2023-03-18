@@ -15,7 +15,8 @@ class RotateArmSubsystem
         m_followRotationMotor.Follow(m_leadRotationMotor);
         // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
         _config = m_config;
-        m_enc.SetPositionConversionFactor(_config.distancePerRevolution);
+        _controller = m_config.pid;
+        // m_enc.SetPositionConversionFactor(_config.distancePerRevolution);
     }
 
     // Rotate arm has zero offset set in SparkMax
@@ -23,7 +24,8 @@ class RotateArmSubsystem
 
     double GetCurrentPosition() override {
         // "Home" is at 60 deg relative to ground
-        auto position = m_enc.GetPosition() + _config.minDistance;
+        auto position = m_enc.GetPosition() * _config.distancePerRevolution +
+                        _config.minDistance;
 
         Logging::logToSmartDashboard("ArmPosition",
                                      std::to_string(position) + " deg",
@@ -57,7 +59,8 @@ class RotateArmSubsystem
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Rotational,
         .pid = frc::ProfiledPIDController<units::degree>(
-            ArmConstants::kArmRotationSetP, ArmConstants::kArmRotationSetI, ArmConstants::kArmRotationSetD,
+            ArmConstants::kArmRotationSetP, ArmConstants::kArmRotationSetI,
+            ArmConstants::kArmRotationSetD,
             frc::TrapezoidProfile<units::angle::degree>::Constraints(
                 1.75_deg_per_s, 0.75_deg_per_s_sq)),
         .minDistance = ArmConstants::kRotationHomeDegree,

@@ -26,7 +26,7 @@ class Extender : public frc2::CommandHelper<frc2::CommandBase, Extender> {
         double inExtent = m_inExtent();
         auto rotation = outExtent >= inExtent ? outExtent : -inExtent;
 
-        m_extension->JoystickMoveStep(rotation);
+        m_extension->RunMotorExternal(rotation);
     }
 
    private:

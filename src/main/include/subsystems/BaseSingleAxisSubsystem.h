@@ -149,7 +149,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     _prefix, "NOT MOVING; AT HOME" + std::to_string(speed),
                     Logging::Level::VERBOSE);
 
-            _motor.Set(0);
+            _motor.Set(ArmConstants::kAntiGravityPercentage *
+                       _config.motorMultiplier);
             return;
         }
 
@@ -170,7 +171,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                 Logging::logToStdOut(
                     _prefix, "NOT MOVING; AT MAX" + std::to_string(speed),
                     Logging::Level::VERBOSE);
-            _motor.Set(0);
+            _motor.Set(ArmConstants::kAntiGravityPercentage *
+                       _config.motorMultiplier);
             return;
         }
 
@@ -193,6 +195,9 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
      * @param speed Percentage speed
      */
     void RunMotorExternal(double speed) override {
+        // TODO: constant
+        if (abs(speed) <= 0.05) return;
+
         if (_isMovingToPosition) {
             StopMovement();
         }
@@ -213,11 +218,19 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
 
     void UpdateMovement() override {
         if (_isMovingToPosition) {
-            if (_log) Logging::logToStdOut(_prefix, "Target Position: " + std::to_string(Unit_t(_targetPosition).value()), Logging::Level::INFO);
+            if (_log)
+                Logging::logToStdOut(
+                    _prefix,
+                    "Target Position: " +
+                        std::to_string(Unit_t(_targetPosition).value()),
+                    Logging::Level::INFO);
             auto res = _controller.Calculate(Unit_t(GetCurrentPosition()),
                                              Unit_t(_targetPosition));
             auto clampedRes = std::clamp(res, -1.0, 1.0);
-            if (_log) Logging::logToStdOut(_prefix, "Clamped Res: " + std::to_string(res), Logging::Level::INFO);
+            if (_log)
+                Logging::logToStdOut(_prefix,
+                                     "Clamped Res: " + std::to_string(res),
+                                     Logging::Level::INFO);
             Logging::logToSmartDashboard(_prefix + " TargetPosition",
                                          std::to_string(_targetPosition),
                                          Logging::Level::INFO);
@@ -240,7 +253,9 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             }
         }
 
-        if (GetCurrentPosition() <= _config.minDistance) {
+        // TODO: Constant wrap-around value
+        if (GetCurrentPosition() <= _config.minDistance ||
+            GetCurrentPosition() >= 350.0) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME ENC",
                                      Logging::Level::INFO);
@@ -310,7 +325,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
         if (_log)
             Logging::logToStdOut(_prefix, "Set homing to true",
                                  Logging::Level::INFO);
-        _isMovingToPosition = false;
+        StopMovement();
         _isHoming = true;
     }
 
@@ -341,10 +356,11 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             .ToPtr();
     }
 
-    void Periodic() override { 
-        // auto res = frc::SmartDashboard::GetNumber(_prefix + " Position Set", 0);
-        // if (_log)
-        //     Logging::logToStdOut(_prefix, "Shuffleboard Position" + std::to_string(res),
+    void Periodic() override {
+        // auto res = frc::SmartDashboard::GetNumber(_prefix + " Position Set",
+        // 0); if (_log)
+        //     Logging::logToStdOut(_prefix, "Shuffleboard Position" +
+        //     std::to_string(res),
         //                          Logging::Level::INFO);
         // MoveToPosition(res);
         UpdateMovement();
@@ -357,9 +373,9 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     Encoder &_enc;
     SingleAxisConfig _config;
     frc::ProfiledPIDController<Unit> _controller;
-    bool _isHoming;
-    bool _isMovingToPosition;
-    double _targetPosition;
+    bool _isHoming = false;
+    bool _isMovingToPosition = false;
+    double _targetPosition = 0.0;
     bool _log;
     std::string _prefix;
 
