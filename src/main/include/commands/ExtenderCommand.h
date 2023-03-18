@@ -24,7 +24,7 @@ class Extender : public frc2::CommandHelper<frc2::CommandBase, Extender> {
     void Execute() override {
         double outExtent = m_outExtent();
         double inExtent = m_inExtent();
-        auto rotation = outExtent >= inExtent ? outExtent : -inExtent;
+        auto rotation = outExtent >= inExtent ? -outExtent : inExtent;
 
         m_extension->RunMotorExternal(rotation);
     }

@@ -11,7 +11,7 @@ class RotateArmSubsystem
    public:
     RotateArmSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min,
-                                  &max, "ARM", true) {
+                                  &max, "ARM") {
         m_followRotationMotor.Follow(m_leadRotationMotor);
         // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
         _config = m_config;

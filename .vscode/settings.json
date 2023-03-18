@@ -99,6 +99,7 @@
     "xlocnum": "cpp",
     "xmemory": "cpp",
     "xstring": "cpp",
-    "xutility": "cpp"
-}
+    "xutility": "cpp",
+    "matrixfunctions": "cpp"
+  }
 }

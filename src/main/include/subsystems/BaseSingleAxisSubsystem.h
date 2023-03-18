@@ -135,7 +135,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
         if (homeState) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME", Logging::Level::INFO);
-            if (speed > 0) {
+            if (speed < 0) {
                 if (_log)
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
@@ -153,10 +153,10 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             return;
         }
 
-        if (AtMax()) {
+        else if (AtMax()) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT MAX", Logging::Level::INFO);
-            if (speed < 0) {
+            if (speed > 0) {
                 if (_log)
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
@@ -171,13 +171,13 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::Level::VERBOSE);
             _motor.Set(0);
             return;
+        } else {
+            if (_log)
+                Logging::logToStdOut(_prefix,
+                                    "SETTING SPEED TO: " + std::to_string(speed),
+                                    Logging::Level::VERBOSE);
+            _motor.Set(speed);
         }
-
-        if (_log)
-            Logging::logToStdOut(_prefix,
-                                 "SETTING SPEED TO: " + std::to_string(speed),
-                                 Logging::Level::VERBOSE);
-        _motor.Set(speed);
     }
 
     void RunMotorSpeedDefault(bool invertDirection = false) override {
@@ -356,7 +356,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                    [this] { Home(); },
                    // Ignore the home encoder value since it starts at 0
                    [this] {
-                       RunMotorSpeed(-_config.defaultMovementSpeed, true);
+                       RunMotorSpeed(_config.defaultMovementSpeed, true);
                    },
                    [this](bool interrupted) {
                        StopMovement();

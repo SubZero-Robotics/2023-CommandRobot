@@ -12,7 +12,8 @@ class ExtensionSubsystem
    public:
     ExtensionSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
-                                  nullptr, "EXTEND") {
+                                  nullptr, "EXTEND", true) {
+        m_extensionMotor.SetInverted(true);
         _config = m_config;
         _controller = m_config.pid;
         _config.distancePerRevolution = ArmConstants::kInPerRotation;

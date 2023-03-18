@@ -41,8 +41,8 @@ namespace ArmConstants {
 constexpr double kMaxRPM = 4000;
 // Extension Constants
 constexpr double kExtensionGearRatio = 36;
-constexpr double kInPerRotation = 3.5 / kExtensionGearRatio;
-constexpr double kMaxArmDistance = 35;
+constexpr double kInPerRotation = -3.5 / kExtensionGearRatio;
+constexpr double kMaxArmDistance = 12;
 constexpr int kExtenderLimitSwitchPort = 2;
 constexpr double kExtenderStepSize = 1;
 
