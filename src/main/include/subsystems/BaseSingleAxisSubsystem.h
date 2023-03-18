@@ -22,6 +22,7 @@
 #include "subsystems/ISingleAxisSubsystem.h"
 #include "utils/Logging.h"
 
+// ! TODO: Update comment to match!
 /**
  * @brief A base class for a single-axis subsystem
  *
@@ -193,10 +194,16 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     void RunMotorExternal(double speed) override {
         // TODO: constant
         if (abs(speed) <= 0.05) {
+            if (_isMovingToPosition) return; // Don't set the motor and overwrite a potential automated movement
+
             if (_config.type == AxisType::Rotational)
-                _motor.Set(ArmConstants::kAntiGravityPercentage);
+                _motor.Set(ArmConstants::kAntiGravityPercentage);   // Make 'er hover!
+            else _motor.Set(0);
+
+            return; 
         }
 
+        // Overwrite current automated position with joystick input
         if (_isMovingToPosition) {
             StopMovement();
         }
