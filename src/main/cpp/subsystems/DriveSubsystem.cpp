@@ -11,6 +11,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/trajectory/constraint/DifferentialDriveVoltageConstraint.h>
 #include <units/constants.h>
+#include "utils/Logging.h"
 
 #include "Constants.h"
 
@@ -148,6 +149,8 @@ void DriveSubsystem::TankDrive(units::meters_per_second_t left,
 void DriveSubsystem::TankDriveVolts(units::volt_t left, units::volt_t right) {
     LeftLead.SetVoltage(-left);
     RightLead.SetVoltage(-right);
+    Logging::logToSmartDashboard("speedauto", std::to_string(left.value()) + " | " + std::to_string(right.value()), Logging::Level::VERBOSE);
+    Logging::logToStdOut("speedauto",  std::to_string(left.value()) + " | " + std::to_string(right.value()), Logging::Level::VERBOSE);
     m_drive.Feed();
 }
 

@@ -39,7 +39,7 @@ class RobotContainer {
    public:
     RobotContainer();
 
-    frc2::CommandPtr GetAutonomousCommand();
+    frc2::Command* GetAutonomousCommand();
 
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -73,6 +73,7 @@ class RobotContainer {
 
     frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
     frc2::CommandPtr m_nothing = autos::DoesNothing(m_drive);
+    //frc2::CommandPtr m_curves = autos::Test(autoBuilder, m_drive);
 
     frc::SendableChooser<frc2::Command*> m_chooser;
 

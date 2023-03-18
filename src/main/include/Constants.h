@@ -143,9 +143,9 @@ constexpr double kStabilizationI =
 constexpr double kStabilizationD =
     0.01;  // Finaly tune this to fix final error  .01
 
-constexpr double kAutoP = 0.12;
-constexpr double kAutoI = 0.36;
-constexpr double kAutoD = 0.01;
+constexpr double kAutoP = 0;
+constexpr double kAutoI = 0;
+constexpr double kAutoD = 0;
 
 constexpr double kTurnP =
     0.0396;  // tune This to start oscillating.  0.2 made 0.667s periods .12
