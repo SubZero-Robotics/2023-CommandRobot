@@ -24,7 +24,7 @@ class RotateWrist : public frc2::CommandHelper<frc2::CommandBase, RotateWrist> {
 
         if (abs(rotation) < kDeadzone) rotation = 0.0;
 
-        m_effector->JoystickMoveStep(rotation);
+        m_effector->RunMotorExternal(rotation);
     }
 
    private:
