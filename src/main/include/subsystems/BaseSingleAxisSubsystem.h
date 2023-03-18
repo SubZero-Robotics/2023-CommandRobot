@@ -160,7 +160,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-                    _motor.Set(speed);
+                _motor.Set(speed);
                 return;
             }
 
@@ -176,7 +176,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             Logging::logToStdOut(_prefix,
                                  "SETTING SPEED TO: " + std::to_string(speed),
                                  Logging::Level::VERBOSE);
-            _motor.Set(speed);
+        _motor.Set(speed);
     }
 
     void RunMotorSpeedDefault(bool invertDirection = false) override {
@@ -194,7 +194,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
         // TODO: constant
         if (abs(speed) <= 0.05) {
             if (_config.type == AxisType::Rotational)
-                    _motor.Set(ArmConstants::kAntiGravityPercentage);
+                _motor.Set(ArmConstants::kAntiGravityPercentage);
         }
 
         if (_isMovingToPosition) {
@@ -274,7 +274,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             }
         }
 
-        if (GetCurrentPosition() >= _config.maxDistance && GetCurrentPosition() < 350) {
+        if (GetCurrentPosition() >= _config.maxDistance &&
+            GetCurrentPosition() < 350) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT MAX ENC",
                                      Logging::Level::INFO);
