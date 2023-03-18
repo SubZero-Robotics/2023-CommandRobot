@@ -78,14 +78,15 @@ class RobotContainer {
 
     // Auto Builder
     std::unordered_map<std::string, std::shared_ptr<frc2::Command>> eventMap;
+    frc::RamseteController controller;
     pathplanner::RamseteAutoBuilder autoBuilder{
         [this]() { return m_drive->GetPose(); },
         [this](frc::Pose2d initPose) { m_drive->ResetOdometry(initPose); },
-        frc::RamseteController(),
+        controller,
         (frc::DifferentialDriveKinematics)DriveConstants::kDriveKinematics,
         frc::SimpleMotorFeedforward<units::meters>(DriveConstants::ks, DriveConstants::kv),
         [this]() {return m_drive->GetWheelSpeeds();},
-        frc::PIDController(kAutoP, kAutoI, kAutoD),
+        pathplanner::PIDConstants(kAutoP, kAutoI, kAutoD),
         [this](units::volt_t left, units::volt_t right) {
             m_drive->TankDriveVolts(left, right);
         },
