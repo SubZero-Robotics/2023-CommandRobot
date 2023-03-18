@@ -254,7 +254,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
         }
 
         // TODO: Constant wrap-around value
-        if (GetCurrentPosition() <= _config.minDistance || GetCurrentPosition() >= 350.0) {
+        if (GetCurrentPosition() <= _config.minDistance ||
+            GetCurrentPosition() >= 350.0) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME ENC",
                                      Logging::Level::INFO);

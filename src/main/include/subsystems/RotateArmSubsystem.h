@@ -24,7 +24,8 @@ class RotateArmSubsystem
 
     double GetCurrentPosition() override {
         // "Home" is at 60 deg relative to ground
-        auto position = m_enc.GetPosition() * _config.distancePerRevolution + _config.minDistance;
+        auto position = m_enc.GetPosition() * _config.distancePerRevolution +
+                        _config.minDistance;
 
         Logging::logToSmartDashboard("ArmPosition",
                                      std::to_string(position) + " deg",
