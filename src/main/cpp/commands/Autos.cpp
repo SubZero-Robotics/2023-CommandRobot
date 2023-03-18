@@ -6,13 +6,14 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
+#include "commands/IntakeOutAuto.h"
 #include <frc2/command/FunctionalCommand.h>
 
 using namespace AutoConstants;
 using namespace pathplanner;
 
 // This is taken from the hatchbotinlined wpilib example
-frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive) {
+frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive, double distance) {
     return frc2::FunctionalCommand(
                // Reset encoders on command start
                [m_drive] { m_drive->ResetEncoders(); },
@@ -24,13 +25,13 @@ frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive) {
                [m_drive](bool interrupted) { m_drive->ArcadeDrive(0, 0); },
                // End the command when the robot's driven distance exceeds the
                // desired value
-               [m_drive] {
+               [m_drive, distance] {
                    frc::SmartDashboard::PutNumber("Left Encoder",
                                                   m_drive->GetLeftEncoder());
                    frc::SmartDashboard::PutNumber("Right Encoder",
                                                   m_drive->GetRightEncoder());
                    return abs(m_drive->GetAverageEncoderDistance()) >=
-                          AutoConstants::kAutoDriveDistanceInches /
+                          distance /
                               kStraightBackDivisor;
                },
                // Requires the drive subsystem
@@ -59,4 +60,10 @@ frc2::CommandPtr autos::DoesNothing(DriveSubsystem* m_drive) {
                // Requires the drive subsystem
                {m_drive})
         .ToPtr();
+}
+
+frc2::CommandPtr autos::PlaceAndLeave(DriveSubsystem* m_drive, IntakeSubsystem* m_intake){
+    return IntakeOutAuto(m_intake).ToPtr().AndThen(
+        autos::StraightBack(m_drive, 155)
+    );
 }

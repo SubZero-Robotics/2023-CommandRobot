@@ -9,13 +9,15 @@
 #include <pathplanner/lib/auto/RamseteAutoBuilder.h>
 
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
 
 namespace autos {
 /**
  * Example static factory for an autonomous command.
  */
-frc2::CommandPtr StraightBack(DriveSubsystem* m_drive);
+frc2::CommandPtr StraightBack(DriveSubsystem* m_drive, double distance);
 frc2::CommandPtr Test(pathplanner::RamseteAutoBuilder& autoBuilder,
                       DriveSubsystem* m_drive);
 frc2::CommandPtr DoesNothing(DriveSubsystem* m_drive);
+frc2::CommandPtr PlaceAndLeave(DriveSubsystem* m_drive, IntakeSubsystem* m_intake);
 }  // namespace autos

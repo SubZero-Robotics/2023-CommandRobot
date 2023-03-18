@@ -46,7 +46,7 @@ constexpr double kExtenderSoftLimit = kTicksPerIn * kMaxArmDistanceIn;
 constexpr int kRotationLimitSwitchHomePort = 0;
 constexpr int kRotationLimitSwitchMaxPort = 1;
 constexpr float kRotationHomeDegree = 60;
-constexpr float kRotationMaxDegree = 125;
+constexpr float kRotationMaxDegree = 140;
 constexpr int kArmSoftLimitForwardDegrees = 65;
 constexpr int kArmGearRatio = 197.14;
 

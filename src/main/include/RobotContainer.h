@@ -39,7 +39,7 @@ class RobotContainer {
    public:
     RobotContainer();
 
-    frc2::Command* GetAutonomousCommand();
+    frc2::CommandPtr GetAutonomousCommand();
 
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -71,7 +71,7 @@ class RobotContainer {
     std::unique_ptr<DriveSubsystem> drive;
     DriveSubsystem* m_drive;
 
-    frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
+    frc2::CommandPtr m_straightback = autos::StraightBack(m_drive, 60);
     frc2::CommandPtr m_nothing = autos::DoesNothing(m_drive);
     //frc2::CommandPtr m_curves = autos::Test(autoBuilder, m_drive);
 

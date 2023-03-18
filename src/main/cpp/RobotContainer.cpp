@@ -82,8 +82,8 @@ void RobotContainer::ConfigureBindings() {
     DriverXbox.Y().OnTrue(BrakeStop(&m_Brake).ToPtr());
 }
 
-frc2::Command* RobotContainer::GetAutonomousCommand() {
+frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
     // m_Brake.Unset();
-    return m_chooser.GetSelected();
+    return autos::PlaceAndLeave(m_drive, &m_intake);
 }
