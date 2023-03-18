@@ -134,7 +134,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
         if (homeState) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME", Logging::Level::INFO);
-            if (speed < 0) {
+            if (speed > 0) {
                 if (_log)
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
@@ -161,7 +161,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
         if (AtMax()) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT MAX", Logging::Level::INFO);
-            if (speed > 0) {
+            if (speed < 0) {
                 if (_log)
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),

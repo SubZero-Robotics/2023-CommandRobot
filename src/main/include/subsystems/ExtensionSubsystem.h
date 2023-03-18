@@ -62,7 +62,7 @@ class ExtensionSubsystem
         .maxDistance = ArmConstants::kMaxArmDistance,
         .distancePerRevolution = ArmConstants::kInPerRotation,
         .stepSize = ArmConstants::kExtenderStepSize,
-        .motorMultiplier = -.5,
+        .motorMultiplier = .5,
         .minLimitSwitchPort = ArmConstants::kExtenderLimitSwitchPort,
         .maxLimitSwitchPort = BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
         .defaultMovementSpeed = ArmConstants::kExtenderHomingSpeed};
