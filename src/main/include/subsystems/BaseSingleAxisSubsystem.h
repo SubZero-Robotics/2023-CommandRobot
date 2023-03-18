@@ -193,6 +193,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
      * @param speed Percentage speed
      */
     void RunMotorExternal(double speed) override {
+        if (abs(speed) <= 0.05) return;
+
         if (_isMovingToPosition) {
             StopMovement();
         }
