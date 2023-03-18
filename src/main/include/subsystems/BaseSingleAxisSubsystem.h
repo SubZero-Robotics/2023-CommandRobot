@@ -173,9 +173,9 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             return;
         } else {
             if (_log)
-                Logging::logToStdOut(_prefix,
-                                    "SETTING SPEED TO: " + std::to_string(speed),
-                                    Logging::Level::VERBOSE);
+                Logging::logToStdOut(
+                    _prefix, "SETTING SPEED TO: " + std::to_string(speed),
+                    Logging::Level::VERBOSE);
             _motor.Set(speed);
         }
     }
