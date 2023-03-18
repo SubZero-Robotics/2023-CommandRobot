@@ -12,7 +12,7 @@ class ExtensionSubsystem
    public:
     ExtensionSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
-                                  nullptr, "EXTEND", true) {
+                                  nullptr, "EXTEND") {
         _config = m_config;
         _controller = m_config.pid;
         _config.distancePerRevolution = ArmConstants::kInPerRotation;

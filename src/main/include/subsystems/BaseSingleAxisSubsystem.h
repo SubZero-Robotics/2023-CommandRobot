@@ -139,12 +139,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-
-                if (_config.type == AxisType::Rotational)
-                    _motor.Set(ArmConstants::kAntiGravityPercentage + speed);
-                else
-                    _motor.Set(speed);
-
+                _motor.Set(speed);
                 return;
             }
 
@@ -154,7 +149,6 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::Level::VERBOSE);
 
             _motor.Set(0);
-
             return;
         }
 
@@ -166,17 +160,13 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
-
-                if (_config.type == AxisType::Rotational)
-                    _motor.Set(ArmConstants::kAntiGravityPercentage + speed);
-                else
                     _motor.Set(speed);
                 return;
             }
 
             if (_log)
                 Logging::logToStdOut(
-                    _prefix, "NOT MOVING; AT MAX" + std::to_string(speed),
+                    _prefix, "NOT MOVING; AT MAX " + std::to_string(speed),
                     Logging::Level::VERBOSE);
             _motor.Set(0);
             return;
@@ -186,9 +176,6 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             Logging::logToStdOut(_prefix,
                                  "SETTING SPEED TO: " + std::to_string(speed),
                                  Logging::Level::VERBOSE);
-        if (_config.type == AxisType::Rotational)
-            _motor.Set(ArmConstants::kAntiGravityPercentage + speed);
-        else
             _motor.Set(speed);
     }
 
@@ -205,7 +192,10 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
      */
     void RunMotorExternal(double speed) override {
         // TODO: constant
-        if (abs(speed) <= 0.05) return;
+        if (abs(speed) <= 0.05) {
+            if (_config.type == AxisType::Rotational)
+                    _motor.Set(ArmConstants::kAntiGravityPercentage);
+        }
 
         if (_isMovingToPosition) {
             StopMovement();
@@ -284,7 +274,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             }
         }
 
-        if (GetCurrentPosition() >= _config.maxDistance) {
+        if (GetCurrentPosition() >= _config.maxDistance && GetCurrentPosition() < 350) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT MAX ENC",
                                      Logging::Level::INFO);
