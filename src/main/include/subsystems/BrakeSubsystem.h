@@ -40,12 +40,13 @@ class BrakeSubsystem : public frc2::SubsystemBase {
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
 
-    frc::Compressor m_compressor{DriveConstants::kPenumaticsModuleID,
-                                 frc::PneumaticsModuleType::CTREPCM};
-    frc::DoubleSolenoid exampleDoublePH{
-        DriveConstants::kPenumaticsModuleID, frc::PneumaticsModuleType::CTREPCM,
-        DriveConstants::kSolenoidForwardChannel,
-        DriveConstants::kSolenoidReverseChannel};
+    // frc::Compressor m_compressor{DriveConstants::kPenumaticsModuleID,
+    //                              frc::PneumaticsModuleType::CTREPCM};
+    // frc::DoubleSolenoid exampleDoublePH{
+    //     DriveConstants::kPenumaticsModuleID,
+    //     frc::PneumaticsModuleType::CTREPCM,
+    //     DriveConstants::kSolenoidForwardChannel,
+    //     DriveConstants::kSolenoidReverseChannel};
     WPI_TalonFX &_rTalon;
     WPI_TalonFX &_lTalon;
 };

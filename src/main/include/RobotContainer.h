@@ -24,6 +24,7 @@
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/RotateArmSubsystem.h"
+#include "subsystems/VL53L1XSubsystem.h"
 #include "subsystems/WristSubsystem.h"
 
 /**
@@ -63,6 +64,7 @@ class RobotContainer {
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
     IntakeSubsystem m_intake{&m_leds};
     WristSubsystem m_wrist;
+    VL53L1XController m_lidar{kLidarInputPin};
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
