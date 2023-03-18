@@ -140,8 +140,10 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
 
-                if (_config.type == AxisType::Rotational) _motor.Set(ArmConstants::kAntiGravityPercentage +
-                    speed); else _motor.Set(speed);
+                if (_config.type == AxisType::Rotational)
+                    _motor.Set(ArmConstants::kAntiGravityPercentage + speed);
+                else
+                    _motor.Set(speed);
 
                 return;
             }
@@ -152,7 +154,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     Logging::Level::VERBOSE);
 
             _motor.Set(0);
-            
+
             return;
         }
 
@@ -165,8 +167,10 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
                         Logging::Level::VERBOSE);
 
-                if (_config.type == AxisType::Rotational) _motor.Set(ArmConstants::kAntiGravityPercentage +
-                       speed); else _motor.Set(speed);
+                if (_config.type == AxisType::Rotational)
+                    _motor.Set(ArmConstants::kAntiGravityPercentage + speed);
+                else
+                    _motor.Set(speed);
                 return;
             }
 
@@ -182,8 +186,10 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             Logging::logToStdOut(_prefix,
                                  "SETTING SPEED TO: " + std::to_string(speed),
                                  Logging::Level::VERBOSE);
-        if (_config.type == AxisType::Rotational) _motor.Set(ArmConstants::kAntiGravityPercentage +
-                       speed); else _motor.Set(speed);
+        if (_config.type == AxisType::Rotational)
+            _motor.Set(ArmConstants::kAntiGravityPercentage + speed);
+        else
+            _motor.Set(speed);
     }
 
     void RunMotorSpeedDefault(bool invertDirection = false) override {
