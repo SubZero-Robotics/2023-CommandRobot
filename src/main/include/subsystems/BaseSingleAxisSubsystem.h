@@ -149,7 +149,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     _prefix, "NOT MOVING; AT HOME" + std::to_string(speed),
                     Logging::Level::VERBOSE);
 
-            _motor.Set(0);
+            _motor.Set(ArmConstants::kAntiGravityPercentage * _config.motorMultiplier);
             return;
         }
 
@@ -170,7 +170,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                 Logging::logToStdOut(
                     _prefix, "NOT MOVING; AT MAX" + std::to_string(speed),
                     Logging::Level::VERBOSE);
-            _motor.Set(0);
+            _motor.Set(ArmConstants::kAntiGravityPercentage * _config.motorMultiplier);
             return;
         }
 
@@ -193,6 +193,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
      * @param speed Percentage speed
      */
     void RunMotorExternal(double speed) override {
+        // TODO: constant
         if (abs(speed) <= 0.05) return;
 
         if (_isMovingToPosition) {
