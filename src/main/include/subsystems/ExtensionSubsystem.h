@@ -14,7 +14,8 @@ class ExtensionSubsystem
         : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
                                   nullptr, "EXTEND") {
         _config = m_config;
-        m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
+        _controller = m_config.pid;
+        // m_encoder.SetPositionConversionFactor(_config.distancePerRevolution);
     }
 
     void ResetEncoder() override {
@@ -25,7 +26,7 @@ class ExtensionSubsystem
     }
 
     double GetCurrentPosition() override {
-        auto position = m_encoder.GetPosition();
+        auto position = m_encoder.GetPosition() * _config.distancePerRevolution;
 
         Logging::logToSmartDashboard("ExtensionPosition",
                                      std::to_string(position) + " in",

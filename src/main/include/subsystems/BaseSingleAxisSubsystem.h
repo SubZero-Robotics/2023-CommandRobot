@@ -251,7 +251,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
             }
         }
 
-        if (GetCurrentPosition() <= _config.minDistance) {
+        // TODO: Constant wrap-around value
+        if (GetCurrentPosition() <= _config.minDistance || GetCurrentPosition() >= 350.0) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME ENC",
                                      Logging::Level::INFO);
@@ -321,7 +322,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
         if (_log)
             Logging::logToStdOut(_prefix, "Set homing to true",
                                  Logging::Level::INFO);
-        _isMovingToPosition = false;
+        StopMovement();
         _isHoming = true;
     }
 
@@ -369,9 +370,9 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     Encoder &_enc;
     SingleAxisConfig _config;
     frc::ProfiledPIDController<Unit> _controller;
-    bool _isHoming;
-    bool _isMovingToPosition;
-    double _targetPosition;
+    bool _isHoming = false;
+    bool _isMovingToPosition = false;
+    double _targetPosition = 0.0;
     bool _log;
     std::string _prefix;
 
