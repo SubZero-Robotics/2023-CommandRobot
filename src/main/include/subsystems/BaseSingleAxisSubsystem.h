@@ -194,13 +194,17 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
     void RunMotorExternal(double speed) override {
         // TODO: constant
         if (abs(speed) <= 0.05) {
-            if (_isMovingToPosition) return; // Don't set the motor and overwrite a potential automated movement
+            if (_isMovingToPosition)
+                return;  // Don't set the motor and overwrite a potential
+                         // automated movement
 
             if (_config.type == AxisType::Rotational)
-                _motor.Set(ArmConstants::kAntiGravityPercentage);   // Make 'er hover!
-            else _motor.Set(0);
+                _motor.Set(
+                    ArmConstants::kAntiGravityPercentage);  // Make 'er hover!
+            else
+                _motor.Set(0);
 
-            return; 
+            return;
         }
 
         // Overwrite current automated position with joystick input
