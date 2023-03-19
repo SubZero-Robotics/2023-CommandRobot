@@ -2,8 +2,8 @@
 #define LED_CONTROLLER_H
 
 #include <frc/I2C.h>
-#include <frc2/command/SubsystemBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/SubsystemBase.h>
 
 #include <memory>
 
