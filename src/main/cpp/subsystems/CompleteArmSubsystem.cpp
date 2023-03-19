@@ -6,7 +6,7 @@ frc2::CommandPtr CompleteArmSubsystem::Stop() {
                m_wrist->StopMovement();
                m_extension->StopMovement();
                m_intake->Stop();
-           })
+           }, {this, m_rotateArm, m_wrist, m_extension, m_intake})
         .ToPtr()
         .AndThen(SetMovementLED(MovementType::None));
 }
@@ -53,7 +53,7 @@ frc2::CommandPtr CompleteArmSubsystem::SetMovementLED(MovementType type) {
                            break;
                    }
                },
-               {this})
+               {this, m_leds})
         .ToPtr();
 }
 
@@ -104,7 +104,7 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
 
 frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {
     return frc2::InstantCommand(
-               [pose]() { pose.axis->MoveToPosition(pose.position); })
+               [pose]() { pose.axis->MoveToPosition(pose.position); }, {pose.axis})
         .ToPtr();
 
     // ? Only allow arm to rotate downwards completely if extension is fully

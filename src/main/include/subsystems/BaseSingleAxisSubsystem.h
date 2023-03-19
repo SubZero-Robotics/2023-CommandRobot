@@ -6,7 +6,6 @@
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/FunctionalCommand.h>
-#include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxPIDController.h>
 #include <units/acceleration.h>
@@ -55,8 +54,7 @@
  * @tparam Unit Position unit (units::meters, etc.)
  */
 template <typename Motor, typename Encoder, typename Unit, typename Unit_t>
-class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
-                                public frc2::SubsystemBase {
+class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
    public:
     enum ConfigConstants {
         MOTOR_DIRECTION_NORMAL = 1,
