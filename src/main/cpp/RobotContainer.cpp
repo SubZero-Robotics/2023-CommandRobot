@@ -11,13 +11,13 @@
 #include "commands/DefaultDriveCommand.h"
 #include "commands/ExampleCommand.h"
 #include "commands/ExtenderCommand.h"
+#include "commands/GamepieceFunni.h"
 #include "commands/IntakeInCommand.h"
 #include "commands/IntakeOutCommand.h"
 #include "commands/IntakeStopCommand.h"
 #include "commands/LEDToggleCommand.h"
 #include "commands/RotateArmCommand.h"
 #include "commands/RotateWristCommand.h"
-#include "commands/GamepieceFunni.h"
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
@@ -30,8 +30,8 @@ RobotContainer::RobotContainer() {
     m_wrist = std::make_unique<WristSubsystem>();
 
     m_arm = std::make_unique<CompleteArmSubsystem>(
-        m_effector.get(), m_wrist.get(), m_extender.get(),
-        &m_intake, m_drive, &m_leds, &m_lidar);
+        m_effector.get(), m_wrist.get(), m_extender.get(), &m_intake, m_drive,
+        &m_leds, &m_lidar);
 
     // Configure the button bindings
     ConfigureBindings();
@@ -91,6 +91,5 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
     // TODO: return correct auto
     m_Brake.Set();
-    return autos::StraightBack(m_drive)
-        .AlongWith(m_arm->Home());
+    return autos::StraightBack(m_drive).AlongWith(m_arm->Home());
 }

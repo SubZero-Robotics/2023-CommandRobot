@@ -8,15 +8,14 @@
 
 #include <vector>
 
-#include "subsystems/BaseSingleAxisSubsystem.h"
-#include "subsystems/IntakeSubsystem.h"
-#include "subsystems/DriveSubsystem.h"
-#include "subsystems/LEDControllerSubsystem.h"
-#include "subsystems/VL53L1XSubsystem.h"
-
 #include "commands/IntakeInCommand.h"
 #include "commands/IntakeOutCommand.h"
 #include "commands/IntakeStopCommand.h"
+#include "subsystems/BaseSingleAxisSubsystem.h"
+#include "subsystems/DriveSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
+#include "subsystems/LEDControllerSubsystem.h"
+#include "subsystems/VL53L1XSubsystem.h"
 
 class CompleteArmSubsystem : public frc2::SubsystemBase {
    public:
@@ -46,12 +45,15 @@ class CompleteArmSubsystem : public frc2::SubsystemBase {
     CompleteArmSubsystem(ISingleAxisSubsystem* rotateArm,
                          ISingleAxisSubsystem* wrist,
                          ISingleAxisSubsystem* extension,
-                         IntakeSubsystem* intake,
-                         DriveSubsystem* drive,
-                         LEDControllerSubsystem *leds,
-                         VL53L1XController* lidar)
-        : m_rotateArm(rotateArm), m_wrist(wrist), m_extension(extension),
-        m_intake(intake), m_drive(drive), m_leds(leds), m_lidar(lidar) {}
+                         IntakeSubsystem* intake, DriveSubsystem* drive,
+                         LEDControllerSubsystem* leds, VL53L1XController* lidar)
+        : m_rotateArm(rotateArm),
+          m_wrist(wrist),
+          m_extension(extension),
+          m_intake(intake),
+          m_drive(drive),
+          m_leds(leds),
+          m_lidar(lidar) {}
 
     /**
      * @brief Stop movement on all axes
@@ -60,10 +62,10 @@ class CompleteArmSubsystem : public frc2::SubsystemBase {
     frc2::CommandPtr Stop();
 
     /**
-     * @brief  Set the LEDs to show the correct 
-     * 
-     * @param type 
-     * @return frc2::CommandPtr 
+     * @brief  Set the LEDs to show the correct
+     *
+     * @param type
+     * @return frc2::CommandPtr
      */
     frc2::CommandPtr SetMovementLED(MovementType type);
 

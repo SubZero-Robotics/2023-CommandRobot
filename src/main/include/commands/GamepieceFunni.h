@@ -1,12 +1,13 @@
 #pragma once
 
+#include <frc/Timer.h>
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc/Timer.h>
 
 #include "subsystems/IntakeSubsystem.h"
 
-class GamepieceFunni : public frc2::CommandHelper<frc2::CommandBase, GamepieceFunni> {
+class GamepieceFunni
+    : public frc2::CommandHelper<frc2::CommandBase, GamepieceFunni> {
    public:
     /**
      * Creates a new Intake.
@@ -34,9 +35,7 @@ class GamepieceFunni : public frc2::CommandHelper<frc2::CommandBase, GamepieceFu
 
     bool IsFinished() override { return isFinished; }
 
-    void End(bool interrupted) override {
-        m_intake->Stop();
-    }
+    void End(bool interrupted) override { m_intake->Stop(); }
 
    private:
     IntakeSubsystem* m_intake;
