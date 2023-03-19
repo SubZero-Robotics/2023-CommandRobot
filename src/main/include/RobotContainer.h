@@ -62,7 +62,7 @@ class RobotContainer {
     std::unique_ptr<RotateArmSubsystem> m_effector;
     std::unique_ptr<ExtensionSubsystem> m_extender;
     BrakeSubsystem m_Brake{RightLead, LeftLead};
-    LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
+    LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress, frc::I2C::Port::kMXP};
     IntakeSubsystem m_intake{&m_leds};
     std::unique_ptr<WristSubsystem> m_wrist;
     // std::unique_ptr<CompleteArmSubsystem> m_arm;
@@ -75,6 +75,8 @@ class RobotContainer {
 
     frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
     frc2::CommandPtr m_nothing = autos::DoesNothing(m_drive);
+
+    std::unique_ptr<CompleteArmSubsystem> m_arm;
 
     frc::SendableChooser<frc2::Command*> m_chooser;
 

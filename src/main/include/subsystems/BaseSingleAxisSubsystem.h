@@ -234,6 +234,12 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                     "Target Position: " +
                         std::to_string(Unit_t(_targetPosition).value()),
                     Logging::Level::INFO);
+
+            if (_controller.AtGoal()) {
+                _isMovingToPosition = false;
+                return;
+            }
+
             auto res = _controller.Calculate(Unit_t(GetCurrentPosition()),
                                              Unit_t(_targetPosition));
             auto clampedRes = std::clamp(res, -1.0, 1.0);

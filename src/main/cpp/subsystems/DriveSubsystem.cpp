@@ -137,6 +137,14 @@ void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
     previousPercentage = abs(currentPercentage);
 }
 
+frc2::CommandPtr DriveSubsystem::GetArcadeDriveCommand(double percentage, double rotation) {
+    return frc2::InstantCommand(
+        [this, percentage, rotation] (){
+            this->ArcadeDrive(percentage, rotation);
+        }
+    ).ToPtr();
+}
+
 void DriveSubsystem::TankDrive(units::meters_per_second_t left,
                                units::meters_per_second_t right) {
     frc::SmartDashboard::PutNumber("Left Auto Speed", (double)left);

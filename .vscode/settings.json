@@ -100,6 +100,7 @@
     "xmemory": "cpp",
     "xstring": "cpp",
     "xutility": "cpp",
-    "matrixfunctions": "cpp"
-  }
+    "matrixfunctions": "cpp",
+    "*.inc": "cpp"
+}
 }

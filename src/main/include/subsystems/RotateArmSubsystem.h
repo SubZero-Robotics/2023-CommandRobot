@@ -27,6 +27,8 @@ class RotateArmSubsystem
         auto position = m_enc.GetPosition() * _config.distancePerRevolution +
                         _config.minDistance;
 
+        if (position >= 350) position = 0;
+
         Logging::logToSmartDashboard("ArmPosition",
                                      std::to_string(position) + " deg",
                                      Logging::Level::INFO);

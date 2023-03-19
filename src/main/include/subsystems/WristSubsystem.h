@@ -23,6 +23,8 @@ class WristSubsystem
     double GetCurrentPosition() override {
         auto position = m_encoder.GetPosition() * _config.distancePerRevolution;
 
+        if (position >= 350) position = 0;
+
         Logging::logToSmartDashboard("WristPosition",
                                      std::to_string(position) + " deg",
                                      Logging::Level::INFO);
