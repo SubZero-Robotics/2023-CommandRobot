@@ -18,8 +18,7 @@ frc2::CommandPtr CompleteArmSubsystem::SetMovementLED(MovementType type) {
                        case MovementType::None:
                            // * Current cone color
                            m_leds->setOn();
-                           m_leds->setColor(
-                               m_leds->getCurrentColor());
+                           m_leds->setColor(m_leds->getCurrentColor());
                            m_leds->setPattern(
                                LEDControllerSubsystem::PatternType::SetAll,
                                true);
