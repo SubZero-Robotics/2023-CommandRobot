@@ -11,35 +11,35 @@ enum class Level { VERBOSE, INFO, WARNING, ERROR };
 
 static void logToSmartDashboard(const std::string& key, const std::string& msg,
                                 Level level = Level::INFO) {
-    frc::SmartDashboard::PutString(keyPrefix + "-" + key, msg);
+    frc::SmartDashboard::PutString(key, msg);
 }
 
 static void logToStdOut(const std::string& key, const std::string& msg,
-                        Level level) {
+                        Level level = Level::VERBOSE, const std::string& ansiKeyModifiers = "") {
     switch (level) {
         case Level::VERBOSE:
-            std::cout << "\033[34;1mVERBOSE:"
-                      << "[" << key << "\033[34;1m]\033[34m " << msg << "\033[0m"
+            std::cout << "\033[34;1mVERBOSE: "
+                      << "[" << ansiKeyModifiers << key << "\033[34;1m]\033[34m " << msg << "\033[0m"
                       << std::endl;
             break;
         case Level::INFO:
             std::cout << "\033[32;1mINFO: "
-                      << "[" << key << "\033[32;1m]\033[32m " << msg << "\033[0m"
+                      << "[" << ansiKeyModifiers << key << "\033[32;1m]\033[32m " << msg << "\033[0m"
                       << std::endl;
             break;
         case Level::WARNING:
             std::cout << "\033[33;1mWARNING: "
-                      << "[" << key << "\033[33;1m]\033[33m" << msg << "\033[0m"
+                      << "[" << ansiKeyModifiers << key << "\033[33;1m]\033[33m" << msg << "\033[0m"
                       << std::endl;
             break;
         case Level::ERROR:
             std::cout << "\033[31;1;7mERROR: "
-                      << "[" << key << "\033[31;1;7m]\033[31m" << msg << "\033[0m"
+                      << "[" << ansiKeyModifiers << key << "\033[31;1;7m]\033[31m" << msg << "\033[0m"
                       << std::endl;
             break;
         default:
             std::cout << "\033[37mLOG: "
-                      << "[" << key << "\033[37m]" << msg << "\033[0m"
+                      << "[" << ansiKeyModifiers << key << "\033[37m]" << msg << "\033[0m"
                       << std::endl;
             break;
     }

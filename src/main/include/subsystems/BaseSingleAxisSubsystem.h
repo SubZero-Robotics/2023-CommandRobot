@@ -94,7 +94,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
     BaseSingleAxisSubsystem(SingleAxisConfig &cfg, Motor &motor,
                             Encoder &encoder, frc::DigitalInput *minSwitch,
                             frc::DigitalInput *maxSwitch, std::string prefix,
-                            bool log = false)
+                            std::string ansiPrefixModifiers = "", bool log = false)
         : _motor(motor),
           _enc(encoder),
           _config(cfg),
@@ -102,8 +102,9 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
           _isHoming(false),
           _isMovingToPosition(false),
           _targetPosition(0),
-          _log(log),
           _prefix(prefix),
+          _ansiPrefixModifiers(ansiPrefixModifiers),
+          _log(log),
           _minLimitSwitch(minSwitch),
           _maxLimitSwitch(maxSwitch) {
         _config.defaultMovementSpeed =
@@ -122,22 +123,22 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
         if (_log)
             Logging::logToStdOut(
                 _prefix, "MUL IS " + std::to_string(_config.motorMultiplier),
-                Logging::Level::VERBOSE);
+                Logging::Level::VERBOSE, _ansiPrefixModifiers);
         speed *= _config.motorMultiplier;
         speed = std::clamp(speed, -1.0, 1.0);
         if (_log)
             Logging::logToStdOut(_prefix, "SPEED IS " + std::to_string(speed),
-                                 Logging::Level::VERBOSE);
+                                 Logging::Level::VERBOSE, _ansiPrefixModifiers);
 
         bool homeState = ignoreEncoder ? AtLimitSwitchHome() : AtHome();
         if (homeState) {
             if (_log)
-                Logging::logToStdOut(_prefix, "AT HOME", Logging::Level::INFO);
+                Logging::logToStdOut(_prefix, "AT HOME", Logging::Level::INFO, _ansiPrefixModifiers);
             if (speed < 0) {
                 if (_log)
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
-                        Logging::Level::VERBOSE);
+                        Logging::Level::VERBOSE, _ansiPrefixModifiers);
                 _motor.Set(speed);
                 return;
             }
@@ -145,7 +146,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             if (_log)
                 Logging::logToStdOut(
                     _prefix, "NOT MOVING; AT HOME" + std::to_string(speed),
-                    Logging::Level::VERBOSE);
+                    Logging::Level::VERBOSE, _ansiPrefixModifiers);
 
             _motor.Set(0);
             return;
@@ -158,7 +159,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                 if (_log)
                     Logging::logToStdOut(
                         _prefix, "SETTING SPEED TO: " + std::to_string(speed),
-                        Logging::Level::VERBOSE);
+                        Logging::Level::VERBOSE, _ansiPrefixModifiers);
                 _motor.Set(speed);
                 return;
             }
@@ -166,14 +167,14 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             if (_log)
                 Logging::logToStdOut(
                     _prefix, "NOT MOVING; AT MAX " + std::to_string(speed),
-                    Logging::Level::VERBOSE);
+                    Logging::Level::VERBOSE, _ansiPrefixModifiers);
             _motor.Set(0);
             return;
         } else {
             if (_log)
                 Logging::logToStdOut(
                     _prefix, "SETTING SPEED TO: " + std::to_string(speed),
-                    Logging::Level::VERBOSE);
+                    Logging::Level::VERBOSE, _ansiPrefixModifiers);
             _motor.Set(speed);
         }
     }
@@ -230,11 +231,11 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                 Logging::logToStdOut(
                     _prefix,
                     "Target Position: " +
-                        std::to_string(Unit_t(_targetPosition).value()) + _config.type == AxisType::Linear ? " in" : " deg",
-                    Logging::Level::INFO);
+                        std::to_string(Unit_t(_targetPosition).value()) + std::string(_config.type == AxisType::Linear ? " in" : " deg"),
+                    Logging::Level::INFO, _ansiPrefixModifiers);
 
             if (_controller.AtGoal()) {
-                Logging::logToStdOut(_prefix, "REACHED GOAL", Logging::Level::INFO);
+                Logging::logToStdOut(_prefix, "REACHED GOAL", Logging::Level::INFO, _ansiPrefixModifiers);
                 _isMovingToPosition = false;
                 return;
             }
@@ -245,7 +246,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             if (_log)
                 Logging::logToStdOut(_prefix,
                                      "Clamped Res: " + std::to_string(res),
-                                     Logging::Level::INFO);
+                                     Logging::Level::INFO, _ansiPrefixModifiers);
             Logging::logToSmartDashboard(_prefix + " TargetPos",
                                          std::to_string(_targetPosition),
                                          Logging::Level::INFO);
@@ -263,7 +264,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                 ResetEncoder();
                 if (_log)
                     Logging::logToStdOut(_prefix, "AT HOME SWITCH",
-                                         Logging::Level::INFO);
+                                         Logging::Level::INFO, _ansiPrefixModifiers);
                 return true;
             }
         }
@@ -273,7 +274,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             GetCurrentPosition() >= 350.0) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME ENC",
-                                     Logging::Level::INFO);
+                                     Logging::Level::INFO, _ansiPrefixModifiers);
             return true;
         }
 
@@ -285,7 +286,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             if (AtLimitSwitchMax()) {
                 if (_log)
                     Logging::logToStdOut(_prefix, "AT MAX SWITCH",
-                                         Logging::Level::INFO);
+                                         Logging::Level::INFO, _ansiPrefixModifiers);
                 return true;
             }
         }
@@ -294,7 +295,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             GetCurrentPosition() < 350) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT MAX ENC",
-                                     Logging::Level::INFO);
+                                     Logging::Level::INFO, _ansiPrefixModifiers);
 
             return true;
         }
@@ -308,7 +309,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             if (_log)
                 Logging::logToStdOut(
                     _prefix, "MIN LIMIT SWITCH: " + std::to_string(state),
-                    Logging::Level::VERBOSE);
+                    Logging::Level::VERBOSE, _ansiPrefixModifiers);
             return state;
         }
 
@@ -321,7 +322,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             if (_log)
                 Logging::logToStdOut(
                     _prefix, "MAX LIMIT SWITCH: " + std::to_string(state),
-                    Logging::Level::VERBOSE);
+                    Logging::Level::VERBOSE, _ansiPrefixModifiers);
             return state;
         }
 
@@ -332,7 +333,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
         if (_log)
             Logging::logToStdOut(_prefix,
                                  "Moving to " + std::to_string(position),
-                                 Logging::Level::INFO);
+                                 Logging::Level::INFO, _ansiPrefixModifiers);
         _isMovingToPosition = true;
         _targetPosition = position;
     }
@@ -340,7 +341,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
     void Home() override {
         if (_log)
             Logging::logToStdOut(_prefix, "Set homing to true",
-                                 Logging::Level::INFO);
+                                 Logging::Level::INFO, _ansiPrefixModifiers);
         StopMovement();
         _isHoming = true;
     }
@@ -350,7 +351,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
     inline void StopMovement() override {
         if (_log)
             Logging::logToStdOut(_prefix, "Movement stopped",
-                                 Logging::Level::INFO);
+                                 Logging::Level::INFO, _ansiPrefixModifiers);
         _isHoming = false;
         _isMovingToPosition = false;
         _motor.Set(0);
@@ -392,8 +393,9 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
     bool _isHoming = false;
     bool _isMovingToPosition = false;
     double _targetPosition = 0.0;
-    bool _log;
     std::string _prefix;
+    std::string _ansiPrefixModifiers;
+    bool _log;
 
    private:
     frc::DigitalInput *_minLimitSwitch = nullptr;
