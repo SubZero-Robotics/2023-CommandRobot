@@ -58,7 +58,7 @@ class ExtensionSubsystem
             ArmConstants::kExtenderSetP, ArmConstants::kExtenderSetI,
             ArmConstants::kExtenderSetD,
             frc::TrapezoidProfile<units::inch>::Constraints(1.75_mps,
-                                                             0.75_mps_sq)),
+                                                            0.75_mps_sq)),
         .minDistance = 0,
         .maxDistance = ArmConstants::kMaxArmDistance,
         .distancePerRevolution = ArmConstants::kInPerRotation,
