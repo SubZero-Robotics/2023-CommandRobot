@@ -101,7 +101,8 @@ frc2::CommandPtr CompleteArmSubsystem::TravelMode() {
 }
 
 frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
-    // TODO
+    return SetMovementLED(MovementType::PlaceHigh);
+    // TODO: Add remaining commands
 }
 
 frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {
