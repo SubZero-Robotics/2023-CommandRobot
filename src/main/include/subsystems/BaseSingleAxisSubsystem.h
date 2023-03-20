@@ -94,7 +94,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
     BaseSingleAxisSubsystem(SingleAxisConfig &cfg, Motor &motor,
                             Encoder &encoder, frc::DigitalInput *minSwitch,
                             frc::DigitalInput *maxSwitch, std::string prefix,
-                            std::string ansiPrefixModifiers = "", bool log = false)
+                            std::string ansiPrefixModifiers = "",
+                            bool log = false)
         : _motor(motor),
           _enc(encoder),
           _config(cfg),
@@ -133,7 +134,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
         bool homeState = ignoreEncoder ? AtLimitSwitchHome() : AtHome();
         if (homeState) {
             if (_log)
-                Logging::logToStdOut(_prefix, "AT HOME", Logging::Level::INFO, _ansiPrefixModifiers);
+                Logging::logToStdOut(_prefix, "AT HOME", Logging::Level::INFO,
+                                     _ansiPrefixModifiers);
             if (speed < 0) {
                 if (_log)
                     Logging::logToStdOut(
@@ -231,11 +233,15 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                 Logging::logToStdOut(
                     _prefix,
                     "Target Position: " +
-                        std::to_string(Unit_t(_targetPosition).value()) + std::string(_config.type == AxisType::Linear ? " in" : " deg"),
+                        std::to_string(Unit_t(_targetPosition).value()) +
+                        std::string(_config.type == AxisType::Linear ? " in"
+                                                                     : " deg"),
                     Logging::Level::INFO, _ansiPrefixModifiers);
 
             if (_controller.AtGoal()) {
-                Logging::logToStdOut(_prefix, "REACHED GOAL", Logging::Level::INFO, _ansiPrefixModifiers);
+                Logging::logToStdOut(_prefix, "REACHED GOAL",
+                                     Logging::Level::INFO,
+                                     _ansiPrefixModifiers);
                 _isMovingToPosition = false;
                 return;
             }
@@ -244,9 +250,9 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                                              Unit_t(_targetPosition));
             auto clampedRes = std::clamp(res, -1.0, 1.0);
             if (_log)
-                Logging::logToStdOut(_prefix,
-                                     "Clamped Res: " + std::to_string(res),
-                                     Logging::Level::INFO, _ansiPrefixModifiers);
+                Logging::logToStdOut(
+                    _prefix, "Clamped Res: " + std::to_string(res),
+                    Logging::Level::INFO, _ansiPrefixModifiers);
             Logging::logToSmartDashboard(_prefix + " TargetPos",
                                          std::to_string(_targetPosition),
                                          Logging::Level::INFO);
@@ -264,7 +270,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                 ResetEncoder();
                 if (_log)
                     Logging::logToStdOut(_prefix, "AT HOME SWITCH",
-                                         Logging::Level::INFO, _ansiPrefixModifiers);
+                                         Logging::Level::INFO,
+                                         _ansiPrefixModifiers);
                 return true;
             }
         }
@@ -274,7 +281,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             GetCurrentPosition() >= 350.0) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT HOME ENC",
-                                     Logging::Level::INFO, _ansiPrefixModifiers);
+                                     Logging::Level::INFO,
+                                     _ansiPrefixModifiers);
             return true;
         }
 
@@ -286,7 +294,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             if (AtLimitSwitchMax()) {
                 if (_log)
                     Logging::logToStdOut(_prefix, "AT MAX SWITCH",
-                                         Logging::Level::INFO, _ansiPrefixModifiers);
+                                         Logging::Level::INFO,
+                                         _ansiPrefixModifiers);
                 return true;
             }
         }
@@ -295,7 +304,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             GetCurrentPosition() < 350) {
             if (_log)
                 Logging::logToStdOut(_prefix, "AT MAX ENC",
-                                     Logging::Level::INFO, _ansiPrefixModifiers);
+                                     Logging::Level::INFO,
+                                     _ansiPrefixModifiers);
 
             return true;
         }
