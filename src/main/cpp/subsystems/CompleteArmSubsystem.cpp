@@ -1,12 +1,14 @@
 #include "subsystems/CompleteArmSubsystem.h"
 
 frc2::CommandPtr CompleteArmSubsystem::Stop() {
-    return frc2::InstantCommand([this]() {
-               m_rotateArm->StopMovement();
-               m_wrist->StopMovement();
-               m_extension->StopMovement();
-               m_intake->Stop();
-           }, {this, m_rotateArm, m_wrist, m_extension, m_intake})
+    return frc2::InstantCommand(
+               [this]() {
+                   m_rotateArm->StopMovement();
+                   m_wrist->StopMovement();
+                   m_extension->StopMovement();
+                   m_intake->Stop();
+               },
+               {this, m_rotateArm, m_wrist, m_extension, m_intake})
         .ToPtr()
         .AndThen(SetMovementLED(MovementType::None));
 }
@@ -104,7 +106,8 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
 
 frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {
     return frc2::InstantCommand(
-               [pose]() { pose.axis->MoveToPosition(pose.position); }, {pose.axis})
+               [pose]() { pose.axis->MoveToPosition(pose.position); },
+               {pose.axis})
         .ToPtr();
 
     // ? Only allow arm to rotate downwards completely if extension is fully
