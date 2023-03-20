@@ -199,7 +199,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem,
                          // automated movement
 
             if (_config.type == AxisType::Rotational)
-                _motor.Set(
+                RunMotorSpeed(
                     ArmConstants::kAntiGravityPercentage);  // Make 'er hover!
             else
                 _motor.Set(0);

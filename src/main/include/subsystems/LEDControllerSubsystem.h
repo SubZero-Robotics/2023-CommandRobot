@@ -6,6 +6,8 @@
 
 #include <memory>
 
+#include "utils/Logging.h"
+
 class LEDControllerSubsystem {
    public:
     enum class CommandType {

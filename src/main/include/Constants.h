@@ -56,11 +56,11 @@ constexpr double kExtenderSetFF = 0.000015;
 constexpr int kRotationLimitSwitchHomePort = 0;
 constexpr int kRotationLimitSwitchMaxPort = 1;
 constexpr double kRotationHomeDegree = 60;
-constexpr double kRotationMaxDegree = 125;
+constexpr double kRotationMaxDegree = 145;
 constexpr int kArmSoftLimitForwardDegrees = 65;
 constexpr double kArmGearRatio = 197.14;
 constexpr double kArmStepSize = 4;
-constexpr double kAntiGravityPercentage = 0.01;
+constexpr double kAntiGravityPercentage = -0.03;
 
 constexpr double kArmRotationSetP = 6e-5;
 constexpr double kArmRotationSetI = 1e-6;

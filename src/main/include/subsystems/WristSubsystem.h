@@ -37,6 +37,28 @@ class WristSubsystem
         return position;
     }
 
+    void RunMotorExternal(double speed) override {
+        // TODO: constant
+        if (abs(speed) <= 0.05) {
+            if (_isMovingToPosition)
+                return;  // Don't set the motor and overwrite a potential
+                         // automated movement
+
+            if (_config.type == AxisType::Rotational)
+                RunMotorSpeed(0.01);
+            else
+                _motor.Set(0);
+            return;
+        }
+
+        // Overwrite current automated position with joystick input
+        if (_isMovingToPosition) {
+            StopMovement();
+        }
+
+        RunMotorSpeed(speed);
+    }
+
    private:
     rev::CANSparkMax m_wristMotor{CANSparkMaxConstants::kWristRotationMotorID,
                                   rev::CANSparkMax::MotorType::kBrushless};
@@ -58,7 +80,7 @@ class WristSubsystem
         .motorMultiplier = -1.0,
         .minLimitSwitchPort = ArmConstants::kWristLimitSwitchPort,
         .maxLimitSwitchPort = BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
-        .defaultMovementSpeed = ArmConstants::kWristHomingSpeed};
+        .defaultMovementSpeed = -ArmConstants::kWristHomingSpeed};
 
     frc::DigitalInput min{ArmConstants::kWristLimitSwitchPort};
 };
