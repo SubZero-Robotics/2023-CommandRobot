@@ -11,6 +11,7 @@
 #include "commands/DefaultDriveCommand.h"
 #include "commands/ExampleCommand.h"
 #include "commands/ExtenderCommand.h"
+#include "commands/GamepieceFunni.h"
 #include "commands/IntakeInCommand.h"
 #include "commands/IntakeOutCommand.h"
 #include "commands/IntakeStopCommand.h"
@@ -28,8 +29,9 @@ RobotContainer::RobotContainer() {
     m_extender = std::make_unique<ExtensionSubsystem>();
     m_wrist = std::make_unique<WristSubsystem>();
 
-    // m_arm = std::make_unique<CompleteArmSubsystem>(
-    //     m_effector.get(), m_wrist.get(), m_extender.get());
+    m_arm = std::make_unique<CompleteArmSubsystem>(
+        m_effector.get(), m_wrist.get(), m_extender.get(), &m_intake, m_drive,
+        &m_leds, &m_lidar);
 
     // Configure the button bindings
     ConfigureBindings();
@@ -64,17 +66,19 @@ void RobotContainer::ConfigureBindings() {
 
     m_intake.SetDefaultCommand(IntakeStop(&m_intake).ToPtr());
 
-    ArmXbox.Y().OnTrue(std::move(m_effector->GetHomeCommand()));
+    ArmXbox.Y().OnTrue(std::move(m_arm->AutoIntake()));
 
-    ArmXbox.X().OnTrue(std::move(m_extender->GetHomeCommand()));
+    ArmXbox.X().OnTrue(std::move(m_arm->AutoPlaceHigh()));
 
-    ArmXbox.B().OnTrue(std::move(m_wrist->GetHomeCommand()));
+    ArmXbox.B().OnTrue(std::move(m_arm->TravelMode()));
 
-    // ArmXbox.A().OnTrue(std::move(m_multiAxis->Home()));
+    ArmXbox.A().OnTrue(std::move(m_arm->Home()));
 
     ArmXbox.LeftBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 
     ArmXbox.RightBumper().WhileTrue(IntakeIn(&m_intake).ToPtr());
+
+    DriverXbox.A().WhileTrue(GamepieceFunni(&m_intake).ToPtr());
 
     DriverXbox.RightBumper().OnTrue(LEDToggle(&m_leds).ToPtr());
 
@@ -87,5 +91,5 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // An example command will be run in autonomous
     // TODO: return correct auto
     m_Brake.Set();
-    return autos::StraightBack(m_drive);
+    return autos::StraightBack(m_drive).AlongWith(m_arm->Home());
 }

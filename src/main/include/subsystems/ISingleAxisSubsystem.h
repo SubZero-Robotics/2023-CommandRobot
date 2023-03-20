@@ -2,10 +2,11 @@
 #define I_SINGLE_AXIS_SUBSYSTEM_H
 
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/SubsystemBase.h>
 
 #include <memory>
 
-class ISingleAxisSubsystem {
+class ISingleAxisSubsystem : public frc2::SubsystemBase {
    public:
     // Need controller input
     virtual void RunMotorSpeed(double speed, bool ignoreEncoder) = 0;

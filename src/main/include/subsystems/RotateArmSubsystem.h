@@ -11,7 +11,7 @@ class RotateArmSubsystem
    public:
     RotateArmSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min,
-                                  &max, "ARM") {
+                                  &max, "ARM", "\033[95;40;4m", true) {
         m_followRotationMotor.Follow(m_leadRotationMotor);
         // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
         _config = m_config;
@@ -26,6 +26,8 @@ class RotateArmSubsystem
         // "Home" is at 60 deg relative to ground
         auto position = m_enc.GetPosition() * _config.distancePerRevolution +
                         _config.minDistance;
+
+        if (position >= 350) position = 0;
 
         Logging::logToSmartDashboard("ArmPosition",
                                      std::to_string(position) + " deg",

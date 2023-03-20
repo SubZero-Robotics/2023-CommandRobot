@@ -11,7 +11,7 @@ class WristSubsystem
    public:
     WristSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min,
-                                  nullptr, "WRIST") {
+                                  nullptr, "WRIST", "\033[92;40;4m") {
         _config = m_config;
         _controller = m_config.pid;
         m_encoder.SetPositionConversionFactor(1);
@@ -22,6 +22,8 @@ class WristSubsystem
 
     double GetCurrentPosition() override {
         auto position = m_encoder.GetPosition() * _config.distancePerRevolution;
+
+        if (position >= 350) position = 0;
 
         Logging::logToSmartDashboard("WristPosition",
                                      std::to_string(position) + " deg",

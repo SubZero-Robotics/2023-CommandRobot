@@ -63,6 +63,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
      */
     void ArcadeDrive(double, double);
 
+    frc2::CommandPtr GetArcadeDriveCommand(double, double);
+
     void TankDrive(units::meters_per_second_t, units::meters_per_second_t);
 
     /**
