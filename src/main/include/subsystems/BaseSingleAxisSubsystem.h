@@ -230,10 +230,11 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                 Logging::logToStdOut(
                     _prefix,
                     "Target Position: " +
-                        std::to_string(Unit_t(_targetPosition).value()),
+                        std::to_string(Unit_t(_targetPosition).value()) + _config.type == AxisType::Linear ? " in" : " deg",
                     Logging::Level::INFO);
 
             if (_controller.AtGoal()) {
+                Logging::logToStdOut(_prefix, "REACHED GOAL", Logging::Level::INFO);
                 _isMovingToPosition = false;
                 return;
             }
@@ -245,7 +246,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                 Logging::logToStdOut(_prefix,
                                      "Clamped Res: " + std::to_string(res),
                                      Logging::Level::INFO);
-            Logging::logToSmartDashboard(_prefix + " TargetPosition",
+            Logging::logToSmartDashboard(_prefix + " TargetPos",
                                          std::to_string(_targetPosition),
                                          Logging::Level::INFO);
             RunMotorSpeed(clampedRes);
