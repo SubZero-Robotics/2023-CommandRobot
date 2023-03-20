@@ -19,13 +19,13 @@ static void logToStdOut(const std::string& key, const std::string& msg,
     switch (level) {
         case Level::VERBOSE:
             std::cout << "\033[34;1mVERBOSE:"
-                      << "[" << key << "\033[34;1m]\033[34m " << msg << "\033[0m"
-                      << std::endl;
+                      << "[" << key << "\033[34;1m]\033[34m " << msg
+                      << "\033[0m" << std::endl;
             break;
         case Level::INFO:
             std::cout << "\033[32;1mINFO: "
-                      << "[" << key << "\033[32;1m]\033[32m " << msg << "\033[0m"
-                      << std::endl;
+                      << "[" << key << "\033[32;1m]\033[32m " << msg
+                      << "\033[0m" << std::endl;
             break;
         case Level::WARNING:
             std::cout << "\033[33;1mWARNING: "
@@ -34,8 +34,8 @@ static void logToStdOut(const std::string& key, const std::string& msg,
             break;
         case Level::ERROR:
             std::cout << "\033[31;1;7mERROR: "
-                      << "[" << key << "\033[31;1;7m]\033[31m" << msg << "\033[0m"
-                      << std::endl;
+                      << "[" << key << "\033[31;1;7m]\033[31m" << msg
+                      << "\033[0m" << std::endl;
             break;
         default:
             std::cout << "\033[37mLOG: "

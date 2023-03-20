@@ -230,11 +230,17 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                 Logging::logToStdOut(
                     _prefix,
                     "Target Position: " +
-                        std::to_string(Unit_t(_targetPosition).value()) + _config.type == AxisType::Linear ? " in" : " deg",
+                                std::to_string(
+                                    Unit_t(_targetPosition).value()) +
+                                _config.type ==
+                            AxisType::Linear
+                        ? " in"
+                        : " deg",
                     Logging::Level::INFO);
 
             if (_controller.AtGoal()) {
-                Logging::logToStdOut(_prefix, "REACHED GOAL", Logging::Level::INFO);
+                Logging::logToStdOut(_prefix, "REACHED GOAL",
+                                     Logging::Level::INFO);
                 _isMovingToPosition = false;
                 return;
             }
