@@ -91,7 +91,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
         double defaultMovementSpeed = 0.2;
     };
 
-    BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &motor,
+    BaseSingleAxisSubsystem(SingleAxisConfig &cfg, Motor &motor,
                             Encoder &encoder, frc::DigitalInput *minSwitch,
                             frc::DigitalInput *maxSwitch, std::string prefix,
                             bool log = false)
@@ -386,7 +386,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
    protected:
     Motor &_motor;
     Encoder &_enc;
-    SingleAxisConfig _config;
+    SingleAxisConfig &_config;
     frc::ProfiledPIDController<Unit> _controller;
     bool _isHoming = false;
     bool _isMovingToPosition = false;
