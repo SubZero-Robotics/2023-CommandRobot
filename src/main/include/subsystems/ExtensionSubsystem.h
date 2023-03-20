@@ -7,12 +7,12 @@
 
 class ExtensionSubsystem
     : public BaseSingleAxisSubsystem<rev::CANSparkMax,
-                                     rev::SparkMaxRelativeEncoder, units::meter,
-                                     units::meter_t> {
+                                     rev::SparkMaxRelativeEncoder, units::inch,
+                                     units::inch_t> {
    public:
     ExtensionSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
-                                  nullptr, "EXTEND", true) {
+                                  nullptr, "EXTEND", "\033[96;40;4m") {
         m_extensionMotor.SetInverted(true);
         _config = m_config;
         _controller = m_config.pid;
@@ -54,11 +54,11 @@ class ExtensionSubsystem
 
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Linear,
-        .pid = frc::ProfiledPIDController<units::meter>(
+        .pid = frc::ProfiledPIDController<units::inch>(
             ArmConstants::kExtenderSetP, ArmConstants::kExtenderSetI,
             ArmConstants::kExtenderSetD,
-            frc::TrapezoidProfile<units::meter>::Constraints(1.75_mps,
-                                                             0.75_mps_sq)),
+            frc::TrapezoidProfile<units::inch>::Constraints(1.75_mps,
+                                                            0.75_mps_sq)),
         .minDistance = 0,
         .maxDistance = ArmConstants::kMaxArmDistance,
         .distancePerRevolution = ArmConstants::kInPerRotation,

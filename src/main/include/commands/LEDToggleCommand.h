@@ -24,7 +24,9 @@ class LEDToggle : public frc2::CommandHelper<frc2::CommandBase, LEDToggle> {
      * @param subsystem The subsystem used by this command.
      */
     explicit LEDToggle(LEDControllerSubsystem* subsystem)
-        : m_subsystem(subsystem) {}
+        : m_subsystem(subsystem) {
+        AddRequirements(subsystem);
+    }
 
     void Execute() override {
         if (m_subsystem->getCurrentColor() ==

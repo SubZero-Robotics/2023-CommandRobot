@@ -3,10 +3,11 @@
 
 #include <frc/I2C.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/SubsystemBase.h>
 
 #include <memory>
 
-class LEDControllerSubsystem {
+class LEDControllerSubsystem : public frc2::SubsystemBase {
    public:
     enum class CommandType {
         On = 0,
