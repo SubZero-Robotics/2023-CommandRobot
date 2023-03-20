@@ -20,15 +20,13 @@ static void logToStdOut(const std::string& key, const std::string& msg,
     switch (level) {
         case Level::VERBOSE:
             std::cout << "\033[34;1mVERBOSE: "
-                      << "[" << ansiKeyModifiers << key
-                      << "\033[34;1m]\033[34m" << msg << "\033[0m"
-                      << std::endl;
+                      << "[" << ansiKeyModifiers << key << "\033[34;1m]\033[34m"
+                      << msg << "\033[0m" << std::endl;
             break;
         case Level::INFO:
             std::cout << "\033[32;1mINFO: "
-                      << "[" << ansiKeyModifiers << key
-                      << "\033[32;1m]\033[32m" << msg << "\033[0m"
-                      << std::endl;
+                      << "[" << ansiKeyModifiers << key << "\033[32;1m]\033[32m"
+                      << msg << "\033[0m" << std::endl;
             break;
         case Level::WARNING:
             std::cout << "\033[33;1mWARNING: "
