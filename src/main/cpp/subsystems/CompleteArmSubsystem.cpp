@@ -71,57 +71,54 @@ frc2::CommandPtr CompleteArmSubsystem::Home() {
 frc2::CommandPtr CompleteArmSubsystem::AutoIntake() {
     return TravelMode()
         .AndThen(SetMovementLED(MovementType::AutoIntake))
+        // TODO: Change angle based on game piece
         .AndThen(SetPose({.axis = m_wrist, .position = 90}))
-        .Until([this]() { return !m_wrist->GetIsMovingToPosition(); })
-        // Start intaking
-        .AndThen(IntakeIn(m_intake).ToPtr())
+
         // Move forward slowly until we reach the cube
-        .RaceWith(m_drive->GetArcadeDriveCommand(0.1, 0))
-        .Until([this]() { return m_lidar->GetDistance() <= 400; })
-        // Stop moving
-        .AndThen(m_drive->GetArcadeDriveCommand(0, 0))
-        // ? Stop intaking- might need to keep this spinning for an extra second
-        .AndThen(IntakeStop(m_intake).ToPtr())
+        .AndThen(autos::StraightBack(m_drive, -20, 0.1)
+                     // TODO: Change distance based on game piece
+                     // TODO: Make distance(s) a constant
+                     .Until([this]() {
+                         return (m_lidar->GetDistance() <= 400 &&
+                                 m_lidar->IsValid());
+                     })
+                     .RaceWith(IntakeIn(m_intake).ToPtr()))
+
+        // Intake a little bit more
+        .AndThen(SpinIntakeTimer(m_intake, 750_ms, true).ToPtr())
         .AndThen(TravelMode())
         .AndThen(SetMovementLED(MovementType::None));
 }
 
 frc2::CommandPtr CompleteArmSubsystem::TravelMode() {
-    // Move wrist to 0
     return SetMovementLED(MovementType::TravelMode)
+        // Move wrist to 0
         .AndThen(SetPose({.axis = m_wrist, .position = 0}))
-        .Until([this]() { return !m_wrist->GetIsMovingToPosition(); })
         // Move extension to 0
         .AndThen(SetPose({.axis = m_extension, .position = 0}))
-        .Until([this]() { return !m_extension->GetIsMovingToPosition(); })
         // Move arm to 0
         .AndThen(SetPose({.axis = m_rotateArm, .position = 0}))
-        .Until([this]() { return !m_rotateArm->GetIsMovingToPosition(); })
         .AndThen(SetMovementLED(MovementType::None));
 }
 
 frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
     return SetMovementLED(MovementType::PlaceHigh)
-        .AndThen(SetPose({.axis = m_rotateArm,
-                          .position = ArmConstants::kRotationHomeDegree + 70})
-                     .Until([this]() {
-                         return !m_rotateArm->GetIsMovingToPosition();
-                     }))
-        .AlongWith(SetPose({.axis = m_wrist, .position = 90}).Until([this]() {
-            return !m_wrist->GetIsMovingToPosition();
-        }))
-        // Move
+        // Move wrist to 90 degrees and arm to 135 degrees
+        .AndThen(SetPose({.axis = m_wrist, .position = 90}))
+        .AlongWith(SetPose({.axis = m_rotateArm,
+                            .position = ArmConstants::kRotationMaxDegree - 10}))
+        // Move extension all the way out
         .AndThen(SetPose(
             {.axis = m_extension, .position = ArmConstants::kMaxArmDistance}))
-        .Until([this]() { return !m_extension->GetIsMovingToPosition(); })
         // Spit out piece
         .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
-        .AndThen(SetPose({.axis = m_wrist, .position = 0}).Until([this]() {
-            return !m_wrist->GetIsMovingToPosition();
-        }))
-        .AndThen(m_drive->GetArcadeDriveCommand(-0.1, 0))
-        // Stop moving
-        .AndThen(m_drive->GetArcadeDriveCommand(0, 0))
+        // Move wrist away so it doesn't snag
+        .AndThen(SetPose({.axis = m_wrist, .position = 0}))
+        // Move extender back in
+        .AndThen(SetPose({.axis = m_extension, .position = 0}))
+        // Take a step back
+        .AndThen(autos::StraightBack(m_drive, 40))
+        // Get ready to move again
         .AndThen(TravelMode())
         .AndThen(SetMovementLED(MovementType::None));
 }
@@ -129,8 +126,15 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
 frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {
     Logging::logToStdOut("completearm",
                          "set pose to " + std::to_string(pose.position));
-    return frc2::InstantCommand(
-               [pose]() { pose.axis->MoveToPosition(pose.position); },
+
+    return frc2::FunctionalCommand(
+               [pose] { pose.axis->MoveToPosition(pose.position); },
+               // The subsystem updates this for us
+               [pose] {},
+               // Stop all movement on end
+               [pose](bool interrupted) { pose.axis->StopMovement(); },
+               // Finish once no longer moving to a position
+               [pose] { return !pose.axis->GetIsMovingToPosition(); },
                {pose.axis})
         .ToPtr();
 

@@ -2,6 +2,7 @@
 #define MULTI_AXIS_ORCHESTRATOR_SUBSYSTEM_H
 
 #include <frc2/command/Command.h>
+#include <frc2/command/FunctionalCommand.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SubsystemBase.h>
@@ -9,6 +10,7 @@
 #include <vector>
 
 #include "Constants.h"
+#include "commands/Autos.h"
 #include "commands/IntakeInCommand.h"
 #include "commands/IntakeOutCommand.h"
 #include "commands/IntakeStopCommand.h"

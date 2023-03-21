@@ -67,14 +67,14 @@ class RobotContainer {
     IntakeSubsystem m_intake{&m_leds};
     std::unique_ptr<WristSubsystem> m_wrist;
     // std::unique_ptr<CompleteArmSubsystem> m_arm;
-    VL53L1XController m_lidar{kLidarInputPin};
+    VL53L1XController m_lidar{kLidarInputPin, kLidarValidationPin};
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
     std::unique_ptr<DriveSubsystem> drive;
     DriveSubsystem* m_drive;
 
-    frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
+    frc2::CommandPtr m_straightback = autos::StraightBack(m_drive, 60);
     frc2::CommandPtr m_nothing = autos::DoesNothing(m_drive);
 
     std::unique_ptr<CompleteArmSubsystem> m_arm;

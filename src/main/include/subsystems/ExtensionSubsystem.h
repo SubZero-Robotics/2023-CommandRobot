@@ -12,11 +12,10 @@ class ExtensionSubsystem
    public:
     ExtensionSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
-                                  nullptr, "EXTEND", "\033[96;40;4m", true) {
+                                  nullptr, "EXTEND", "\033[96;40;4m") {
         m_extensionMotor.SetInverted(true);
         _config = m_config;
         _controller = m_config.pid;
-        _controller.SetTolerance(.2, 2);
         _config.distancePerRevolution = ArmConstants::kInPerRotation;
         m_encoder.SetPositionConversionFactor(1);
     }
@@ -55,9 +54,11 @@ class ExtensionSubsystem
                                                                      : " deg"),
                     Logging::Level::INFO, _ansiPrefixModifiers);
 
+            // TODO: extract multipliers to constants and pass through the
+            // config
             auto res =
                 _controller.Calculate(GetCurrentPosition(), _targetPosition) *
-                -1;
+                2.0;
             auto clampedRes = std::clamp(res, -1.0, 1.0);
             if (_log)
                 Logging::logToStdOut(

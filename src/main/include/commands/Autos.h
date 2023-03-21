@@ -5,13 +5,23 @@
 #pragma once
 
 #include <frc2/command/CommandPtr.h>
+#include <pathplanner/lib/PathPlanner.h>
+#include <pathplanner/lib/auto/RamseteAutoBuilder.h>
 
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
 
 namespace autos {
 /**
  * Example static factory for an autonomous command.
  */
-frc2::CommandPtr StraightBack(DriveSubsystem* m_drive);
+frc2::CommandPtr StraightBack(DriveSubsystem* m_drive, double distance,
+                              double speed = AutoConstants::kAutoDriveSpeed);
+frc2::CommandPtr Test(pathplanner::RamseteAutoBuilder& autoBuilder,
+                      DriveSubsystem* m_drive);
 frc2::CommandPtr DoesNothing(DriveSubsystem* m_drive);
+frc2::CommandPtr PlaceAndLeave(DriveSubsystem* m_drive,
+                               IntakeSubsystem* m_intake);
+frc2::CommandPtr PlaceAndBalance(DriveSubsystem* m_drive,
+                                 IntakeSubsystem* m_intake);
 }  // namespace autos

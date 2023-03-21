@@ -15,34 +15,37 @@ class SpinIntakeTimer
      * @param subsystem The subsystem used by this command.
      */
     explicit SpinIntakeTimer(IntakeSubsystem* subsystem,
-                             units::time::second_t seconds, bool intaking)
+                             units::time::second_t duration, bool isIntakingIn)
         : m_intake{subsystem},
-          isFinished{false},
-          m_intaking{intaking},
-          m_seconds{seconds} {
+          m_isFinished{false},
+          m_duration{duration},
+          m_isIntaking{isIntakingIn} {
         // Register that this command requires the subsystem.
         AddRequirements(m_intake);
-        m_timer.Start();
     }
 
+    void Initialize() override { m_timer.Restart(); }
+
     void Execute() override {
-        if (m_timer.AdvanceIfElapsed(m_seconds)) {
-            if (m_intaking) {
-                m_intake->In();
-            } else {
-                m_intake->Out();
-            }
+        if (m_isIntaking) {
+            m_intake->In();
+        } else {
+            m_intake->Out();
+        }
+
+        if (m_timer.HasElapsed(m_duration)) {
+            m_isFinished = true;
         }
     }
 
-    bool IsFinished() override { return isFinished; }
+    bool IsFinished() override { return m_isFinished; }
 
     void End(bool interrupted) override { m_intake->Stop(); }
 
    private:
     IntakeSubsystem* m_intake;
     frc::Timer m_timer;
-    bool isFinished;
-    units::time::second_t m_seconds;
-    bool m_intaking;
+    bool m_isFinished;
+    units::time::second_t m_duration;
+    bool m_isIntaking;
 };

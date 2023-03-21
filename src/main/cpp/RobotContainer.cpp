@@ -76,7 +76,7 @@ void RobotContainer::ConfigureBindings() {
 
     ArmXbox.LeftBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 
-    ArmXbox.RightBumper().WhileTrue(IntakeIn(&m_intake).ToPtr());
+    ArmXbox.RightBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 
     DriverXbox.A().WhileTrue(GamepieceFunni(&m_intake).ToPtr());
 
@@ -88,8 +88,8 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-    // An example command will be run in autonomous
-    // TODO: return correct auto
-    m_Brake.Set();
-    return autos::StraightBack(m_drive).AlongWith(m_arm->Home());
+    // m_Brake.Unset();
+    m_Brake.SetBrakeMode();
+    // return autos::PlaceAndLeave(m_drive, &m_intake);
+    return autos::PlaceAndBalance(m_drive, &m_intake);
 }
