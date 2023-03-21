@@ -185,7 +185,8 @@ constexpr double kAutoDriveSpeed = 0.5;
 }  // namespace AutoConstants
 
 constexpr uint8_t kLEDCotrollerSlaveAddress = 0x01;
-constexpr int kLidarInputPin = 6;
+constexpr int kLidarInputPin = 5;
+constexpr int kLidarValidationPin = 6;
 // 0 to 2000mm
 constexpr uint16_t kLidarMaxDistance = 2000;
 

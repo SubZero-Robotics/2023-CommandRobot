@@ -7,6 +7,7 @@
 
 // Must be pin 5 or 6
 constexpr uint8_t outPin = 5;
+constexpr uint8_t validPin = 7;
 constexpr uint16_t maxDistance = 2000;
 
 static uint16_t distance = 0;
@@ -18,6 +19,9 @@ void setup() {
     Wire.begin();
 
     pinMode(outPin, OUTPUT);
+    pinMode(validPin, OUTPUT);
+
+    digitalWrite(validPin, HIGH);
 
     sensor.setTimeout(500);
     if (!sensor.init()) {
@@ -61,5 +65,8 @@ void loop() {
         auto range = sensor.ranging_data.range_mm;
         distance = range <= maxDistance ? range : distance;
         analogWrite(outPin, map(distance, 0, maxDistance, 0, 255));
+        digitalWrite(validPin, LOW);
+    } else {
+        digitalWrite(validPin, HIGH);
     }
 }

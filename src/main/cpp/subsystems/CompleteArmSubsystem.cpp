@@ -78,7 +78,7 @@ frc2::CommandPtr CompleteArmSubsystem::AutoIntake() {
         // Move forward slowly until we reach the cube
         .RaceWith(m_drive->GetArcadeDriveCommand(0.1, 0))
         // TODO: Change distance based on game piece
-        .Until([this]() { return m_lidar->GetDistance() <= 400; })
+        .Until([this]() { return (m_lidar->GetDistance() <= 400 && m_lidar->IsValid()); })
         // Stop moving
         .AndThen(m_drive->GetArcadeDriveCommand(0, 0))
         // Intake a little bit more
