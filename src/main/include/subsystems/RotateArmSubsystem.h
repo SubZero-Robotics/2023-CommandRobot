@@ -95,9 +95,9 @@ class RotateArmSubsystem
 
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Rotational,
-        .pid = frc2::PIDController(
-            ArmConstants::kArmRotationSetP, ArmConstants::kArmRotationSetI,
-            ArmConstants::kArmRotationSetD),
+        .pid = frc2::PIDController(ArmConstants::kArmRotationSetP,
+                                   ArmConstants::kArmRotationSetI,
+                                   ArmConstants::kArmRotationSetD),
         .minDistance = ArmConstants::kRotationHomeDegree,
         .maxDistance = ArmConstants::kRotationMaxDegree,
         .distancePerRevolution = 360.0,

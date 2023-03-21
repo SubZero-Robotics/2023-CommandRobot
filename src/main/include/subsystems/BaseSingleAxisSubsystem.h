@@ -238,8 +238,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                                                                      : " deg"),
                     Logging::Level::INFO, _ansiPrefixModifiers);
 
-            auto res = _controller.Calculate(GetCurrentPosition(),
-                                             _targetPosition);
+            auto res =
+                _controller.Calculate(GetCurrentPosition(), _targetPosition);
             auto clampedRes = std::clamp(res, -1.0, 1.0) * 0.65;
             if (_log)
                 Logging::logToStdOut(
