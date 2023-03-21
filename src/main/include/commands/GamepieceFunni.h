@@ -22,7 +22,8 @@ class GamepieceFunni
     }
 
     void Execute() override {
-        if (m_timer.AdvanceIfElapsed(800_ms)) {
+        auto time = !state ? 50_ms : 50_ms;
+        if (m_timer.HasElapsed(time)) {
             state = 1 - state;
 
             if (state) {
@@ -30,6 +31,8 @@ class GamepieceFunni
             } else {
                 m_intake->Out();
             }
+
+            m_timer.Restart();
         }
     }
 
@@ -41,5 +44,5 @@ class GamepieceFunni
     IntakeSubsystem* m_intake;
     frc::Timer m_timer;
     uint8_t state = 0;
-    bool isFinished;
+    bool isFinished = false;
 };
