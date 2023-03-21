@@ -1,5 +1,8 @@
 #include "subsystems/CompleteArmSubsystem.h"
 
+#include "Constants.h"
+#include "commands/SpinIntakeTimer.h"
+
 frc2::CommandPtr CompleteArmSubsystem::Stop() {
     return frc2::InstantCommand(
                [this]() {
@@ -101,8 +104,20 @@ frc2::CommandPtr CompleteArmSubsystem::TravelMode() {
 }
 
 frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
-    return SetMovementLED(MovementType::PlaceHigh);
-    // TODO: Add remaining commands
+    return SetMovementLED(MovementType::PlaceHigh)
+        .AndThen(SetPose({.axis = m_rotateArm,
+                          .position = ArmConstants::kRotationHomeDegree + 70}))
+        //.Until([this]() { return !m_rotateArm->GetIsMovingToPosition(); })
+        // Move
+        .AlongWith(SetPose({.axis = m_wrist, .position = 90}))
+        .Until([this]() { return !m_wrist->GetIsMovingToPosition(); })
+        // Move
+        .AndThen(SetPose(
+            {.axis = m_extension, .position = ArmConstants::kMaxArmDistance}))
+        .Until([this]() { return !m_extension->GetIsMovingToPosition(); })
+        // Spit out piece
+        .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
+        .AndThen(SetMovementLED(MovementType::None));
 }
 
 frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {
