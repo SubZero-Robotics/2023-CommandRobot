@@ -24,9 +24,7 @@ class SpinIntakeTimer
         AddRequirements(m_intake);
     }
 
-    void Initialize() override {
-        m_timer.Restart();
-    }
+    void Initialize() override { m_timer.Restart(); }
 
     void Execute() override {
         if (m_isIntaking) {
