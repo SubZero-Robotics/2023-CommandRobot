@@ -46,10 +46,10 @@ constexpr double kMaxArmDistance = 12;
 constexpr int kExtenderLimitSwitchPort = 2;
 constexpr double kExtenderStepSize = 1;
 
-constexpr double kExtenderSetP = 0.7;
-constexpr double kExtenderSetI = 0;
-constexpr double kExtenderSetD = 0;
-constexpr double kExtenderSetIZone = 0;
+constexpr double kExtenderSetP = 0.018386;
+constexpr double kExtenderSetI = 0.0075;
+constexpr double kExtenderSetD = 0.00062724;
+constexpr double kExtenderSetIZone = 0.01;
 constexpr double kExtenderSetFF = 0.000015;
 
 // Arm Rotation Constants
@@ -62,10 +62,10 @@ constexpr double kArmGearRatio = 197.14;
 constexpr double kArmStepSize = 4;
 constexpr double kAntiGravityPercentage = -0.03;
 
-constexpr double kArmRotationSetP = 6e-5;
-constexpr double kArmRotationSetI = 1e-6;
-constexpr double kArmRotationSetD = 0;
-constexpr double kArmRotationSetIZone = 0;
+constexpr double kArmRotationSetP = 0.0018386;
+constexpr double kArmRotationSetI = 0.0075;
+constexpr double kArmRotationSetD = 0.00062724;
+constexpr double kArmRotationSetIZone = 0.01;
 constexpr double kArmRotationSetFF = 0.000015;
 
 // Motor Constants

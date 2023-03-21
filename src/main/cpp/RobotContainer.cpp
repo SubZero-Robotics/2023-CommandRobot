@@ -74,7 +74,7 @@ void RobotContainer::ConfigureBindings() {
 
     ArmXbox.A().OnTrue(std::move(m_arm->Home()));
 
-    DriverXbox.B().OnTrue(m_arm->SetPose({.axis=m_wrist.get(),.position=30}));
+    DriverXbox.B().OnTrue(m_arm->SetPose({.axis=m_extender.get(),.position=6}));
 
     ArmXbox.LeftBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 

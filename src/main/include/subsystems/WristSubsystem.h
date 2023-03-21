@@ -11,7 +11,7 @@ class WristSubsystem
    public:
     WristSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min,
-                                  nullptr, "WRIST", "\033[92;40;4m", true) {
+                                  nullptr, "WRIST", "\033[92;40;4m") {
         _config = m_config;
         _controller = m_config.pid;
         _controller.SetTolerance(10, 10);
