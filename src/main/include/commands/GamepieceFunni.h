@@ -15,7 +15,8 @@ class GamepieceFunni
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit GamepieceFunni(IntakeSubsystem* subsystem, LEDControllerSubsystem* leds)
+    explicit GamepieceFunni(IntakeSubsystem* subsystem,
+                            LEDControllerSubsystem* leds)
         : m_intake{subsystem}, m_leds{leds}, isFinished{false} {
         // Register that this command requires the subsystem.
         AddRequirements(m_intake);
