@@ -59,7 +59,8 @@ class RotateArmSubsystem
                                                                      : " deg"),
                     Logging::Level::INFO, _ansiPrefixModifiers);
 
-            // TODO: extract multipliers to constants and pass through the config
+            // TODO: extract multipliers to constants and pass through the
+            // config
             auto res =
                 _controller.Calculate(GetCurrentPosition(), _targetPosition) *
                 -1;

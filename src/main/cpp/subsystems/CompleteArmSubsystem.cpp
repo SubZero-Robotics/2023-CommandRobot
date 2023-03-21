@@ -102,9 +102,11 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
     return SetMovementLED(MovementType::PlaceHigh)
         // Move wrist to 90 degrees and arm to 135 degrees
         .AndThen(SetPose({.axis = m_wrist, .position = 90}))
-        .AlongWith(SetPose({.axis = m_rotateArm, .position = ArmConstants::kRotationMaxDegree - 10}))
+        .AlongWith(SetPose({.axis = m_rotateArm,
+                            .position = ArmConstants::kRotationMaxDegree - 10}))
         // Move extension all the way out
-        .AndThen(SetPose({.axis = m_extension, .position = ArmConstants::kMaxArmDistance}))
+        .AndThen(SetPose(
+            {.axis = m_extension, .position = ArmConstants::kMaxArmDistance}))
         // Spit out piece
         .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
         // Move wrist away so it doesn't snag
@@ -123,16 +125,15 @@ frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {
                          "set pose to " + std::to_string(pose.position));
 
     return frc2::FunctionalCommand(
-        [pose] { pose.axis->MoveToPosition(pose.position); },
-        // The subsystem updates this for us
-        [pose] {},
-        // Stop all movement on end
-        [pose](bool interrupted) {
-            pose.axis->StopMovement();
-        },
-        // Finish once no longer moving to a position
-        [pose] { return !pose.axis->GetIsMovingToPosition(); }, {pose.axis})
-    .ToPtr();
+               [pose] { pose.axis->MoveToPosition(pose.position); },
+               // The subsystem updates this for us
+               [pose] {},
+               // Stop all movement on end
+               [pose](bool interrupted) { pose.axis->StopMovement(); },
+               // Finish once no longer moving to a position
+               [pose] { return !pose.axis->GetIsMovingToPosition(); },
+               {pose.axis})
+        .ToPtr();
 
     // ? Only allow arm to rotate downwards completely if extension is fully
     // ? retracted and wrist is not too low
