@@ -2,9 +2,9 @@
 
 BrakeSubsystem::BrakeSubsystem(WPI_TalonFX &rTalon, WPI_TalonFX &lTalon)
     : _rTalon(rTalon), _lTalon(lTalon) {
-    //Implementation of subsystem constructor goes here.
+    // Implementation of subsystem constructor goes here.
     m_compressor.EnableAnalog(DriveConstants::kBrakeMinPressure,
-                               DriveConstants::kBrakeMaxPressure);
+                              DriveConstants::kBrakeMaxPressure);
     exampleDoublePH.Set(frc::DoubleSolenoid::Value::kForward);
 }
 
