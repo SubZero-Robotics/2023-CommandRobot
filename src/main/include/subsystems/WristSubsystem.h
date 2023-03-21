@@ -23,7 +23,7 @@ class WristSubsystem
         if (_log)
             Logging::logToStdOut(_prefix, "RESET POSITION",
                                  Logging::Level::INFO);
-        m_encoder.SetZeroOffset(0);
+        // m_encoder.SetZeroOffset(0);
     }
 
     double GetCurrentPosition() override {

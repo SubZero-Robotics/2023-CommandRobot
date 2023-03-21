@@ -79,7 +79,7 @@ frc2::CommandPtr CompleteArmSubsystem::AutoIntake() {
                      // TODO: Change distance based on game piece
                      // TODO: Make distance(s) a constant
                      .Until([this]() {
-                         return (m_lidar->GetDistance() <= 400 &&
+                         return (m_lidar->GetDistance() <= 600 &&
                                  m_lidar->IsValid());
                      })
                      .RaceWith(IntakeIn(m_intake).ToPtr()))
@@ -97,7 +97,7 @@ frc2::CommandPtr CompleteArmSubsystem::TravelMode() {
         // Move extension to 0
         .AndThen(SetPose({.axis = m_extension, .position = 0}))
         // Move arm to 0
-        .AndThen(SetPose({.axis = m_rotateArm, .position = 0}))
+        .AndThen(SetPose({.axis = m_rotateArm, .position = ArmConstants::kRotationHomeDegree}))
         .AndThen(SetMovementLED(MovementType::None));
 }
 
@@ -107,6 +107,7 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
         .AndThen(SetPose({.axis = m_wrist, .position = 90}))
         .AlongWith(SetPose({.axis = m_rotateArm,
                             .position = ArmConstants::kRotationMaxDegree - 10}))
+                            
         // Move extension all the way out
         .AndThen(SetPose(
             {.axis = m_extension, .position = ArmConstants::kMaxArmDistance}))

@@ -25,7 +25,7 @@ class RotateArmSubsystem
         if (_log)
             Logging::logToStdOut(_prefix, "RESET POSITION",
                                  Logging::Level::INFO);
-        m_enc.SetZeroOffset(0);
+        // m_enc.SetZeroOffset(0);
     }
 
     double GetCurrentPosition() override {

@@ -37,8 +37,8 @@ void setup() {
     // datasheet for more information on range and timing limits.
     sensor.setDistanceMode(VL53L1X::Long);
     sensor.setMeasurementTimingBudget(50000);
-    sensor.setROISize(6u, 8u);
-    sensor.setROICenter(199u);
+    sensor.setROISize(14u, 10u);
+    sensor.setROICenter(182u);
 
     // Start continuous readings at a rate of one measurement every 50 ms (the
     // inter-measurement period). This period should be at least as long as the

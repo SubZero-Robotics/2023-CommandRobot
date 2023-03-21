@@ -16,6 +16,7 @@ class ExtensionSubsystem
         m_extensionMotor.SetInverted(true);
         _config = m_config;
         _controller = m_config.pid;
+        _controller.SetTolerance(.2, 1);
         _config.distancePerRevolution = ArmConstants::kInPerRotation;
         m_encoder.SetPositionConversionFactor(1);
     }
@@ -58,8 +59,8 @@ class ExtensionSubsystem
             // config
             auto res =
                 _controller.Calculate(GetCurrentPosition(), _targetPosition) *
-                2.0;
-            auto clampedRes = std::clamp(res, -1.0, 1.0);
+                6.0;
+            auto clampedRes = std::clamp(res, -1.0, 1.0) * -1.0;
             if (_log)
                 Logging::logToStdOut(
                     _prefix, "Clamped Res: " + std::to_string(clampedRes),

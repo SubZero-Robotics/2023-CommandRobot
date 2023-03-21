@@ -73,8 +73,9 @@ void RobotContainer::ConfigureBindings() {
     ArmXbox.B().OnTrue(std::move(m_arm->TravelMode()));
 
     ArmXbox.A().OnTrue(std::move(m_arm->Home()));
+    
 
-    ArmXbox.LeftBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
+    ArmXbox.LeftBumper().WhileTrue(IntakeIn(&m_intake).ToPtr());
 
     ArmXbox.RightBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 
