@@ -19,6 +19,8 @@ frc2::CommandPtr StraightBack(DriveSubsystem* m_drive, double distance);
 frc2::CommandPtr Test(pathplanner::RamseteAutoBuilder& autoBuilder,
                       DriveSubsystem* m_drive);
 frc2::CommandPtr DoesNothing(DriveSubsystem* m_drive);
-frc2::CommandPtr PlaceAndLeave(DriveSubsystem* m_drive, IntakeSubsystem* m_intake);
-frc2::CommandPtr PlaceAndBalance(DriveSubsystem* m_drive, IntakeSubsystem* m_intake);
+frc2::CommandPtr PlaceAndLeave(DriveSubsystem* m_drive,
+                               IntakeSubsystem* m_intake);
+frc2::CommandPtr PlaceAndBalance(DriveSubsystem* m_drive,
+                                 IntakeSubsystem* m_intake);
 }  // namespace autos

@@ -32,14 +32,13 @@ frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive, double distance) {
                    frc::SmartDashboard::PutNumber("Right Encoder",
                                                   m_drive->GetRightEncoder());
                    return abs(m_drive->GetAverageEncoderDistance()) >=
-                          distance /
-                              kStraightBackDivisor;
+                          distance / kStraightBackDivisor;
                },
                // Requires the drive subsystem
                {m_drive})
         .ToPtr();
 }
-                             
+
 frc2::CommandPtr autos::DoesNothing(DriveSubsystem* m_drive) {
     return frc2::FunctionalCommand(
                [m_drive] { m_drive->ResetEncoders(); },
@@ -55,12 +54,16 @@ frc2::CommandPtr autos::DoesNothing(DriveSubsystem* m_drive) {
         .ToPtr();
 }
 
-frc2::CommandPtr autos::PlaceAndLeave(DriveSubsystem* m_drive, IntakeSubsystem* m_intake){
-    return SpinIntakeTimer(m_intake, 1000_ms, false).ToPtr()
-    .AndThen(autos::StraightBack(m_drive, 155));
+frc2::CommandPtr autos::PlaceAndLeave(DriveSubsystem* m_drive,
+                                      IntakeSubsystem* m_intake) {
+    return SpinIntakeTimer(m_intake, 1000_ms, false)
+        .ToPtr()
+        .AndThen(autos::StraightBack(m_drive, 155));
 }
 
-frc2::CommandPtr autos::PlaceAndBalance(DriveSubsystem* m_drive, IntakeSubsystem* m_intake){
-    return SpinIntakeTimer(m_intake, 1000_ms, false).ToPtr()
-    .AndThen(autos::StraightBack(m_drive, 97));
+frc2::CommandPtr autos::PlaceAndBalance(DriveSubsystem* m_drive,
+                                        IntakeSubsystem* m_intake) {
+    return SpinIntakeTimer(m_intake, 1000_ms, false)
+        .ToPtr()
+        .AndThen(autos::StraightBack(m_drive, 97));
 }

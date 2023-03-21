@@ -93,6 +93,6 @@ void RobotContainer::ConfigureBindings() {
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // m_Brake.Unset();
     m_Brake.SetBrakeMode();
-    //return autos::PlaceAndLeave(m_drive, &m_intake);
+    // return autos::PlaceAndLeave(m_drive, &m_intake);
     return autos::PlaceAndBalance(m_drive, &m_intake);
 }
