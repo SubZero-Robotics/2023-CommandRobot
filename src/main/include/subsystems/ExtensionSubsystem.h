@@ -54,9 +54,11 @@ class ExtensionSubsystem
                                                                      : " deg"),
                     Logging::Level::INFO, _ansiPrefixModifiers);
 
-            // TODO: extract multipliers to constants and pass through the config
+            // TODO: extract multipliers to constants and pass through the
+            // config
             auto res =
-                _controller.Calculate(GetCurrentPosition(), _targetPosition) * 2.0;
+                _controller.Calculate(GetCurrentPosition(), _targetPosition) *
+                2.0;
             auto clampedRes = std::clamp(res, -1.0, 1.0);
             if (_log)
                 Logging::logToStdOut(
