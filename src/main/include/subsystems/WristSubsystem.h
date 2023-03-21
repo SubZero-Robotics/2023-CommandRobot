@@ -77,7 +77,8 @@ class WristSubsystem
                                                                      : " deg"),
                     Logging::Level::INFO, _ansiPrefixModifiers);
 
-            // TODO: extract multipliers to constants and pass through the config
+            // TODO: extract multipliers to constants and pass through the
+            // config
             auto res =
                 _controller.Calculate(GetCurrentPosition(), _targetPosition);
             auto clampedRes = std::clamp(res, -1.0, 1.0) * 0.66;
