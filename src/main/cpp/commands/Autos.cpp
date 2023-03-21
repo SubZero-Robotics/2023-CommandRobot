@@ -14,13 +14,13 @@
 using namespace AutoConstants;
 
 // This is taken from the hatchbotinlined wpilib example
-frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive, double distance) {
+frc2::CommandPtr autos::StraightBack(DriveSubsystem* m_drive, double distance, double speed) {
     return frc2::FunctionalCommand(
                // Reset encoders on command start
                [m_drive] { m_drive->ResetEncoders(); },
                // Drive forward while the command is executing
-               [m_drive] {
-                   m_drive->ArcadeDrive(AutoConstants::kAutoDriveSpeed, 0);
+               [m_drive, speed] {
+                   m_drive->ArcadeDrive(speed, 0);
                },
                // Stop driving at the end of the command
                [m_drive](bool interrupted) { m_drive->ArcadeDrive(0, 0); },

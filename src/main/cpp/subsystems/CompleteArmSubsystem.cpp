@@ -73,16 +73,16 @@ frc2::CommandPtr CompleteArmSubsystem::AutoIntake() {
         .AndThen(SetMovementLED(MovementType::AutoIntake))
         // TODO: Change angle based on game piece
         .AndThen(SetPose({.axis = m_wrist, .position = 90}))
-        // Start intaking
-        .AndThen(IntakeIn(m_intake).ToPtr())
+
         // Move forward slowly until we reach the cube
-        .RaceWith(m_drive->GetArcadeDriveCommand(0.1, 0))
+        .AndThen(autos::StraightBack(m_drive, -20, 0.1)
         // TODO: Change distance based on game piece
+        // TODO: Make distance(s) a constant
         .Until([this]() {
             return (m_lidar->GetDistance() <= 400 && m_lidar->IsValid());
         })
-        // Stop moving
-        .AndThen(m_drive->GetArcadeDriveCommand(0, 0))
+        .RaceWith(IntakeIn(m_intake).ToPtr()))
+
         // Intake a little bit more
         .AndThen(SpinIntakeTimer(m_intake, 750_ms, true).ToPtr())
         .AndThen(TravelMode())
