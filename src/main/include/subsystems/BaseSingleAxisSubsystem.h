@@ -3,7 +3,7 @@
 
 #include <frc/DigitalInput.h>
 #include <frc/DutyCycleEncoder.h>
-#include <frc/controller/ProfiledPIDController.h>
+#include <frc/controller/PIDController.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/FunctionalCommand.h>
 #include <rev/CANSparkMax.h>
@@ -68,7 +68,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
      * @brief Configuration for a single axis of absolute movement
      *
      * @param type Rotational or Linear direction
-     * @param pid ProfiledPIDController for moving the axis along a profile
+     * @param pid PIDController for moving the axis along a profile
      * @param minDistance Minimum distance in your choice of linear or
      * rotational units
      * @param maxDistance Maximum distance in your choice of linear or
@@ -80,7 +80,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
      */
     struct SingleAxisConfig {
         AxisType type;
-        frc::ProfiledPIDController<Unit> pid;
+        frc2::PIDController pid;
         double minDistance;
         double maxDistance;
         double distancePerRevolution;
@@ -238,24 +238,25 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                                                                      : " deg"),
                     Logging::Level::INFO, _ansiPrefixModifiers);
 
-            if (_controller.AtGoal()) {
-                Logging::logToStdOut(_prefix, "REACHED GOAL",
-                                     Logging::Level::INFO,
-                                     _ansiPrefixModifiers);
-                _isMovingToPosition = false;
-                return;
-            }
-
-            auto res = _controller.Calculate(Unit_t(GetCurrentPosition()),
-                                             Unit_t(_targetPosition));
-            auto clampedRes = std::clamp(res, -1.0, 1.0);
+            auto res = _controller.Calculate(GetCurrentPosition(),
+                                             _targetPosition);
+            auto clampedRes = std::clamp(res, -1.0, 1.0) * 0.65;
             if (_log)
                 Logging::logToStdOut(
-                    _prefix, "Clamped Res: " + std::to_string(res),
+                    _prefix, "Clamped Res: " + std::to_string(clampedRes),
                     Logging::Level::INFO, _ansiPrefixModifiers);
             Logging::logToSmartDashboard(_prefix + " TargetPos",
                                          std::to_string(_targetPosition),
                                          Logging::Level::INFO);
+
+            if (_controller.AtSetpoint()) {
+                Logging::logToStdOut(_prefix, "REACHED GOAL",
+                                     Logging::Level::INFO,
+                                     _ansiPrefixModifiers);
+                StopMovement();
+                return;
+            }
+
             RunMotorSpeed(clampedRes);
         }
     }
@@ -399,7 +400,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
     Motor &_motor;
     Encoder &_enc;
     SingleAxisConfig &_config;
-    frc::ProfiledPIDController<Unit> _controller;
+    frc2::PIDController _controller;
     bool _isHoming = false;
     bool _isMovingToPosition = false;
     double _targetPosition = 0.0;

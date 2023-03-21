@@ -35,11 +35,11 @@ bool LEDControllerSubsystem::setPattern(
 
 bool LEDControllerSubsystem::setColor(uint8_t red, uint8_t green,
                                       uint8_t blue) {
-    Logging::logToStdOut("LEDS", "SET COLOR START", Logging::Level::VERBOSE);
+    //Logging::logToStdOut("LEDS", "SET COLOR START", Logging::Level::VERBOSE);
     _lastCommand = LEDControllerSubsystem::CommandType::ChangeColor;
     uint8_t buf[4] = {(uint8_t)_lastCommand, red, green, blue};
     _i2c->WriteBulk(buf, 4);
-    Logging::logToStdOut("LEDS", "SET COLOR END", Logging::Level::VERBOSE);
+    //Logging::logToStdOut("LEDS", "SET COLOR END", Logging::Level::VERBOSE);
     return true;
 }
 

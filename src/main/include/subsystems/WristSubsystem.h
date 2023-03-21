@@ -11,9 +11,10 @@ class WristSubsystem
    public:
     WristSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min,
-                                  nullptr, "WRIST", "\033[92;40;4m") {
+                                  nullptr, "WRIST", "\033[92;40;4m", true) {
         _config = m_config;
         _controller = m_config.pid;
+        _controller.SetTolerance(10, 10);
         m_encoder.SetPositionConversionFactor(1);
     }
 
@@ -70,11 +71,9 @@ class WristSubsystem
 
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Rotational,
-        .pid = frc::ProfiledPIDController<units::degree>(
+        .pid = frc2::PIDController(
             ArmConstants::kWristSetP, ArmConstants::kWristSetI,
-            ArmConstants::kWristSetD,
-            frc::TrapezoidProfile<units::degree>::Constraints(
-                1.75_deg_per_s, 0.75_deg_per_s_sq)),
+            ArmConstants::kWristSetD),
         .minDistance = 0,
         .maxDistance = ArmConstants::kWristDegreeLimit,
         .distancePerRevolution = 360.0,

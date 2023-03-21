@@ -11,7 +11,7 @@ class RotateArmSubsystem
    public:
     RotateArmSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_leadRotationMotor, m_enc, &min,
-                                  &max, "ARM", "\033[95;40;4m", true) {
+                                  &max, "ARM", "\033[95;40;4m") {
         m_followRotationMotor.Follow(m_leadRotationMotor);
         // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html
         _config = m_config;
@@ -60,11 +60,9 @@ class RotateArmSubsystem
 
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Rotational,
-        .pid = frc::ProfiledPIDController<units::degree>(
+        .pid = frc2::PIDController(
             ArmConstants::kArmRotationSetP, ArmConstants::kArmRotationSetI,
-            ArmConstants::kArmRotationSetD,
-            frc::TrapezoidProfile<units::angle::degree>::Constraints(
-                1.75_deg_per_s, 0.75_deg_per_s_sq)),
+            ArmConstants::kArmRotationSetD),
         .minDistance = ArmConstants::kRotationHomeDegree,
         .maxDistance = ArmConstants::kRotationMaxDegree,
         .distancePerRevolution = 360.0,

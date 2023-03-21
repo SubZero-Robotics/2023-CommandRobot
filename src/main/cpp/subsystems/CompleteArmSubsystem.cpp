@@ -106,6 +106,7 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
 }
 
 frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {
+    Logging::logToStdOut("completearm", "set pose to " + std::to_string(pose.position));
     return frc2::InstantCommand(
                [pose]() { pose.axis->MoveToPosition(pose.position); },
                {pose.axis})
