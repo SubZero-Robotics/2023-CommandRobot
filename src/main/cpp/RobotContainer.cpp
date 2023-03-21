@@ -77,9 +77,9 @@ void RobotContainer::ConfigureBindings() {
     DriverXbox.B().OnTrue(
         m_arm->SetPose({.axis = m_extender.get(), .position = 6}));
 
-    ArmXbox.LeftBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
+    ArmXbox.LeftBumper().WhileTrue(IntakeIn(&m_intake).ToPtr());
 
-    ArmXbox.RightBumper().WhileTrue(IntakeIn(&m_intake).ToPtr());
+    ArmXbox.RightBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 
     DriverXbox.A().WhileTrue(GamepieceFunni(&m_intake).ToPtr());
 

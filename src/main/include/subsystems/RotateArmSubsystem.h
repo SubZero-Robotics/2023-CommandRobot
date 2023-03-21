@@ -59,12 +59,11 @@ class RotateArmSubsystem
                                                                      : " deg"),
                     Logging::Level::INFO, _ansiPrefixModifiers);
 
-            // TODO: extract multipliers to constants and pass through the
-            // config
+            // TODO: extract multipliers to constants and pass through the config
             auto res =
                 _controller.Calculate(GetCurrentPosition(), _targetPosition) *
                 -1;
-            auto clampedRes = std::clamp(res, -1.0, 1.0) * 0.65;
+            auto clampedRes = std::clamp(res, -1.0, 1.0) * 0.5;
             if (_log)
                 Logging::logToStdOut(
                     _prefix, "Clamped Res: " + std::to_string(clampedRes),
