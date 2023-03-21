@@ -3,6 +3,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/InstantCommand.h>
+#include <frc2/command/FunctionalCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SubsystemBase.h>
 
@@ -13,6 +14,7 @@
 #include "commands/IntakeOutCommand.h"
 #include "commands/IntakeStopCommand.h"
 #include "commands/SpinIntakeTimer.h"
+#include "commands/Autos.h"
 #include "subsystems/BaseSingleAxisSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"

@@ -77,9 +77,9 @@ constexpr double kForwardRotationsSoftLimit =
 constexpr int kReverseRotationsSoftLimit = 0;
 
 // Homing Speeds
-constexpr double kRotationHomingSpeed = .05;
-constexpr double kExtenderHomingSpeed = .3;
-constexpr double kWristHomingSpeed = .1;
+constexpr double kRotationHomingSpeed = .15;
+constexpr double kExtenderHomingSpeed = .66;
+constexpr double kWristHomingSpeed = .33;
 
 // Intake Constants
 constexpr double kIntakeSpeed = 1.0;

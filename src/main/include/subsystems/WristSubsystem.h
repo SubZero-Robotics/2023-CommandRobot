@@ -19,7 +19,12 @@ class WristSubsystem
     }
 
     // Wrist has zero offset set in SparkMax
-    void ResetEncoder() override {}
+    void ResetEncoder() override {
+        if (_log)
+            Logging::logToStdOut(_prefix, "RESET POSITION",
+                                 Logging::Level::INFO);
+        m_encoder.SetZeroOffset(0);
+    }
 
     double GetCurrentPosition() override {
         auto position = m_encoder.GetPosition() * _config.distancePerRevolution;

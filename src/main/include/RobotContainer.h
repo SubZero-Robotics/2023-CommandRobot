@@ -74,7 +74,7 @@ class RobotContainer {
     std::unique_ptr<DriveSubsystem> drive;
     DriveSubsystem* m_drive;
 
-    frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
+    frc2::CommandPtr m_straightback = autos::StraightBack(m_drive, 60);
     frc2::CommandPtr m_nothing = autos::DoesNothing(m_drive);
 
     std::unique_ptr<CompleteArmSubsystem> m_arm;
