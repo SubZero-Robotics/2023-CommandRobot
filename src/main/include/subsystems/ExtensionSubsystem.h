@@ -50,14 +50,14 @@ class ExtensionSubsystem
             if (_log)
                 Logging::logToStdOut(
                     _prefix,
-                    "Target Position: " +
-                        std::to_string(_targetPosition) +
+                    "Target Position: " + std::to_string(_targetPosition) +
                         std::string(_config.type == AxisType::Linear ? " in"
                                                                      : " deg"),
                     Logging::Level::INFO, _ansiPrefixModifiers);
 
-            auto res = _controller.Calculate(GetCurrentPosition(),
-                                             _targetPosition) * -1;
+            auto res =
+                _controller.Calculate(GetCurrentPosition(), _targetPosition) *
+                -1;
             auto clampedRes = std::clamp(res, -1.0, 1.0);
             if (_log)
                 Logging::logToStdOut(
