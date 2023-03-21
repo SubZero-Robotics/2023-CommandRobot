@@ -22,7 +22,10 @@ class SpinIntakeTimer
           m_isIntaking{isIntakingIn} {
         // Register that this command requires the subsystem.
         AddRequirements(m_intake);
-        m_timer.Start();
+    }
+
+    void Initialize() override {
+        m_timer.Restart();
     }
 
     void Execute() override {
