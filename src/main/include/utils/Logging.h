@@ -15,32 +15,28 @@ static void logToSmartDashboard(const std::string& key, const std::string& msg,
 }
 
 static void logToStdOut(const std::string& key, const std::string& msg,
-                        Level level = Level::VERBOSE, const std::string &modifiersDontUse = "") {
+                        Level level = Level::VERBOSE,
+                        const std::string& modifiersDontUse = "") {
     switch (level) {
         case Level::VERBOSE:
             std::cout << "VERBOSE: "
-                      << "[" << key << "]"
-                      << msg << std::endl;
+                      << "[" << key << "]" << msg << std::endl;
             break;
         case Level::INFO:
             std::cout << "INFO: "
-                      << "[" << key << "]"
-                      << msg << std::endl;
+                      << "[" << key << "]" << msg << std::endl;
             break;
         case Level::WARNING:
             std::cout << "WARNING: "
-                      << "[" << key << "]"
-                      << msg << std::endl;
+                      << "[" << key << "]" << msg << std::endl;
             break;
         case Level::ERROR:
             std::cerr << "ERROR: "
-                      << "[" << key << "]"
-                      << msg << std::endl;
+                      << "[" << key << "]" << msg << std::endl;
             break;
         default:
             std::cout << "LOG: "
-                      << "[" << key << "]"
-                      << msg << std::endl;
+                      << "[" << key << "]" << msg << std::endl;
             break;
     }
 }
