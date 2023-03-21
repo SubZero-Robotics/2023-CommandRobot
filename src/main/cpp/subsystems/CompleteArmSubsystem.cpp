@@ -76,12 +76,13 @@ frc2::CommandPtr CompleteArmSubsystem::AutoIntake() {
 
         // Move forward slowly until we reach the cube
         .AndThen(autos::StraightBack(m_drive, -20, 0.1)
-        // TODO: Change distance based on game piece
-        // TODO: Make distance(s) a constant
-        .Until([this]() {
-            return (m_lidar->GetDistance() <= 400 && m_lidar->IsValid());
-        })
-        .RaceWith(IntakeIn(m_intake).ToPtr()))
+                     // TODO: Change distance based on game piece
+                     // TODO: Make distance(s) a constant
+                     .Until([this]() {
+                         return (m_lidar->GetDistance() <= 400 &&
+                                 m_lidar->IsValid());
+                     })
+                     .RaceWith(IntakeIn(m_intake).ToPtr()))
 
         // Intake a little bit more
         .AndThen(SpinIntakeTimer(m_intake, 750_ms, true).ToPtr())
