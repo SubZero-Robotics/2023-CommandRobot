@@ -12,10 +12,11 @@ class ExtensionSubsystem
    public:
     ExtensionSubsystem()
         : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
-                                  nullptr, "EXTEND", "\033[96;40;4m") {
+                                  nullptr, "EXTEND", "\033[96;40;4m", true) {
         m_extensionMotor.SetInverted(true);
         _config = m_config;
         _controller = m_config.pid;
+        _controller.SetTolerance(.2, 2);
         _config.distancePerRevolution = ArmConstants::kInPerRotation;
         m_encoder.SetPositionConversionFactor(1);
     }
@@ -44,6 +45,40 @@ class ExtensionSubsystem
         return position;
     }
 
+    void UpdateMovement() override {
+        if (_isMovingToPosition) {
+            if (_log)
+                Logging::logToStdOut(
+                    _prefix,
+                    "Target Position: " + std::to_string(_targetPosition) +
+                        std::string(_config.type == AxisType::Linear ? " in"
+                                                                     : " deg"),
+                    Logging::Level::INFO, _ansiPrefixModifiers);
+
+            auto res =
+                _controller.Calculate(GetCurrentPosition(), _targetPosition) *
+                -1;
+            auto clampedRes = std::clamp(res, -1.0, 1.0);
+            if (_log)
+                Logging::logToStdOut(
+                    _prefix, "Clamped Res: " + std::to_string(clampedRes),
+                    Logging::Level::INFO, _ansiPrefixModifiers);
+            Logging::logToSmartDashboard(_prefix + " TargetPos",
+                                         std::to_string(_targetPosition),
+                                         Logging::Level::INFO);
+
+            if (_controller.AtSetpoint()) {
+                Logging::logToStdOut(_prefix, "REACHED GOAL",
+                                     Logging::Level::INFO,
+                                     _ansiPrefixModifiers);
+                StopMovement();
+                return;
+            }
+
+            RunMotorSpeed(clampedRes);
+        }
+    }
+
    private:
     rev::CANSparkMax m_extensionMotor{CANSparkMaxConstants::kExtensionMotorID,
                                       rev::CANSparkMax::MotorType::kBrushless};
@@ -54,11 +89,9 @@ class ExtensionSubsystem
 
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Linear,
-        .pid = frc::ProfiledPIDController<units::inch>(
-            ArmConstants::kExtenderSetP, ArmConstants::kExtenderSetI,
-            ArmConstants::kExtenderSetD,
-            frc::TrapezoidProfile<units::inch>::Constraints(1.75_mps,
-                                                            0.75_mps_sq)),
+        .pid = frc2::PIDController(ArmConstants::kExtenderSetP,
+                                   ArmConstants::kExtenderSetI,
+                                   ArmConstants::kExtenderSetD),
         .minDistance = 0,
         .maxDistance = ArmConstants::kMaxArmDistance,
         .distancePerRevolution = ArmConstants::kInPerRotation,

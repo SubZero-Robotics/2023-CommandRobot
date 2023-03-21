@@ -14,6 +14,7 @@ class WristSubsystem
                                   nullptr, "WRIST", "\033[92;40;4m") {
         _config = m_config;
         _controller = m_config.pid;
+        _controller.SetTolerance(10, 10);
         m_encoder.SetPositionConversionFactor(1);
     }
 
@@ -70,11 +71,9 @@ class WristSubsystem
 
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Rotational,
-        .pid = frc::ProfiledPIDController<units::degree>(
-            ArmConstants::kWristSetP, ArmConstants::kWristSetI,
-            ArmConstants::kWristSetD,
-            frc::TrapezoidProfile<units::degree>::Constraints(
-                1.75_deg_per_s, 0.75_deg_per_s_sq)),
+        .pid = frc2::PIDController(ArmConstants::kWristSetP,
+                                   ArmConstants::kWristSetI,
+                                   ArmConstants::kWristSetD),
         .minDistance = 0,
         .maxDistance = ArmConstants::kWristDegreeLimit,
         .distancePerRevolution = 360.0,

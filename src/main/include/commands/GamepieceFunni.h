@@ -22,7 +22,7 @@ class GamepieceFunni
     }
 
     void Execute() override {
-        if (m_timer.AdvanceIfElapsed(200_ms)) {
+        if (m_timer.AdvanceIfElapsed(800_ms)) {
             state = 1 - state;
 
             if (state) {
