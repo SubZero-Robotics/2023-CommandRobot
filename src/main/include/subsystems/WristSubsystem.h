@@ -71,9 +71,9 @@ class WristSubsystem
 
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Rotational,
-        .pid = frc2::PIDController(
-            ArmConstants::kWristSetP, ArmConstants::kWristSetI,
-            ArmConstants::kWristSetD),
+        .pid = frc2::PIDController(ArmConstants::kWristSetP,
+                                   ArmConstants::kWristSetI,
+                                   ArmConstants::kWristSetD),
         .minDistance = 0,
         .maxDistance = ArmConstants::kWristDegreeLimit,
         .distancePerRevolution = 360.0,

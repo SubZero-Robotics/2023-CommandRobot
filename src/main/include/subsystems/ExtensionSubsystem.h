@@ -54,9 +54,9 @@ class ExtensionSubsystem
 
     SingleAxisConfig m_config = {
         .type = BaseSingleAxisSubsystem::AxisType::Linear,
-        .pid = frc2::PIDController(
-            ArmConstants::kExtenderSetP, ArmConstants::kExtenderSetI,
-            ArmConstants::kExtenderSetD),
+        .pid = frc2::PIDController(ArmConstants::kExtenderSetP,
+                                   ArmConstants::kExtenderSetI,
+                                   ArmConstants::kExtenderSetD),
         .minDistance = 0,
         .maxDistance = ArmConstants::kMaxArmDistance,
         .distancePerRevolution = ArmConstants::kInPerRotation,
