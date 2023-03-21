@@ -78,7 +78,7 @@ void RobotContainer::ConfigureBindings() {
 
     ArmXbox.RightBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 
-    DriverXbox.A().WhileTrue(GamepieceFunni(&m_intake).ToPtr());
+    DriverXbox.A().WhileTrue(GamepieceFunni(&m_intake, &m_leds).ToPtr());
 
     DriverXbox.RightBumper().OnTrue(LEDToggle(&m_leds).ToPtr());
 
