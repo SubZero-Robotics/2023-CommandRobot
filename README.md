@@ -1,4 +1,19 @@
-# Team 5690 SubZero Robotics 2023 Command Robot
+<div align="center">
+  <a href="https://github.com/subzero-robotics/2022-commandRobot">
+    <img src="https://raw.githubusercontent.com/SubZero-Robotics/2023-CommandRobot/main/robot.png" alt="Robot" width="300">
+  </a>
+
+<h3 align="center">2023 Command Robot</h3>
+
+  <p align="center">
+    Code for our 2023 robot. Built with the WPILib command-based framework.
+    <br />
+    <br />
+    <a href="https://github.com/subzero-robotics/2023-commandRobot/issues">Current Issues</a>
+    ·
+    <a href="https://www.thebluealliance.com/team/5690/2023">The Blue Alliance</a>
+  </p>
+</div>
 
 ## Table of contents
 
