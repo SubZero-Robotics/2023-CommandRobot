@@ -53,7 +53,7 @@ class WristSubsystem
                          // automated movement
 
             if (_config.type == AxisType::Rotational)
-                RunMotorSpeed(0.01);
+                RunMotorSpeed(-0.005);
             else
                 _motor.Set(0);
             return;
