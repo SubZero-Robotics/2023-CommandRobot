@@ -25,9 +25,10 @@ class SpinIntakeTimer
         AddRequirements(m_intake);
     }
 
-    void Initialize() override { m_timer.Restart(); 
-    Logging::logToStdOut("AUTO INTAKE", "INIT");
-    m_isFinished = false;
+    void Initialize() override {
+        m_timer.Restart();
+        Logging::logToStdOut("AUTO INTAKE", "INIT");
+        m_isFinished = false;
     }
 
     void Execute() override {
