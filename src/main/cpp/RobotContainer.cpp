@@ -20,9 +20,7 @@
 
 RobotContainer::RobotContainer() {
     // Initialize all of your commands and subsystems here
-    drive = std::make_unique<DriveSubsystem>(RightLead, RightFollow, LeftLead,
-                                             LeftFollow);
-    m_drive = drive.get();
+    m_drive = &drive;
 
     m_effector = std::make_unique<RotateArmSubsystem>();
     m_extender = std::make_unique<ExtensionSubsystem>();
@@ -34,9 +32,11 @@ RobotContainer::RobotContainer() {
 
     // Configure the button bindings
     ConfigureBindings();
-
-    m_chooser.SetDefaultOption("StraightBack", m_straightback.get());
-    m_chooser.SetDefaultOption("DoesNothing", m_nothing.get());
+    
+    m_chooser.SetDefaultOption("Place and Balance", m_placeandbalance.get());
+    m_chooser.AddOption("StraightBack", m_straightback.get());
+    m_chooser.AddOption("DoesNothing", m_nothing.get());
+    m_chooser.AddOption("Place and Leave", m_placeandleave.get());
 
     frc::SmartDashboard::PutData(&m_chooser);
 
@@ -89,9 +89,10 @@ void RobotContainer::ConfigureBindings() {
     DriverXbox.Y().OnTrue(BrakeStop(&m_Brake).ToPtr());
 }
 
-frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
+frc2::Command* RobotContainer::GetAutonomousCommand() {
     // m_Brake.Unset();
     m_Brake.SetBrakeMode();
     // return autos::PlaceAndLeave(m_drive, &m_intake);
-    return autos::PlaceAndBalance(m_drive, &m_intake);
+    //return SpinIntakeTimer(&m_intake, 1000_ms, false).ToPtr().AndThen(autos::PlaceAndBalance(m_drive, &m_intake).RaceWith(m_arm->Home().AndThen(GamepieceFunni(&m_intake, &m_leds).ToPtr())));
+    return m_chooser.GetSelected();
 }

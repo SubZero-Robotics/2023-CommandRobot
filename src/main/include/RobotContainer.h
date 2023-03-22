@@ -39,7 +39,7 @@ class RobotContainer {
    public:
     RobotContainer();
 
-    frc2::CommandPtr GetAutonomousCommand();
+    frc2::Command* GetAutonomousCommand();
 
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -58,6 +58,8 @@ class RobotContainer {
     // build an actual autonomous
     ExampleSubsystem m_subsystem;
 
+    DriveSubsystem drive{RightLead, RightFollow, LeftLead, LeftFollow};
+
     // Arm Subsystem
     std::unique_ptr<RotateArmSubsystem> m_effector;
     std::unique_ptr<ExtensionSubsystem> m_extender;
@@ -71,11 +73,12 @@ class RobotContainer {
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
-    std::unique_ptr<DriveSubsystem> drive;
     DriveSubsystem* m_drive;
 
-    frc2::CommandPtr m_straightback = autos::StraightBack(m_drive, 60);
-    frc2::CommandPtr m_nothing = autos::DoesNothing(m_drive);
+    frc2::CommandPtr m_straightback = autos::StraightBack(&drive, 60);
+    frc2::CommandPtr m_nothing = autos::DoesNothing(&drive);
+    frc2::CommandPtr m_placeandleave = autos::PlaceAndLeave(&drive, &m_intake);
+    frc2::CommandPtr m_placeandbalance = autos::PlaceAndLeave(&drive, &m_intake);
 
     std::unique_ptr<CompleteArmSubsystem> m_arm;
 
