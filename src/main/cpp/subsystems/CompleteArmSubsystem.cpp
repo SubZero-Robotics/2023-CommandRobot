@@ -132,7 +132,8 @@ frc2::CommandPtr CompleteArmSubsystem::TravelMode() {
         // Move extension to 0
         .AndThen(SetPose({.axis = m_extension, .position = 0}))
         // Move arm to 0
-        .AndThen(SetPose({.axis = m_rotateArm, .position = ArmConstants::kRotationHomeDegree}))
+        .AndThen(SetPose({.axis = m_rotateArm,
+                          .position = ArmConstants::kRotationHomeDegree}))
         .AndThen(SetMovementLED(MovementType::None));
 }
 
