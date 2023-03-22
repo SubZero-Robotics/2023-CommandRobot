@@ -253,15 +253,15 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceLowCube() {
 }
 
 frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
-    return m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple ? AutoPlaceHighCube().WithTimeout(15_s) : AutoPlaceHighCone().WithTimeout(15_s);
+    return m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple ? AutoPlaceHighCube().WithTimeout(25_s).AndThen(SetMovementLED(MovementType::None)) : AutoPlaceHighCone().WithTimeout(25_s).AndThen(SetMovementLED(MovementType::None));
 }
 
 frc2::CommandPtr CompleteArmSubsystem::AutoPlaceMedium() {
-     return m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple ? AutoPlaceMediumCube().WithTimeout(15_s) : AutoPlaceMediumCone().WithTimeout(15_s);
+     return m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple ? AutoPlaceMediumCube().WithTimeout(20_s).AndThen(SetMovementLED(MovementType::None)) : AutoPlaceMediumCone().WithTimeout(20_s).AndThen(SetMovementLED(MovementType::None));
 }
 
 frc2::CommandPtr CompleteArmSubsystem::AutoPlaceLow() {
-     return m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple ? AutoPlaceLowCube().WithTimeout(15_s) : AutoPlaceLowCone().WithTimeout(15_s);
+     return m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple ? AutoPlaceLowCube().WithTimeout(15_s).AndThen(SetMovementLED(MovementType::None)) : AutoPlaceLowCone().WithTimeout(15_s).AndThen(SetMovementLED(MovementType::None));
 }
 
 frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {
