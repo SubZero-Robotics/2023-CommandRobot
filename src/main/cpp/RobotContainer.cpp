@@ -32,7 +32,7 @@ RobotContainer::RobotContainer() {
 
     // Configure the button bindings
     ConfigureBindings();
-    
+
     m_chooser.SetDefaultOption("Place and Balance", m_placeandbalance.get());
     m_chooser.AddOption("StraightBack", m_straightback.get());
     m_chooser.AddOption("DoesNothing", m_nothing.get());
@@ -93,6 +93,9 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
     // m_Brake.Unset();
     m_Brake.SetBrakeMode();
     // return autos::PlaceAndLeave(m_drive, &m_intake);
-    //return SpinIntakeTimer(&m_intake, 1000_ms, false).ToPtr().AndThen(autos::PlaceAndBalance(m_drive, &m_intake).RaceWith(m_arm->Home().AndThen(GamepieceFunni(&m_intake, &m_leds).ToPtr())));
+    // return SpinIntakeTimer(&m_intake, 1000_ms,
+    // false).ToPtr().AndThen(autos::PlaceAndBalance(m_drive,
+    // &m_intake).RaceWith(m_arm->Home().AndThen(GamepieceFunni(&m_intake,
+    // &m_leds).ToPtr())));
     return m_chooser.GetSelected();
 }

@@ -78,7 +78,8 @@ class RobotContainer {
     frc2::CommandPtr m_straightback = autos::StraightBack(&drive, 60);
     frc2::CommandPtr m_nothing = autos::DoesNothing(&drive);
     frc2::CommandPtr m_placeandleave = autos::PlaceAndLeave(&drive, &m_intake);
-    frc2::CommandPtr m_placeandbalance = autos::PlaceAndLeave(&drive, &m_intake);
+    frc2::CommandPtr m_placeandbalance =
+        autos::PlaceAndLeave(&drive, &m_intake);
 
     std::unique_ptr<CompleteArmSubsystem> m_arm;
 
