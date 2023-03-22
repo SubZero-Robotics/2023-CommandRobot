@@ -46,13 +46,48 @@ frc2::CommandPtr CompleteArmSubsystem::SetMovementLED(MovementType type) {
                            m_leds->setPattern(
                                LEDControllerSubsystem::PatternType::Blink);
                            break;
-                       case MovementType::PlaceHigh:
+                       case MovementType::PlaceHighCone:
                            m_leds->setOn();
                            // * Dark red
                            m_leds->setColor(142, 17, 52);
                            m_leds->setPattern(
                                LEDControllerSubsystem::PatternType::Blink);
                            break;
+                       case MovementType::PlaceMediumCone:
+                       m_leds->setOn();
+                       // * Rainbow
+                       m_leds->setPattern(
+                        LEDControllerSubsystem::PatternType::RGBFade
+                       );
+                        break;
+                       case MovementType::PlaceLowCone:
+                       m_leds->setOn();
+                       m_leds->setColor(17, 17, 170);
+                       m_leds->setPattern(
+                        LEDControllerSubsystem::PatternType::Blink
+                       );
+                        break;
+                        case MovementType::PlaceHighCube:
+                           m_leds->setOn();
+                           // * Dark red
+                           m_leds->setColor(142, 17, 52);
+                           m_leds->setPattern(
+                               LEDControllerSubsystem::PatternType::Blink);
+                           break;
+                        case MovementType::PlaceMediumCube:
+                       m_leds->setOn();
+                       // * Rainbow
+                       m_leds->setPattern(
+                        LEDControllerSubsystem::PatternType::RGBFade
+                       );
+                        break;
+                       case MovementType::PlaceLowCube:
+                       m_leds->setOn();
+                       m_leds->setColor(17, 17, 170);
+                       m_leds->setPattern(
+                        LEDControllerSubsystem::PatternType::Blink
+                       );
+                        break;
                    }
                },
                {this, m_leds})
@@ -101,27 +136,131 @@ frc2::CommandPtr CompleteArmSubsystem::TravelMode() {
         .AndThen(SetMovementLED(MovementType::None));
 }
 
-frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
-    return SetMovementLED(MovementType::PlaceHigh)
+frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHighCone() {
+    return SetMovementLED(MovementType::PlaceHighCone)
+
+        .AndThen(SetPose(
+            {.axis = m_extension, .position = 2}))
         // Move wrist to 90 degrees and arm to 135 degrees
-        .AndThen(SetPose({.axis = m_wrist, .position = 90}))
-        .AlongWith(SetPose({.axis = m_rotateArm,
-                            .position = ArmConstants::kRotationMaxDegree - 10}))
-                            
-        // Move extension all the way out
+        .AndThen(SetPose({.axis = m_rotateArm,
+                            .position = ArmConstants::kRotationMaxDegree}))
+        .AndThen(frc2::InstantCommand([this](){m_rotateArm->RunMotorExternal(-.07);}).ToPtr())
+                // Move extension all the way out
         .AndThen(SetPose(
             {.axis = m_extension, .position = ArmConstants::kMaxArmDistance}))
+
+        .AndThen(SetPose({.axis = m_wrist, .position = ArmConstants::kWristDegreeLimit}))
         // Spit out piece
         .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
         // Move wrist away so it doesn't snag
         .AndThen(SetPose({.axis = m_wrist, .position = 0}))
         // Move extender back in
         .AndThen(SetPose({.axis = m_extension, .position = 0}))
-        // Take a step back
-        .AndThen(autos::StraightBack(m_drive, 40))
         // Get ready to move again
         .AndThen(TravelMode())
         .AndThen(SetMovementLED(MovementType::None));
+}
+
+frc2::CommandPtr CompleteArmSubsystem::AutoPlaceMediumCone() {
+    return SetMovementLED(MovementType::PlaceMediumCone)
+
+        .AndThen(SetPose(
+            {.axis = m_extension, .position = 2}))
+        // Move wrist to 90 degrees and arm to 135 degrees
+        .AndThen(SetPose({.axis = m_rotateArm,
+                            .position = 92}))
+        .AndThen(frc2::InstantCommand([this](){m_rotateArm->RunMotorExternal(-.07);}).ToPtr())
+                // Move extension all the way out
+        .AndThen(SetPose(
+            {.axis = m_extension, .position = 0}))
+        .AndThen(SetPose({.axis = m_wrist, .position = 58}))
+        // Spit out piece
+        .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
+        // Move wrist away so it doesn't snag
+        .AndThen(SetPose({.axis = m_wrist, .position = 0}))
+        // Move extender back in
+        .AndThen(SetPose({.axis = m_extension, .position = 0}))
+        // Get ready to move again
+        .AndThen(TravelMode())
+        .AndThen(SetMovementLED(MovementType::None));
+}
+
+frc2::CommandPtr CompleteArmSubsystem::AutoPlaceLowCone() {
+    return SetMovementLED(MovementType::PlaceLowCone)
+        .AndThen(TravelMode())
+        .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
+        .AndThen(TravelMode())
+        .AndThen(SetMovementLED(MovementType::None));
+}
+
+frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHighCube() {
+    return SetMovementLED(MovementType::PlaceHighCube)
+
+        .AndThen(SetPose(
+            {.axis = m_extension, .position = 2}))
+        // Move wrist to 90 degrees and arm to 135 degrees
+        .AndThen(SetPose({.axis = m_rotateArm,
+                            .position = ArmConstants::kRotationMaxDegree-2}))
+        .AndThen(frc2::InstantCommand([this](){m_rotateArm->RunMotorExternal(-.07);}).ToPtr())
+                // Move extension all the way out
+        .AndThen(SetPose(
+            {.axis = m_extension, .position = ArmConstants::kMaxArmDistance}))
+
+        .AndThen(SetPose({.axis = m_wrist, .position = ArmConstants::kWristDegreeLimit}))
+        // Spit out piece
+        .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
+        // Move wrist away so it doesn't snag
+        .AndThen(SetPose({.axis = m_wrist, .position = 0}))
+        // Move extender back in
+        .AndThen(SetPose({.axis = m_extension, .position = 0}))
+        // Get ready to move again
+        .AndThen(TravelMode())
+        .AndThen(SetMovementLED(MovementType::None));
+}
+
+frc2::CommandPtr CompleteArmSubsystem::AutoPlaceMediumCube() {
+    return SetMovementLED(MovementType::PlaceMediumCube)
+
+        .AndThen(SetPose(
+            {.axis = m_extension, .position = 2}))
+        // Move wrist to 90 degrees and arm to 135 degrees
+        .AndThen(SetPose({.axis = m_rotateArm,
+                            .position = 110}))
+        .AndThen(frc2::InstantCommand([this](){m_rotateArm->RunMotorExternal(-.07);}).ToPtr())
+                // Move extension all the way out
+        .AndThen(SetPose(
+            {.axis = m_extension, .position = 0}))
+        .AndThen(SetPose({.axis = m_wrist, .position = 95}))
+        // Spit out piece
+        .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
+        // Move wrist away so it doesn't snag
+        .AndThen(SetPose({.axis = m_wrist, .position = 0}))
+        // Move extender back in
+        .AndThen(SetPose({.axis = m_extension, .position = 0}))
+        // Get ready to move again
+        .AndThen(TravelMode())
+        .AndThen(SetMovementLED(MovementType::None));
+}
+
+frc2::CommandPtr CompleteArmSubsystem::AutoPlaceLowCube() {
+    return SetMovementLED(MovementType::PlaceLowCube)
+        .AndThen(TravelMode())
+        .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false
+        ).ToPtr())
+        .AndThen(TravelMode())
+        .AndThen(SetMovementLED(MovementType::None));
+}
+
+frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHigh() {
+    return m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple ? AutoPlaceHighCube().WithTimeout(15_s) : AutoPlaceHighCone().WithTimeout(15_s);
+}
+
+frc2::CommandPtr CompleteArmSubsystem::AutoPlaceMedium() {
+     return m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple ? AutoPlaceMediumCube().WithTimeout(15_s) : AutoPlaceMediumCone().WithTimeout(15_s);
+}
+
+frc2::CommandPtr CompleteArmSubsystem::AutoPlaceLow() {
+     return m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple ? AutoPlaceLowCube().WithTimeout(15_s) : AutoPlaceLowCone().WithTimeout(15_s);
 }
 
 frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {

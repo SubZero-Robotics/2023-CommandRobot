@@ -5,6 +5,7 @@
 #include <frc2/command/CommandHelper.h>
 
 #include "subsystems/IntakeSubsystem.h"
+#include "utils/Logging.h"
 
 class SpinIntakeTimer
     : public frc2::CommandHelper<frc2::CommandBase, SpinIntakeTimer> {
@@ -24,7 +25,10 @@ class SpinIntakeTimer
         AddRequirements(m_intake);
     }
 
-    void Initialize() override { m_timer.Restart(); }
+    void Initialize() override { m_timer.Restart(); 
+    Logging::logToStdOut("AUTO INTAKE", "INIT");
+    m_isFinished = false;
+    }
 
     void Execute() override {
         if (m_isIntaking) {
@@ -34,6 +38,7 @@ class SpinIntakeTimer
         }
 
         if (m_timer.HasElapsed(m_duration)) {
+            Logging::logToStdOut("AUTO INTAKE", "TIMER ELAPSED");
             m_isFinished = true;
         }
     }

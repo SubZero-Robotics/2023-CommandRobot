@@ -14,7 +14,6 @@
 #include "commands/GamepieceFunni.h"
 #include "commands/IntakeInCommand.h"
 #include "commands/IntakeOutCommand.h"
-#include "commands/IntakeStopCommand.h"
 #include "commands/LEDToggleCommand.h"
 #include "commands/RotateArmCommand.h"
 #include "commands/RotateWristCommand.h"
@@ -64,22 +63,23 @@ void RobotContainer::ConfigureBindings() {
         m_extender.get(), [this] { return ArmXbox.GetLeftTriggerAxis(); },
         [this] { return ArmXbox.GetRightTriggerAxis(); }));
 
-    m_intake.SetDefaultCommand(IntakeStop(&m_intake).ToPtr());
+    // ArmXbox.Y().OnTrue(std::move(m_arm->AutoIntake()));
 
-    ArmXbox.Y().OnTrue(std::move(m_arm->AutoIntake()));
+    ArmXbox.X().OnTrue(std::move(m_arm->AutoPlaceMedium()));
 
-    ArmXbox.X().OnTrue(std::move(m_arm->AutoPlaceHigh()));
+    ArmXbox.Y().OnTrue(std::move(m_arm->AutoPlaceHigh()));
+
+    ArmXbox.A().OnTrue(std::move(m_arm->AutoPlaceLow()));
 
     ArmXbox.B().OnTrue(std::move(m_arm->TravelMode()));
 
-    ArmXbox.A().OnTrue(std::move(m_arm->Home()));
-    
+    DriverXbox.A().OnTrue(std::move(m_arm->Home()));
 
     ArmXbox.LeftBumper().WhileTrue(IntakeIn(&m_intake).ToPtr());
 
     ArmXbox.RightBumper().WhileTrue(IntakeOut(&m_intake).ToPtr());
 
-    DriverXbox.A().WhileTrue(GamepieceFunni(&m_intake, &m_leds).ToPtr());
+    DriverXbox.LeftBumper().WhileTrue(GamepieceFunni(&m_intake, &m_leds).ToPtr());
 
     DriverXbox.RightBumper().OnTrue(LEDToggle(&m_leds).ToPtr());
 

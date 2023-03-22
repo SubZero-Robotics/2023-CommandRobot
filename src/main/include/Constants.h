@@ -60,7 +60,7 @@ constexpr double kRotationMaxDegree = 145;
 constexpr int kArmSoftLimitForwardDegrees = 65;
 constexpr double kArmGearRatio = 197.14;
 constexpr double kArmStepSize = 4;
-constexpr double kAntiGravityPercentage = 0.03;
+constexpr double kAntiGravityPercentage = -0.05;
 
 constexpr double kArmRotationSetP = 0.0018386;
 constexpr double kArmRotationSetI = 0.0075;
@@ -83,7 +83,7 @@ constexpr double kWristHomingSpeed = .33;
 
 // Intake Constants
 constexpr double kIntakeSpeed = 1.0;
-constexpr double kOuttakeSpeed = 0.66;
+constexpr double kOuttakeSpeed = 0.45;
 
 // Wrist Constants
 constexpr int kWristLimitSwitchPort = 3;

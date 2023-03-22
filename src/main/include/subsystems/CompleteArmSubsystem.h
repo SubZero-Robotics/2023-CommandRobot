@@ -13,13 +13,13 @@
 #include "commands/Autos.h"
 #include "commands/IntakeInCommand.h"
 #include "commands/IntakeOutCommand.h"
-#include "commands/IntakeStopCommand.h"
 #include "commands/SpinIntakeTimer.h"
 #include "subsystems/BaseSingleAxisSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/VL53L1XSubsystem.h"
+#include "utils/Logging.h"
 
 class CompleteArmSubsystem : public frc2::SubsystemBase {
    public:
@@ -28,7 +28,12 @@ class CompleteArmSubsystem : public frc2::SubsystemBase {
         HomeAll,
         AutoIntake,
         TravelMode,
-        PlaceHigh
+        PlaceHighCone,
+        PlaceMediumCone,
+        PlaceLowCone,
+        PlaceHighCube,
+        PlaceMediumCube,
+        PlaceLowCube
     };
 
     struct ArmAxisPose {
@@ -83,7 +88,23 @@ class CompleteArmSubsystem : public frc2::SubsystemBase {
 
     frc2::CommandPtr TravelMode();
 
+    frc2::CommandPtr AutoPlaceHighCone();
+
+    frc2::CommandPtr AutoPlaceMediumCone();
+
+    frc2::CommandPtr AutoPlaceLowCone();
+
+    frc2::CommandPtr AutoPlaceHighCube();
+
+    frc2::CommandPtr AutoPlaceMediumCube();
+
+    frc2::CommandPtr AutoPlaceLowCube();
+
     frc2::CommandPtr AutoPlaceHigh();
+
+    frc2::CommandPtr AutoPlaceMedium();
+
+    frc2::CommandPtr AutoPlaceLow();
 
     frc2::CommandPtr SetPose(ArmAxisPose pose);
 

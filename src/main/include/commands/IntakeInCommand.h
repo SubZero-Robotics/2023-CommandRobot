@@ -22,6 +22,8 @@ class IntakeIn : public frc2::CommandHelper<frc2::CommandBase, IntakeIn> {
 
     bool IsFinished() override { return isFinished; }
 
+    void End(bool interrupted) { m_intake->Stop(); }
+
    private:
     IntakeSubsystem* m_intake;
     bool isFinished;

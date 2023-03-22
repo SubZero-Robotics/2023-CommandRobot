@@ -16,7 +16,7 @@ class ExtensionSubsystem
         m_extensionMotor.SetInverted(true);
         _config = m_config;
         _controller = m_config.pid;
-        _controller.SetTolerance(.2, 1);
+        _controller.SetTolerance(.5, 1);
         _config.distancePerRevolution = ArmConstants::kInPerRotation;
         m_encoder.SetPositionConversionFactor(1);
     }
