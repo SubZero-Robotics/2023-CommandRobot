@@ -64,5 +64,5 @@ frc2::CommandPtr autos::PlaceAndBalance(DriveSubsystem* m_drive,
                                         IntakeSubsystem* m_intake) {
     return SpinIntakeTimer(m_intake, 1000_ms, false)
         .ToPtr()
-        .AndThen(autos::StraightBack(m_drive, 97));
+        .AndThen(autos::StraightBack(m_drive, 94));
 }
