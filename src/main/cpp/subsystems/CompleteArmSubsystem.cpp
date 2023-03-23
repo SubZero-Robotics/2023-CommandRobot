@@ -150,13 +150,13 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceHighCone() {
         .AndThen(SetPose(
             {.axis = m_wrist, .position = ArmConstants::kWristDegreeLimit}))
         // Spit out piece
-        .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
+        // .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
         // Move wrist away so it doesn't snag
-        .AndThen(SetPose({.axis = m_wrist, .position = 0}))
+        // .AndThen(SetPose({.axis = m_wrist, .position = 0}))
         // Move extender back in
-        .AndThen(SetPose({.axis = m_extension, .position = 0}))
+        // .AndThen(SetPose({.axis = m_extension, .position = 0}))
         // Get ready to move again
-        .AndThen(TravelMode())
+        // .AndThen(TravelMode())
         .AndThen(SetMovementLED(MovementType::None));
 }
 
@@ -173,13 +173,13 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceMediumCone() {
         .AndThen(SetPose({.axis = m_extension, .position = 0}))
         .AndThen(SetPose({.axis = m_wrist, .position = 58}))
         // Spit out piece
-        .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
+        // .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
         // Move wrist away so it doesn't snag
-        .AndThen(SetPose({.axis = m_wrist, .position = 0}))
+        // .AndThen(SetPose({.axis = m_wrist, .position = 0}))
         // Move extender back in
-        .AndThen(SetPose({.axis = m_extension, .position = 0}))
+        // .AndThen(SetPose({.axis = m_extension, .position = 0}))
         // Get ready to move again
-        .AndThen(TravelMode())
+        // .AndThen(TravelMode())
         .AndThen(SetMovementLED(MovementType::None));
 }
 
