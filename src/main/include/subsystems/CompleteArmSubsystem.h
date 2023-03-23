@@ -19,6 +19,8 @@
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/VL53L1XSubsystem.h"
+#include "commands/BrakeSetCommand.h"
+#include "commands/BrakeStopCommand.h"
 #include "utils/Logging.h"
 
 class CompleteArmSubsystem : public frc2::SubsystemBase {

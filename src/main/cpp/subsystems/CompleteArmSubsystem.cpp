@@ -84,6 +84,18 @@ frc2::CommandPtr CompleteArmSubsystem::SetMovementLED(MovementType type) {
                            m_leds->setPattern(
                                LEDControllerSubsystem::PatternType::Blink);
                            break;
+                        case MovementType::BrakeModeOn:
+                            m_leds->setOn();
+                            m_leds->setColor(255, 0, 0);
+                            m_leds->setPattern(
+                                LEDControllerSubsystem::PatternType::Chase);
+                            break;
+                        case MovementType::BrakeModeOff:
+                            m_leds->setOn();
+                            m_leds->setColor(0, 255, 0);
+                            m_leds->setPattern(
+                                LEDControllerSubsystem::PatternType::Chase);
+                            break;
                    }
                },
                {this, m_leds})
@@ -273,7 +285,10 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceLow() {
                      SetMovementLED(MovementType::None));
 }
 
-frc2::CommandPtr CompleteArmSubsystem
+// frc2::CommandPtr CompleteArmSubsystem::BrakeModeOn() {
+//     return SetMovementLED(MovementType::BrakeModeOn)
+//         .AndThen(BrakeModeOn())
+// }
 
 frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {
     Logging::logToStdOut("completearm",
