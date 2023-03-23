@@ -30,7 +30,7 @@ RobotContainer::RobotContainer() {
         m_effector.get(), m_wrist.get(), m_extender.get());
 
     m_assist = std::make_unique<AssistSubsystem>(
-        m_arm.get(), &m_leds, &m_intake);
+        m_arm.get(), &m_leds, &m_intake, m_drive);
 
     // Configure the button bindings
     ConfigureBindings();
@@ -73,9 +73,11 @@ void RobotContainer::ConfigureBindings() {
 
     ArmXbox.A().OnTrue(std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::Low)));
 
-    ArmXbox.B().OnTrue(std::move(m_arm->TravelMode()));
+    ArmXbox.B().OnTrue(m_arm->TravelMode());
 
-    DriverXbox.A().OnTrue(std::move(m_arm->Home()));
+    DriverXbox.A().OnTrue(m_arm->Home());
+
+    DriverXbox.Start().OnTrue(m_assist->AutoIntake());
 
     ArmXbox.LeftBumper().WhileTrue(IntakeIn(&m_intake).ToPtr());
 

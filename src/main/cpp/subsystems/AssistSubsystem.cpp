@@ -1,12 +1,11 @@
 #include "subsystems/AssistSubsystem.h"
 
-AssistSubsystem::AssistSubsystem(CompleteArmSubsystem* arm, LEDControllerSubsystem* leds, IntakeSubsystem* intake) :
+AssistSubsystem::AssistSubsystem(CompleteArmSubsystem* arm, LEDControllerSubsystem* leds, IntakeSubsystem* intake,
+    DriveSubsystem* drive) :
     m_arm(arm),
     m_leds(leds),
-    m_intake(intake) {
-}
-
-void AssistSubsystem::Periodic() {
+    m_intake(intake),
+    m_drive(drive) {
 }
 
 frc2::CommandPtr AssistSubsystem::GetAutoPlaceCommand(PlacementLocation location) {
@@ -42,6 +41,20 @@ frc2::CommandPtr AssistSubsystem::GetAutoPlaceCommand(PlacementLocation location
         .AndThen(m_leds->DisplayCurrentColor());
 }
 
+frc2::CommandPtr AssistSubsystem::AutoIntake() {
+    return m_arm->TravelMode()
+        .AndThen(m_leds->SetMovementLED(0x00ea8604, LEDControllerSubsystem::PatternType::Blink))
+        // TODO: Change angle based on game piece
+        .AndThen(m_arm->SetPose({.arm=60,.extension=2,.wrist=90,.reverseDirection=false}))
+        // Move forward slowly until we reach the cube
+        .AndThen(autos::StraightBack(m_drive, -10, 0.1))
+        .RaceWith(IntakeIn(m_intake).ToPtr())
+        // Intake a little bit more
+        .AndThen(SpinIntakeTimer(m_intake, 750_ms, true).ToPtr())
+        .AndThen(m_arm->TravelMode())
+        .AndThen(m_leds->DisplayCurrentColor());
+}
+
 // Limelight Stuff
 frc::Pose2d AssistSubsystem::GetPosition() {
     auto rawbot = nt::NetworkTableInstance::GetDefault()
@@ -50,7 +63,7 @@ frc::Pose2d AssistSubsystem::GetPosition() {
     auto x = (units::meter_t)rawbot[0];
     auto y = (units::meter_t)rawbot[1];
     auto yaw = rawbot[5];
-    auto temp = frc::Pose2d{x, y, frc::Rotation2d(sin(yaw), cos(yaw))};
+    auto temp = frc::Pose2d{x, y, frc::Rotation2d(units::degree_t(yaw))};
     Logging::logToSmartDashboard("AssistSubsystem",
                                  "X: " + std::to_string(x.value()) + "\n" +
                                      "Y: " + std::to_string(y.value()) + "\n" +

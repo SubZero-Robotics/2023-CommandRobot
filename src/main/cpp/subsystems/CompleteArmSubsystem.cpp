@@ -38,28 +38,6 @@ frc2::CommandPtr CompleteArmSubsystem::SetPose(WholeArmPose pose) {
             }).ToPtr());
 }
 
-// frc2::CommandPtr CompleteArmSubsystem::AutoIntake() {
-//     return TravelMode()
-//         .AndThen(m_leds->SetMovementLED(MovementType::AutoIntake))
-//         // TODO: Change angle based on game piece
-//         .AndThen(SetPose({.axis = m_wrist, .position = 90}))
-
-//         // Move forward slowly until we reach the cube
-//         .AndThen(autos::StraightBack(m_drive, -20, 0.1)
-//                      // TODO: Change distance based on game piece
-//                      // TODO: Make distance(s) a constant
-//                      .Until([this]() {
-//                          return (m_lidar->GetDistance() <= 600 &&
-//                                  m_lidar->IsValid());
-//                      })
-//                      .RaceWith(IntakeIn(m_intake).ToPtr()))
-
-//         // Intake a little bit more
-//         .AndThen(SpinIntakeTimer(m_intake, 750_ms, true).ToPtr())
-//         .AndThen(TravelMode())
-//         .AndThen(m_leds->SetMovementLED(MovementType::None));
-// }
-
 frc2::CommandPtr CompleteArmSubsystem::TravelMode() {
     return SetPose({.axis = m_wrist, .position = 0})
         // Move extension to 0

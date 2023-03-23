@@ -14,6 +14,10 @@
 #include "subsystems/CompleteArmSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/DriveSubsystem.h"
+
+#include "commands/SpinIntakeTimer.h"
+#include "commands/IntakeInCommand.h"
 #include "utils/DetectionParser.h"
 #include "utils/Logging.h"
 
@@ -24,14 +28,12 @@ class AssistSubsystem : public frc2::SubsystemBase {
         double armLengthIn;
     };
 
-    AssistSubsystem(CompleteArmSubsystem *arm, LEDControllerSubsystem *leds, IntakeSubsystem* intake);
-
-    /**
-     * Will be called periodically whenever the CommandScheduler runs.
-     */
-    void Periodic() override;
+    AssistSubsystem(CompleteArmSubsystem *arm, LEDControllerSubsystem *leds, IntakeSubsystem* intake,
+        DriveSubsystem* drive);
 
     frc2::CommandPtr GetAutoPlaceCommand(PlacementLocation location);
+
+    frc2::CommandPtr AutoIntake();
 
     frc::Pose2d GetPosition();
 
@@ -51,4 +53,5 @@ class AssistSubsystem : public frc2::SubsystemBase {
     CompleteArmSubsystem* m_arm;
     LEDControllerSubsystem* m_leds;
     IntakeSubsystem* m_intake;
+    DriveSubsystem* m_drive;
 };

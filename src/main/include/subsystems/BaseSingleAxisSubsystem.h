@@ -21,7 +21,7 @@
 #include "subsystems/ISingleAxisSubsystem.h"
 #include "utils/Logging.h"
 
-template <typename Motor, typename Encoder, typename Unit, typename Unit_t>
+template <typename Motor, typename Encoder>
 class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
    public:
     enum ConfigConstants {
@@ -201,7 +201,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                 Logging::logToStdOut(
                     _prefix,
                     "Target Position: " +
-                        std::to_string(Unit_t(_targetPosition).value()) +
+                        std::to_string(_targetPosition) +
                         std::string(_config.type == AxisType::Linear ? " in"
                                                                      : " deg"),
                     Logging::Level::INFO, _ansiPrefixModifiers);

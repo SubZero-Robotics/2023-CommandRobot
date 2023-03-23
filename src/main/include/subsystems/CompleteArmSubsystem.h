@@ -11,14 +11,7 @@
 
 #include "Constants.h"
 #include "commands/Autos.h"
-#include "commands/IntakeInCommand.h"
-#include "commands/IntakeOutCommand.h"
-#include "commands/SpinIntakeTimer.h"
 #include "subsystems/BaseSingleAxisSubsystem.h"
-#include "subsystems/DriveSubsystem.h"
-#include "subsystems/IntakeSubsystem.h"
-#include "subsystems/LEDControllerSubsystem.h"
-#include "subsystems/VL53L1XSubsystem.h"
 #include "utils/Logging.h"
 
 class CompleteArmSubsystem : public frc2::SubsystemBase {
