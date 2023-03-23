@@ -29,8 +29,8 @@ RobotContainer::RobotContainer() {
     m_arm = std::make_unique<CompleteArmSubsystem>(
         m_effector.get(), m_wrist.get(), m_extender.get());
 
-    m_assist = std::make_unique<AssistSubsystem>(
-        m_arm.get(), &m_leds, &m_intake);
+    m_assist =
+        std::make_unique<AssistSubsystem>(m_arm.get(), &m_leds, &m_intake);
 
     // Configure the button bindings
     ConfigureBindings();
@@ -67,11 +67,14 @@ void RobotContainer::ConfigureBindings() {
 
     // ArmXbox.Y().OnTrue(std::move(m_arm->AutoIntake()));
 
-    ArmXbox.Y().OnTrue(std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::High)));
+    ArmXbox.Y().OnTrue(
+        std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::High)));
 
-    ArmXbox.X().OnTrue(std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::Middle)));
+    ArmXbox.X().OnTrue(
+        std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::Middle)));
 
-    ArmXbox.A().OnTrue(std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::Low)));
+    ArmXbox.A().OnTrue(
+        std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::Low)));
 
     ArmXbox.B().OnTrue(std::move(m_arm->TravelMode()));
 

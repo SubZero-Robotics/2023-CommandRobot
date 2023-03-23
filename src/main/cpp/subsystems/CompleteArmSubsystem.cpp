@@ -24,18 +24,18 @@ frc2::CommandPtr CompleteArmSubsystem::SetPose(WholeArmPose pose) {
         return SetPose({.axis = m_extension, .position = 2})
             .AndThen(SetPose({.axis = m_rotateArm, .position = pose.arm}))
             .AndThen(frc2::InstantCommand([this]() {
-                m_rotateArm->RunMotorExternal(-.07);
-            }).ToPtr())
+                         m_rotateArm->RunMotorExternal(-.07);
+                     }).ToPtr())
             .AndThen(SetPose({.axis = m_extension, .position = pose.extension}))
             .AndThen(SetPose({.axis = m_wrist, .position = pose.wrist}));
     }
 
     return SetPose({.axis = m_wrist, .position = pose.wrist})
-            .AndThen(SetPose({.axis = m_extension, .position = pose.extension}))
-            .AndThen(SetPose({.axis = m_rotateArm, .position = pose.arm}))
-            .AndThen(frc2::InstantCommand([this]() {
-                m_rotateArm->RunMotorExternal(0);
-            }).ToPtr());
+        .AndThen(SetPose({.axis = m_extension, .position = pose.extension}))
+        .AndThen(SetPose({.axis = m_rotateArm, .position = pose.arm}))
+        .AndThen(frc2::InstantCommand([this]() {
+                     m_rotateArm->RunMotorExternal(0);
+                 }).ToPtr());
 }
 
 // frc2::CommandPtr CompleteArmSubsystem::AutoIntake() {

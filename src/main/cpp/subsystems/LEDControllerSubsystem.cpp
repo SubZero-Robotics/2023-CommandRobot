@@ -64,25 +64,25 @@ bool LEDControllerSubsystem::setColor(Colors color) {
     return false;
 }
 
-frc2::CommandPtr LEDControllerSubsystem::SetMovementLED(uint32_t color, PatternType pattern) {
+frc2::CommandPtr LEDControllerSubsystem::SetMovementLED(uint32_t color,
+                                                        PatternType pattern) {
     return frc2::InstantCommand(
                [this, color, pattern]() {
-                    setOn();
-                    setColor(color);
-                    setPattern(pattern);
+                   setOn();
+                   setColor(color);
+                   setPattern(pattern);
                },
                {this})
         .ToPtr();
 }
 
 frc2::CommandPtr LEDControllerSubsystem::DisplayCurrentColor() {
-    return frc2::InstantCommand(
-        [this]() {
-            setOn();
-            setColor(_currentColor);
-            setPattern(PatternType::SetAll);
-        }
-    ).ToPtr();
+    return frc2::InstantCommand([this]() {
+               setOn();
+               setColor(_currentColor);
+               setPattern(PatternType::SetAll);
+           })
+        .ToPtr();
 }
 
 bool LEDControllerSubsystem::getPatternDone() {

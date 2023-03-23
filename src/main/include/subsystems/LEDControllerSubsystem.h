@@ -3,14 +3,14 @@
 
 #include <frc/I2C.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/InstantCommand.h>
+#include <frc2/command/SubsystemBase.h>
 
 #include <memory>
 
-#include "utils/Logging.h"
 #include "Constants.h"
+#include "utils/Logging.h"
 
 class LEDControllerSubsystem : public frc2::SubsystemBase {
    public:

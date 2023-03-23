@@ -12,8 +12,8 @@
 #include <vector>
 
 #include "subsystems/CompleteArmSubsystem.h"
-#include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
+#include "subsystems/LEDControllerSubsystem.h"
 #include "utils/DetectionParser.h"
 #include "utils/Logging.h"
 
@@ -24,7 +24,8 @@ class AssistSubsystem : public frc2::SubsystemBase {
         double armLengthIn;
     };
 
-    AssistSubsystem(CompleteArmSubsystem *arm, LEDControllerSubsystem *leds, IntakeSubsystem* intake);
+    AssistSubsystem(CompleteArmSubsystem* arm, LEDControllerSubsystem* leds,
+                    IntakeSubsystem* intake);
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.

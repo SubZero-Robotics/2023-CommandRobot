@@ -1,37 +1,45 @@
 #include "subsystems/AssistSubsystem.h"
 
-AssistSubsystem::AssistSubsystem(CompleteArmSubsystem* arm, LEDControllerSubsystem* leds, IntakeSubsystem* intake) :
-    m_arm(arm),
-    m_leds(leds),
-    m_intake(intake) {
-}
+AssistSubsystem::AssistSubsystem(CompleteArmSubsystem* arm,
+                                 LEDControllerSubsystem* leds,
+                                 IntakeSubsystem* intake)
+    : m_arm(arm), m_leds(leds), m_intake(intake) {}
 
-void AssistSubsystem::Periodic() {
-}
+void AssistSubsystem::Periodic() {}
 
-frc2::CommandPtr AssistSubsystem::GetAutoPlaceCommand(PlacementLocation location) {
+frc2::CommandPtr AssistSubsystem::GetAutoPlaceCommand(
+    PlacementLocation location) {
     auto cmd = m_arm->TravelMode();
 
-    auto piece = m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple ? PieceType::Cube : PieceType::Cone;
+    auto piece =
+        m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple
+            ? PieceType::Cube
+            : PieceType::Cone;
 
     switch (location) {
         case PlacementLocation::High:
             cmd = std::move(cmd)
-                .AndThen(m_leds->SetMovementLED(AutoConstants::PlaceHigh::color, LEDControllerSubsystem::PatternType::SetAll))
-                .AndThen(GetPlacementHigh(piece))
-                .WithTimeout(AutoConstants::PlaceHigh::timeout);
+                      .AndThen(m_leds->SetMovementLED(
+                          AutoConstants::PlaceHigh::color,
+                          LEDControllerSubsystem::PatternType::SetAll))
+                      .AndThen(GetPlacementHigh(piece))
+                      .WithTimeout(AutoConstants::PlaceHigh::timeout);
             break;
         case PlacementLocation::Middle:
             cmd = std::move(cmd)
-                .AndThen(m_leds->SetMovementLED(AutoConstants::PlaceMiddle::color, LEDControllerSubsystem::PatternType::SetAll))
-                .AndThen(GetPlacementMiddle(piece))
-                .WithTimeout(AutoConstants::PlaceMiddle::timeout);
+                      .AndThen(m_leds->SetMovementLED(
+                          AutoConstants::PlaceMiddle::color,
+                          LEDControllerSubsystem::PatternType::SetAll))
+                      .AndThen(GetPlacementMiddle(piece))
+                      .WithTimeout(AutoConstants::PlaceMiddle::timeout);
             break;
         case PlacementLocation::Low:
             cmd = std::move(cmd)
-                .AndThen(m_leds->SetMovementLED(AutoConstants::PlaceLow::color, LEDControllerSubsystem::PatternType::SetAll))
-                .AndThen(GetPlacementLow(piece))
-                .WithTimeout(AutoConstants::PlaceLow::timeout);
+                      .AndThen(m_leds->SetMovementLED(
+                          AutoConstants::PlaceLow::color,
+                          LEDControllerSubsystem::PatternType::SetAll))
+                      .AndThen(GetPlacementLow(piece))
+                      .WithTimeout(AutoConstants::PlaceLow::timeout);
             break;
     }
 
