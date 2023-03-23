@@ -314,7 +314,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                                  "Moving to " + std::to_string(position),
                                  Logging::Level::INFO, _ansiPrefixModifiers);
         _isMovingToPosition = true;
-        _targetPosition = std::clamp(position, _config.minDistance, _config.maxDistance);
+        _targetPosition =
+            std::clamp(position, _config.minDistance, _config.maxDistance);
     }
 
     void Home() override {

@@ -23,9 +23,7 @@ class CompleteArmSubsystem : public frc2::SubsystemBase {
     CompleteArmSubsystem(ISingleAxisSubsystem* rotateArm,
                          ISingleAxisSubsystem* wrist,
                          ISingleAxisSubsystem* extension)
-        : m_rotateArm(rotateArm),
-          m_wrist(wrist),
-          m_extension(extension) {}
+        : m_rotateArm(rotateArm), m_wrist(wrist), m_extension(extension) {}
 
     /**
      * @brief Stop movement on all axes

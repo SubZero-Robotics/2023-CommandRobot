@@ -67,11 +67,14 @@ void RobotContainer::ConfigureBindings() {
 
     // ArmXbox.Y().OnTrue(std::move(m_arm->AutoIntake()));
 
-    ArmXbox.Y().OnTrue(std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::High)));
+    ArmXbox.Y().OnTrue(
+        std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::High)));
 
-    ArmXbox.X().OnTrue(std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::Middle)));
+    ArmXbox.X().OnTrue(
+        std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::Middle)));
 
-    ArmXbox.A().OnTrue(std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::Low)));
+    ArmXbox.A().OnTrue(
+        std::move(m_assist->GetAutoPlaceCommand(PlacementLocation::Low)));
 
     ArmXbox.B().OnTrue(m_arm->TravelMode());
 

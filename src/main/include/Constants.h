@@ -37,7 +37,6 @@
  * they are needed.
  */
 
-
 // XboxController enums.  Since the Trigger stuff works on the base Joystick
 // class, not the Xbox extension, these are undefined where we want to use them.
 // So, flat-out copied them here for reference
@@ -76,16 +75,9 @@ enum class MovementType {
     PlaceLowCube
 };
 
-enum class PieceType {
-    Cone,
-    Cube
-};
+enum class PieceType { Cone, Cube };
 
-enum class PlacementLocation {
-    Low,
-    Middle,
-    High
-};
+enum class PlacementLocation { Low, Middle, High };
 
 struct ArmAxisPose {
     ISingleAxisSubsystem* axis;
@@ -94,8 +86,9 @@ struct ArmAxisPose {
 
 /**
  * @brief Always in this order: Arm > Extension > Wrist
- * 
- * @param reverseDirection Set to true to move Wrist > Extension > Arm; useful for retraction movements
+ *
+ * @param reverseDirection Set to true to move Wrist > Extension > Arm; useful
+ * for retraction movements
  */
 struct WholeArmPose {
     double arm;
@@ -253,122 +246,74 @@ constexpr double kAutoBackupDistanceInches = 20;
 constexpr double kAutoDriveSpeed = 0.5;
 
 namespace PlaceHigh {
-    constexpr uint8_t r = 142;
-    constexpr uint8_t g = 17;
-    constexpr uint8_t b = 52;
-    constexpr uint32_t color = (r << 16) | (g << 8) | b;
-    constexpr auto timeout = 25_s;
+constexpr uint8_t r = 142;
+constexpr uint8_t g = 17;
+constexpr uint8_t b = 52;
+constexpr uint32_t color = (r << 16) | (g << 8) | b;
+constexpr auto timeout = 25_s;
 
-    namespace Cone {
-        constexpr WholeArmPose OutPose = {
-            .arm = 145,
-            .extension = 12,
-            .wrist = 120,
-            .reverseDirection = false
-        };
+namespace Cone {
+constexpr WholeArmPose OutPose = {
+    .arm = 145, .extension = 12, .wrist = 120, .reverseDirection = false};
 
-        constexpr WholeArmPose InPose = {
-            .arm = 0,
-            .extension = 0,
-            .wrist = 0,
-            .reverseDirection = true
-        };
-    }
+constexpr WholeArmPose InPose = {
+    .arm = 0, .extension = 0, .wrist = 0, .reverseDirection = true};
+}  // namespace Cone
 
-    namespace Cube {
-        constexpr WholeArmPose OutPose = {
-            .arm = 143,
-            .extension = 12,
-            .wrist = 120,
-            .reverseDirection = false
-        };
+namespace Cube {
+constexpr WholeArmPose OutPose = {
+    .arm = 143, .extension = 12, .wrist = 120, .reverseDirection = false};
 
-        constexpr WholeArmPose InPose = {
-            .arm = 0,
-            .extension = 0,
-            .wrist = 0,
-            .reverseDirection = true
-        };
-    }
-}
+constexpr WholeArmPose InPose = {
+    .arm = 0, .extension = 0, .wrist = 0, .reverseDirection = true};
+}  // namespace Cube
+}  // namespace PlaceHigh
 
 namespace PlaceMiddle {
-    constexpr uint8_t r = 10;
-    constexpr uint8_t g = 230;
-    constexpr uint8_t b = 10;
-    constexpr uint32_t color = (r << 16) | (g << 8) | b;
-    constexpr auto timeout = 20_s;
-    namespace Cone {
-        constexpr WholeArmPose OutPose = {
-            .arm = 92,
-            .extension = 6,
-            .wrist = 58,
-            .reverseDirection = false
-        };
+constexpr uint8_t r = 10;
+constexpr uint8_t g = 230;
+constexpr uint8_t b = 10;
+constexpr uint32_t color = (r << 16) | (g << 8) | b;
+constexpr auto timeout = 20_s;
+namespace Cone {
+constexpr WholeArmPose OutPose = {
+    .arm = 92, .extension = 6, .wrist = 58, .reverseDirection = false};
 
-        constexpr WholeArmPose InPose = {
-            .arm = 0,
-            .extension = 0,
-            .wrist = 0,
-            .reverseDirection = true
-        };
-    }
+constexpr WholeArmPose InPose = {
+    .arm = 0, .extension = 0, .wrist = 0, .reverseDirection = true};
+}  // namespace Cone
 
-    namespace Cube {
-        constexpr WholeArmPose OutPose = {
-            .arm = 110,
-            .extension = 0,
-            .wrist = 95,
-            .reverseDirection = false
-        };
+namespace Cube {
+constexpr WholeArmPose OutPose = {
+    .arm = 110, .extension = 0, .wrist = 95, .reverseDirection = false};
 
-        constexpr WholeArmPose InPose = {
-            .arm = 0,
-            .extension = 0,
-            .wrist = 0,
-            .reverseDirection = true
-        };
-    }
-}
+constexpr WholeArmPose InPose = {
+    .arm = 0, .extension = 0, .wrist = 0, .reverseDirection = true};
+}  // namespace Cube
+}  // namespace PlaceMiddle
 
 namespace PlaceLow {
-    constexpr uint8_t r = 30;
-    constexpr uint8_t g = 30;
-    constexpr uint8_t b = 200;
-    constexpr uint32_t color = (r << 16) | (g << 8) | b;
-    constexpr auto timeout = 15_s;
-    namespace Cone {
-        constexpr WholeArmPose OutPose = {
-            .arm = 0,
-            .extension = 0,
-            .wrist = 0,
-            .reverseDirection = false
-        };
+constexpr uint8_t r = 30;
+constexpr uint8_t g = 30;
+constexpr uint8_t b = 200;
+constexpr uint32_t color = (r << 16) | (g << 8) | b;
+constexpr auto timeout = 15_s;
+namespace Cone {
+constexpr WholeArmPose OutPose = {
+    .arm = 0, .extension = 0, .wrist = 0, .reverseDirection = false};
 
-        constexpr WholeArmPose InPose = {
-            .arm = 0,
-            .extension = 0,
-            .wrist = 0,
-            .reverseDirection = true
-        };
-    }
+constexpr WholeArmPose InPose = {
+    .arm = 0, .extension = 0, .wrist = 0, .reverseDirection = true};
+}  // namespace Cone
 
-    namespace Cube {
-        constexpr WholeArmPose OutPose = {
-            .arm = 0,
-            .extension = 0,
-            .wrist = 0,
-            .reverseDirection = false
-        };
+namespace Cube {
+constexpr WholeArmPose OutPose = {
+    .arm = 0, .extension = 0, .wrist = 0, .reverseDirection = false};
 
-        constexpr WholeArmPose InPose = {
-            .arm = 0,
-            .extension = 0,
-            .wrist = 0,
-            .reverseDirection = true
-        };
-    }
-}
+constexpr WholeArmPose InPose = {
+    .arm = 0, .extension = 0, .wrist = 0, .reverseDirection = true};
+}  // namespace Cube
+}  // namespace PlaceLow
 
 }  // namespace AutoConstants
 
