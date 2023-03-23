@@ -21,6 +21,7 @@
 #include "subsystems/VL53L1XSubsystem.h"
 #include "commands/BrakeSetCommand.h"
 #include "commands/BrakeStopCommand.h"
+#include "subsystems/BrakeSubsystem.h"
 #include "utils/Logging.h"
 
 class CompleteArmSubsystem : public frc2::SubsystemBase {
@@ -133,6 +134,7 @@ class CompleteArmSubsystem : public frc2::SubsystemBase {
     DriveSubsystem* m_drive;
     LEDControllerSubsystem* m_leds;
     VL53L1XController* m_lidar;
+    BrakeSubsystem* m_brake;
 };
 
 #endif

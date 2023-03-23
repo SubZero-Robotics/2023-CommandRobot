@@ -7,6 +7,7 @@ frc2::CommandPtr CompleteArmSubsystem::Stop() {
                    m_wrist->StopMovement();
                    m_extension->StopMovement();
                    m_intake->Stop();
+                   m_brake->UnsetBrakeMode();
                },
                {this, m_rotateArm, m_wrist, m_extension, m_intake})
         .ToPtr()
@@ -86,13 +87,13 @@ frc2::CommandPtr CompleteArmSubsystem::SetMovementLED(MovementType type) {
                            break;
                         case MovementType::BrakeModeOn:
                             m_leds->setOn();
-                            m_leds->setColor(255, 0, 0);
+                            m_leds->setColor(0, 255, 0);
                             m_leds->setPattern(
                                 LEDControllerSubsystem::PatternType::Chase);
                             break;
                         case MovementType::BrakeModeOff:
                             m_leds->setOn();
-                            m_leds->setColor(0, 255, 0);
+                            m_leds->setColor(255, 0, 0);
                             m_leds->setPattern(
                                 LEDControllerSubsystem::PatternType::Chase);
                             break;
@@ -285,10 +286,19 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceLow() {
                      SetMovementLED(MovementType::None));
 }
 
-// frc2::CommandPtr CompleteArmSubsystem::BrakeModeOn() {
-//     return SetMovementLED(MovementType::BrakeModeOn)
-//         .AndThen(BrakeModeOn())
-// }
+frc2::CommandPtr CompleteArmSubsystem::BrakeModeOn() {
+    return SetMovementLED(MovementType::BrakeModeOn)
+        .AndThen(frc2::InstantCommand([this]() {
+                     m_brake->SetBrakeMode();
+                 }).ToPtr());
+}
+
+frc2::CommandPtr CompleteArmSubsystem::BrakeModeOff() {
+    return SetMovementLED(MovementType::BrakeModeOff)
+        .AndThen(frc2::InstantCommand([this]() {
+                     m_brake->UnsetBrakeMode();
+                 }).ToPtr());
+}
 
 frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {
     Logging::logToStdOut("completearm",
