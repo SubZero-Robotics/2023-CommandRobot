@@ -21,38 +21,6 @@
 #include "subsystems/ISingleAxisSubsystem.h"
 #include "utils/Logging.h"
 
-// ! TODO: Update comment to match!
-/**
- * @brief A base class for a single-axis subsystem
- *
- * @example BaseSingleAxisSubsystem<rev::CANSparkMax,
- units::meters>::SingleAxisConfig config = {
- BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>::AxisType::Linear, //
- type frc::ProfilePIDController(1.3, 0.0, 0.7,
-            frc::TrapezoidProfile<units::meters>::Constraints(1.75_mps,
- 0.75_mps_sq), 20_ms   // kDt (s)
-        ),   // PID
-        0,      // min distance
-        200,    // max distance
-        30,     // distance per revolution in linear units
-        1,      // motor direction
-        0,      // min limit switch port
-        1,      // max limit switch port
-        2,      // encoder port
-        0.33    // default movement speed of 33%
-    };
-
-    rev::CANSparkMax m_leadRotationMotor{
-        CANSparkMaxConstants::kLeadRotationMotorID,
-        rev::CANSparkMax::MotorType::kBrushless};
-
-    BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters> singleAxis =
- BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>(config,
- m_leadRotationMotor);
- *
- * @tparam Motor Any motor that supports Set(percent)
- * @tparam Unit Position unit (units::meters, etc.)
- */
 template <typename Motor, typename Encoder, typename Unit, typename Unit_t>
 class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
    public:
@@ -346,7 +314,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                                  "Moving to " + std::to_string(position),
                                  Logging::Level::INFO, _ansiPrefixModifiers);
         _isMovingToPosition = true;
-        _targetPosition = position;
+        _targetPosition = std::clamp(position, _config.minDistance, _config.maxDistance);
     }
 
     void Home() override {

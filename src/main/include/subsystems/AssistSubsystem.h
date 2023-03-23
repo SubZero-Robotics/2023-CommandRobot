@@ -11,6 +11,9 @@
 #include <cmath>
 #include <vector>
 
+#include "subsystems/CompleteArmSubsystem.h"
+#include "subsystems/LEDControllerSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
 #include "utils/DetectionParser.h"
 #include "utils/Logging.h"
 
@@ -21,22 +24,18 @@ class AssistSubsystem : public frc2::SubsystemBase {
         double armLengthIn;
     };
 
-    AssistSubsystem();
+    AssistSubsystem(CompleteArmSubsystem *arm, LEDControllerSubsystem *leds, IntakeSubsystem* intake);
 
     /**
      * Will be called periodically whenever the CommandScheduler runs.
      */
     void Periodic() override;
 
+    frc2::CommandPtr GetAutoPlaceCommand(PlacementLocation location);
+
     frc::Pose2d GetPosition();
 
     std::vector<DetectionParser::DetectedObject> GetObjects();
-
-    /**
-     * Will be called periodically whenever the CommandScheduler runs during
-     * simulation.
-     */
-    void SimulationPeriodic() override;
 
     static ArmPose GetArmPoseFromDistance(double distanceIn,
                                           double poleHeightIn) {
@@ -45,6 +44,11 @@ class AssistSubsystem : public frc2::SubsystemBase {
     }
 
    private:
-    // Components (e.g. motor controllers and sensors) should generally be
-    // declared private and exposed only through public methods.
+    frc2::CommandPtr GetPlacementHigh(PieceType piece);
+    frc2::CommandPtr GetPlacementMiddle(PieceType piece);
+    frc2::CommandPtr GetPlacementLow(PieceType piece);
+
+    CompleteArmSubsystem* m_arm;
+    LEDControllerSubsystem* m_leds;
+    IntakeSubsystem* m_intake;
 };

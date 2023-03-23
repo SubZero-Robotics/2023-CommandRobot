@@ -4,10 +4,13 @@
 #include <frc/I2C.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/CommandPtr.h>
+#include <frc2/command/InstantCommand.h>
 
 #include <memory>
 
 #include "utils/Logging.h"
+#include "Constants.h"
 
 class LEDControllerSubsystem : public frc2::SubsystemBase {
    public:
@@ -83,6 +86,10 @@ class LEDControllerSubsystem : public frc2::SubsystemBase {
     bool setColor(uint32_t color);
 
     bool setColor(Colors color);
+
+    frc2::CommandPtr SetMovementLED(uint32_t color, PatternType pattern);
+
+    frc2::CommandPtr DisplayCurrentColor();
 
     /**
      * @brief Send the READPATTERNDONE command

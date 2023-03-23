@@ -23,46 +23,16 @@
 
 class CompleteArmSubsystem : public frc2::SubsystemBase {
    public:
-    enum class MovementType {
-        None,
-        HomeAll,
-        AutoIntake,
-        TravelMode,
-        PlaceHighCone,
-        PlaceMediumCone,
-        PlaceLowCone,
-        PlaceHighCube,
-        PlaceMediumCube,
-        PlaceLowCube
-    };
-
-    struct ArmAxisPose {
-        ISingleAxisSubsystem* axis;
-        double position;
-    };
-
-    struct WholeArmPose {
-        ArmAxisPose arm;
-        ArmAxisPose wrist;
-        ArmAxisPose extension;
-    };
-
     /**
      * @param axes List of axes to control. Order when homing depends on order
      * within list (Axis 1 -> Axis 2 -> ... -> Axis n)
      */
     CompleteArmSubsystem(ISingleAxisSubsystem* rotateArm,
                          ISingleAxisSubsystem* wrist,
-                         ISingleAxisSubsystem* extension,
-                         IntakeSubsystem* intake, DriveSubsystem* drive,
-                         LEDControllerSubsystem* leds, VL53L1XController* lidar)
+                         ISingleAxisSubsystem* extension)
         : m_rotateArm(rotateArm),
           m_wrist(wrist),
-          m_extension(extension),
-          m_intake(intake),
-          m_drive(drive),
-          m_leds(leds),
-          m_lidar(lidar) {}
+          m_extension(extension) {}
 
     /**
      * @brief Stop movement on all axes
@@ -71,40 +41,16 @@ class CompleteArmSubsystem : public frc2::SubsystemBase {
     frc2::CommandPtr Stop();
 
     /**
-     * @brief  Set the LEDs to show the correct
-     *
-     * @param type
-     * @return frc2::CommandPtr
-     */
-    frc2::CommandPtr SetMovementLED(MovementType type);
-
-    /**
      * @brief Homes all axes in order
      *
      */
     frc2::CommandPtr Home();
 
-    frc2::CommandPtr AutoIntake();
+    // frc2::CommandPtr AutoIntake();
 
     frc2::CommandPtr TravelMode();
 
-    frc2::CommandPtr AutoPlaceHighCone();
-
-    frc2::CommandPtr AutoPlaceMediumCone();
-
-    frc2::CommandPtr AutoPlaceLowCone();
-
-    frc2::CommandPtr AutoPlaceHighCube();
-
-    frc2::CommandPtr AutoPlaceMediumCube();
-
-    frc2::CommandPtr AutoPlaceLowCube();
-
-    frc2::CommandPtr AutoPlaceHigh();
-
-    frc2::CommandPtr AutoPlaceMedium();
-
-    frc2::CommandPtr AutoPlaceLow();
+    frc2::CommandPtr SetPose(WholeArmPose pose);
 
     frc2::CommandPtr SetPose(ArmAxisPose pose);
 
@@ -121,10 +67,6 @@ class CompleteArmSubsystem : public frc2::SubsystemBase {
     ISingleAxisSubsystem* m_rotateArm;
     ISingleAxisSubsystem* m_wrist;
     ISingleAxisSubsystem* m_extension;
-    IntakeSubsystem* m_intake;
-    DriveSubsystem* m_drive;
-    LEDControllerSubsystem* m_leds;
-    VL53L1XController* m_lidar;
 };
 
 #endif

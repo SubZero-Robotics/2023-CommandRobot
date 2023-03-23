@@ -22,6 +22,8 @@
 
 #include <numbers>
 
+#include "subsystems/ISingleAxisSubsystem.h"
+
 // uncomment this for simulation
 // #define IS_SIMULATION
 
@@ -34,6 +36,73 @@
  * command-specific namespaces within this header, which can then be used where
  * they are needed.
  */
+
+
+// XboxController enums.  Since the Trigger stuff works on the base Joystick
+// class, not the Xbox extension, these are undefined where we want to use them.
+// So, flat-out copied them here for reference
+enum Button {
+    kBumperLeft = 5,
+    kBumperRight = 6,
+    kStickLeft = 9,
+    kStickRight = 10,
+    kA = 1,
+    kB = 2,
+    kX = 3,
+    kY = 4,
+    kBack = 7,
+    kStart = 8
+};
+
+enum Axis {
+    kLeftX = 0,
+    kRightX = 4,
+    kLeftY = 1,
+    kRightY = 5,
+    kLeftTrigger = 2,
+    kRightTrigger = 3
+};
+
+enum class MovementType {
+    None,
+    HomeAll,
+    AutoIntake,
+    TravelMode,
+    PlaceHighCone,
+    PlaceMediumCone,
+    PlaceLowCone,
+    PlaceHighCube,
+    PlaceMediumCube,
+    PlaceLowCube
+};
+
+enum class PieceType {
+    Cone,
+    Cube
+};
+
+enum class PlacementLocation {
+    Low,
+    Middle,
+    High
+};
+
+struct ArmAxisPose {
+    ISingleAxisSubsystem* axis;
+    double position;
+};
+
+/**
+ * @brief Always in this order: Arm > Extension > Wrist
+ * 
+ * @param reverseDirection Set to true to move Wrist > Extension > Arm; useful for retraction movements
+ */
+struct WholeArmPose {
+    double arm;
+    double extension;
+    double wrist;
+    bool reverseDirection;
+};
 
 // Arm Extension Constants
 
@@ -182,6 +251,125 @@ constexpr double kStraightBackDivisor = 44.95;
 constexpr double kAutoDriveDistanceInches = 66;
 constexpr double kAutoBackupDistanceInches = 20;
 constexpr double kAutoDriveSpeed = 0.5;
+
+namespace PlaceHigh {
+    constexpr uint8_t r = 142;
+    constexpr uint8_t g = 17;
+    constexpr uint8_t b = 52;
+    constexpr uint32_t color = (r << 16) | (g << 8) | b;
+    constexpr auto timeout = 25_s;
+
+    namespace Cone {
+        constexpr WholeArmPose OutPose = {
+            .arm = 145,
+            .extension = 12,
+            .wrist = 120,
+            .reverseDirection = false
+        };
+
+        constexpr WholeArmPose InPose = {
+            .arm = 0,
+            .extension = 0,
+            .wrist = 0,
+            .reverseDirection = true
+        };
+    }
+
+    namespace Cube {
+        constexpr WholeArmPose OutPose = {
+            .arm = 143,
+            .extension = 12,
+            .wrist = 120,
+            .reverseDirection = false
+        };
+
+        constexpr WholeArmPose InPose = {
+            .arm = 0,
+            .extension = 0,
+            .wrist = 0,
+            .reverseDirection = true
+        };
+    }
+}
+
+namespace PlaceMiddle {
+    constexpr uint8_t r = 10;
+    constexpr uint8_t g = 230;
+    constexpr uint8_t b = 10;
+    constexpr uint32_t color = (r << 16) | (g << 8) | b;
+    constexpr auto timeout = 20_s;
+    namespace Cone {
+        constexpr WholeArmPose OutPose = {
+            .arm = 92,
+            .extension = 6,
+            .wrist = 58,
+            .reverseDirection = false
+        };
+
+        constexpr WholeArmPose InPose = {
+            .arm = 0,
+            .extension = 0,
+            .wrist = 0,
+            .reverseDirection = true
+        };
+    }
+
+    namespace Cube {
+        constexpr WholeArmPose OutPose = {
+            .arm = 110,
+            .extension = 0,
+            .wrist = 95,
+            .reverseDirection = false
+        };
+
+        constexpr WholeArmPose InPose = {
+            .arm = 0,
+            .extension = 0,
+            .wrist = 0,
+            .reverseDirection = true
+        };
+    }
+}
+
+namespace PlaceLow {
+    constexpr uint8_t r = 30;
+    constexpr uint8_t g = 30;
+    constexpr uint8_t b = 200;
+    constexpr uint32_t color = (r << 16) | (g << 8) | b;
+    constexpr auto timeout = 15_s;
+    namespace Cone {
+        constexpr WholeArmPose OutPose = {
+            .arm = 0,
+            .extension = 0,
+            .wrist = 0,
+            .reverseDirection = false
+        };
+
+        constexpr WholeArmPose InPose = {
+            .arm = 0,
+            .extension = 0,
+            .wrist = 0,
+            .reverseDirection = true
+        };
+    }
+
+    namespace Cube {
+        constexpr WholeArmPose OutPose = {
+            .arm = 0,
+            .extension = 0,
+            .wrist = 0,
+            .reverseDirection = false
+        };
+
+        constexpr WholeArmPose InPose = {
+            .arm = 0,
+            .extension = 0,
+            .wrist = 0,
+            .reverseDirection = true
+        };
+    }
+}
+
 }  // namespace AutoConstants
 
 constexpr uint8_t kLEDCotrollerSlaveAddress = 0x01;
@@ -189,28 +377,3 @@ constexpr int kLidarInputPin = 5;
 constexpr int kLidarValidationPin = 6;
 // 0 to 2000mm
 constexpr uint16_t kLidarMaxDistance = 2000;
-
-// XboxController enums.  Since the Trigger stuff works on the base Joystick
-// class, not the Xbox extension, these are undefined where we want to use them.
-// So, flat-out copied them here for reference
-enum Button {
-    kBumperLeft = 5,
-    kBumperRight = 6,
-    kStickLeft = 9,
-    kStickRight = 10,
-    kA = 1,
-    kB = 2,
-    kX = 3,
-    kY = 4,
-    kBack = 7,
-    kStart = 8
-};
-
-enum Axis {
-    kLeftX = 0,
-    kRightX = 4,
-    kLeftY = 1,
-    kRightY = 5,
-    kLeftTrigger = 2,
-    kRightTrigger = 3
-};

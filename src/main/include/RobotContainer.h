@@ -17,6 +17,7 @@
 
 #include "Constants.h"
 #include "commands/Autos.h"
+#include "subsystems/AssistSubsystem.h"
 #include "subsystems/BrakeSubsystem.h"
 #include "subsystems/CompleteArmSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
@@ -68,7 +69,6 @@ class RobotContainer {
                                   frc::I2C::Port::kMXP};
     IntakeSubsystem m_intake{&m_leds};
     std::unique_ptr<WristSubsystem> m_wrist;
-    // std::unique_ptr<CompleteArmSubsystem> m_arm;
     VL53L1XController m_lidar{kLidarInputPin, kLidarValidationPin};
 
     // Drive subsystem from 2022. We should probably make cross season code
@@ -82,6 +82,7 @@ class RobotContainer {
         autos::PlaceAndLeave(&drive, &m_intake);
 
     std::unique_ptr<CompleteArmSubsystem> m_arm;
+    std::unique_ptr<AssistSubsystem> m_assist;
 
     frc::SendableChooser<frc2::Command*> m_chooser;
 

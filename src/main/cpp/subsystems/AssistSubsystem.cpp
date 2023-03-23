@@ -1,11 +1,45 @@
 #include "subsystems/AssistSubsystem.h"
 
-AssistSubsystem::AssistSubsystem() {
-    // Implementation of subsystem constructor goes here.
+AssistSubsystem::AssistSubsystem(CompleteArmSubsystem* arm, LEDControllerSubsystem* leds, IntakeSubsystem* intake) :
+    m_arm(arm),
+    m_leds(leds),
+    m_intake(intake) {
 }
 
 void AssistSubsystem::Periodic() {
-    // Implementation of subsystem periodic method goes here
+}
+
+frc2::CommandPtr AssistSubsystem::GetAutoPlaceCommand(PlacementLocation location) {
+    auto cmd = m_arm->TravelMode();
+
+    auto piece = m_leds->getCurrentColor() == LEDControllerSubsystem::Colors::Purple ? PieceType::Cube : PieceType::Cone;
+
+    switch (location) {
+        case PlacementLocation::High:
+            cmd = std::move(cmd)
+                .AndThen(m_leds->SetMovementLED(AutoConstants::PlaceHigh::color, LEDControllerSubsystem::PatternType::SetAll))
+                .AndThen(GetPlacementHigh(piece))
+                .WithTimeout(AutoConstants::PlaceHigh::timeout);
+            break;
+        case PlacementLocation::Middle:
+            cmd = std::move(cmd)
+                .AndThen(m_leds->SetMovementLED(AutoConstants::PlaceMiddle::color, LEDControllerSubsystem::PatternType::SetAll))
+                .AndThen(GetPlacementMiddle(piece))
+                .WithTimeout(AutoConstants::PlaceMiddle::timeout);
+            break;
+        case PlacementLocation::Low:
+            cmd = std::move(cmd)
+                .AndThen(m_leds->SetMovementLED(AutoConstants::PlaceLow::color, LEDControllerSubsystem::PatternType::SetAll))
+                .AndThen(GetPlacementLow(piece))
+                .WithTimeout(AutoConstants::PlaceLow::timeout);
+            break;
+    }
+
+    return std::move(cmd)
+        // Spit out piece
+        .AndThen(SpinIntakeTimer(m_intake, 2000_ms, false).ToPtr())
+        .AndThen(m_arm->TravelMode())
+        .AndThen(m_leds->DisplayCurrentColor());
 }
 
 // Limelight Stuff
@@ -36,6 +70,35 @@ std::vector<DetectionParser::DetectedObject> AssistSubsystem::GetObjects() {
     return DetectionParser::DetectedObject::parse(detections);
 }
 
-void AssistSubsystem::SimulationPeriodic() {
-    // Implementation of subsystem simulation periodic method goes here.
+frc2::CommandPtr AssistSubsystem::GetPlacementHigh(PieceType piece) {
+    switch (piece) {
+        case PieceType::Cone:
+            return m_arm->SetPose(AutoConstants::PlaceHigh::Cone::OutPose);
+        case PieceType::Cube:
+            return m_arm->SetPose(AutoConstants::PlaceHigh::Cube::OutPose);
+    }
+
+    return m_arm->TravelMode();
+}
+
+frc2::CommandPtr AssistSubsystem::GetPlacementMiddle(PieceType piece) {
+    switch (piece) {
+        case PieceType::Cone:
+            return m_arm->SetPose(AutoConstants::PlaceMiddle::Cone::OutPose);
+        case PieceType::Cube:
+            return m_arm->SetPose(AutoConstants::PlaceMiddle::Cube::OutPose);
+    }
+
+    return m_arm->TravelMode();
+}
+
+frc2::CommandPtr AssistSubsystem::GetPlacementLow(PieceType piece) {
+    switch (piece) {
+        case PieceType::Cone:
+            return m_arm->SetPose(AutoConstants::PlaceLow::Cone::OutPose);
+        case PieceType::Cube:
+            return m_arm->SetPose(AutoConstants::PlaceLow::Cube::OutPose);
+    }
+
+    return m_arm->TravelMode();
 }
