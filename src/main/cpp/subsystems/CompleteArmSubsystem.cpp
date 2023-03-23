@@ -273,6 +273,8 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceLow() {
                      SetMovementLED(MovementType::None));
 }
 
+frc2::CommandPtr CompleteArmSubsystem
+
 frc2::CommandPtr CompleteArmSubsystem::SetPose(ArmAxisPose pose) {
     Logging::logToStdOut("completearm",
                          "set pose to " + std::to_string(pose.position));

@@ -33,7 +33,9 @@ class CompleteArmSubsystem : public frc2::SubsystemBase {
         PlaceLowCone,
         PlaceHighCube,
         PlaceMediumCube,
-        PlaceLowCube
+        PlaceLowCube,
+        BrakeModeOn,
+        BrakeModeOff
     };
 
     struct ArmAxisPose {
@@ -105,6 +107,10 @@ class CompleteArmSubsystem : public frc2::SubsystemBase {
     frc2::CommandPtr AutoPlaceMedium();
 
     frc2::CommandPtr AutoPlaceLow();
+
+    frc2::CommandPtr BrakeModeOn();
+
+    frc2::CommandPtr BrakeModeOff();
 
     frc2::CommandPtr SetPose(ArmAxisPose pose);
 
