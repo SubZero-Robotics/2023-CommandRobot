@@ -1,12 +1,9 @@
 #include "subsystems/AssistSubsystem.h"
 
-AssistSubsystem::AssistSubsystem(CompleteArmSubsystem* arm, LEDControllerSubsystem* leds, IntakeSubsystem* intake,
-    DriveSubsystem* drive) :
-    m_arm(arm),
-    m_leds(leds),
-    m_intake(intake),
-    m_drive(drive) {
-}
+AssistSubsystem::AssistSubsystem(CompleteArmSubsystem* arm,
+                                 LEDControllerSubsystem* leds,
+                                 IntakeSubsystem* intake, DriveSubsystem* drive)
+    : m_arm(arm), m_leds(leds), m_intake(intake), m_drive(drive) {}
 
 frc2::CommandPtr AssistSubsystem::GetAutoPlaceCommand(
     PlacementLocation location) {
@@ -53,9 +50,13 @@ frc2::CommandPtr AssistSubsystem::GetAutoPlaceCommand(
 
 frc2::CommandPtr AssistSubsystem::AutoIntake() {
     return m_arm->TravelMode()
-        .AndThen(m_leds->SetMovementLED(0x00ea8604, LEDControllerSubsystem::PatternType::Blink))
+        .AndThen(m_leds->SetMovementLED(
+            0x00ea8604, LEDControllerSubsystem::PatternType::Blink))
         // TODO: Change angle based on game piece
-        .AndThen(m_arm->SetPose({.arm=60,.extension=2,.wrist=90,.reverseDirection=false}))
+        .AndThen(m_arm->SetPose({.arm = 60,
+                                 .extension = 2,
+                                 .wrist = 90,
+                                 .reverseDirection = false}))
         // Move forward slowly until we reach the cube
         .AndThen(autos::StraightBack(m_drive, -10, 0.1))
         .RaceWith(IntakeIn(m_intake).ToPtr())

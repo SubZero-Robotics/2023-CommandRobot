@@ -21,12 +21,12 @@
 #include "subsystems/BrakeSubsystem.h"
 #include "subsystems/CompleteArmSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/DutyCycleLidarSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/ExtensionSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/RotateArmSubsystem.h"
-#include "subsystems/DutyCycleLidarSubsystem.h"
 #include "subsystems/WristSubsystem.h"
 
 /**

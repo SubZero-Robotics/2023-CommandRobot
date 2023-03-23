@@ -1,8 +1,8 @@
 #include "subsystems/WristSubsystem.h"
 
 WristSubsystem::WristSubsystem()
-    : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min,
-                                nullptr, "WRIST", "\033[92;40;4m") {
+    : BaseSingleAxisSubsystem(m_config, m_wristMotor, m_encoder, &min, nullptr,
+                              "WRIST", "\033[92;40;4m") {
     _config = m_config;
     _controller = m_config.pid;
     _controller.SetTolerance(10, 10);
@@ -11,8 +11,7 @@ WristSubsystem::WristSubsystem()
 
 void WristSubsystem::ResetEncoder() {
     if (_log)
-        Logging::logToStdOut(_prefix, "RESET POSITION",
-                                Logging::Level::INFO);
+        Logging::logToStdOut(_prefix, "RESET POSITION", Logging::Level::INFO);
     // m_encoder.SetZeroOffset(0);
 }
 
@@ -22,15 +21,14 @@ double WristSubsystem::GetCurrentPosition() {
     if (position >= 350) position = 0;
 
     Logging::logToSmartDashboard("WristPosition",
-                                    std::to_string(position) + " deg",
-                                    Logging::Level::INFO);
+                                 std::to_string(position) + " deg",
+                                 Logging::Level::INFO);
 
     if (_log)
         Logging::logToStdOut(_prefix,
-                                std::to_string(position) + "/" +
-                                    std::to_string(_config.maxDistance) +
-                                    " deg",
-                                Logging::Level::INFO);
+                             std::to_string(position) + "/" +
+                                 std::to_string(_config.maxDistance) + " deg",
+                             Logging::Level::INFO);
 
     return position;
 }
@@ -40,7 +38,7 @@ void WristSubsystem::RunMotorExternal(double speed) {
     if (abs(speed) <= 0.05) {
         if (_isMovingToPosition)
             return;  // Don't set the motor and overwrite a potential
-                        // automated movement
+                     // automated movement
 
         if (_config.type == AxisType::Rotational)
             RunMotorSpeed(-0.005);
@@ -64,25 +62,23 @@ void WristSubsystem::UpdateMovement() {
                 _prefix,
                 "Target Position: " + std::to_string(_targetPosition) +
                     std::string(_config.type == AxisType::Linear ? " in"
-                                                                    : " deg"),
+                                                                 : " deg"),
                 Logging::Level::INFO, _ansiPrefixModifiers);
 
         // TODO: extract multipliers to constants and pass through the config
-        auto res =
-            _controller.Calculate(GetCurrentPosition(), _targetPosition);
+        auto res = _controller.Calculate(GetCurrentPosition(), _targetPosition);
         auto clampedRes = std::clamp(res, -1.0, 1.0) * 0.66;
         if (_log)
-            Logging::logToStdOut(
-                _prefix, "Clamped Res: " + std::to_string(clampedRes),
-                Logging::Level::INFO, _ansiPrefixModifiers);
+            Logging::logToStdOut(_prefix,
+                                 "Clamped Res: " + std::to_string(clampedRes),
+                                 Logging::Level::INFO, _ansiPrefixModifiers);
         Logging::logToSmartDashboard(_prefix + " TargetPos",
-                                        std::to_string(_targetPosition),
-                                        Logging::Level::INFO);
+                                     std::to_string(_targetPosition),
+                                     Logging::Level::INFO);
 
         if (_controller.AtSetpoint()) {
-            Logging::logToStdOut(_prefix, "REACHED GOAL",
-                                    Logging::Level::INFO,
-                                    _ansiPrefixModifiers);
+            Logging::logToStdOut(_prefix, "REACHED GOAL", Logging::Level::INFO,
+                                 _ansiPrefixModifiers);
             StopMovement();
             return;
         }

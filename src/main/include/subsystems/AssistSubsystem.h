@@ -11,12 +11,11 @@
 #include <cmath>
 #include <vector>
 
-#include "subsystems/CompleteArmSubsystem.h"
-#include "subsystems/IntakeSubsystem.h"
-#include "subsystems/DriveSubsystem.h"
-
-#include "commands/SpinIntakeTimer.h"
 #include "commands/IntakeInCommand.h"
+#include "commands/SpinIntakeTimer.h"
+#include "subsystems/CompleteArmSubsystem.h"
+#include "subsystems/DriveSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
 #include "utils/DetectionParser.h"
 #include "utils/Logging.h"
 
@@ -27,8 +26,8 @@ class AssistSubsystem : public frc2::SubsystemBase {
         double armLengthIn;
     };
 
-    AssistSubsystem(CompleteArmSubsystem *arm, LEDControllerSubsystem *leds, IntakeSubsystem* intake,
-        DriveSubsystem* drive);
+    AssistSubsystem(CompleteArmSubsystem* arm, LEDControllerSubsystem* leds,
+                    IntakeSubsystem* intake, DriveSubsystem* drive);
 
     frc2::CommandPtr GetAutoPlaceCommand(PlacementLocation location);
 

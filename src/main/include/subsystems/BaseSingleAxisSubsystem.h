@@ -200,8 +200,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
             if (_log)
                 Logging::logToStdOut(
                     _prefix,
-                    "Target Position: " +
-                        std::to_string(_targetPosition) +
+                    "Target Position: " + std::to_string(_targetPosition) +
                         std::string(_config.type == AxisType::Linear ? " in"
                                                                      : " deg"),
                     Logging::Level::INFO, _ansiPrefixModifiers);

@@ -29,8 +29,8 @@ RobotContainer::RobotContainer() {
     m_arm = std::make_unique<CompleteArmSubsystem>(
         m_effector.get(), m_wrist.get(), m_extender.get());
 
-    m_assist = std::make_unique<AssistSubsystem>(
-        m_arm.get(), &m_leds, &m_intake, m_drive);
+    m_assist = std::make_unique<AssistSubsystem>(m_arm.get(), &m_leds,
+                                                 &m_intake, m_drive);
 
     // Configure the button bindings
     ConfigureBindings();
