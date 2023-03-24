@@ -37,9 +37,16 @@
  */
 class RobotContainer {
    public:
+    BrakeSubsystem m_Brake{RightLead, LeftLead};
+
     RobotContainer();
 
     frc2::Command* GetAutonomousCommand();
+
+    void ReleaseBrakes() {
+        m_Brake.UnsetHardware();
+        m_Brake.UnsetSoftware();
+    }
 
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -58,12 +65,11 @@ class RobotContainer {
     // build an actual autonomous
     ExampleSubsystem m_subsystem;
 
-    DriveSubsystem drive{RightLead, RightFollow, LeftLead, LeftFollow};
+    DriveSubsystem drive{RightLead, RightFollow, LeftLead, LeftFollow, &m_Brake};
 
     // Arm Subsystem
     std::unique_ptr<RotateArmSubsystem> m_effector;
     std::unique_ptr<ExtensionSubsystem> m_extender;
-    BrakeSubsystem m_Brake{RightLead, LeftLead};
     LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress,
                                   frc::I2C::Port::kMXP};
     IntakeSubsystem m_intake{&m_leds};
@@ -78,7 +84,7 @@ class RobotContainer {
     frc2::CommandPtr m_straightback = autos::StraightBack(&drive, 60);
     frc2::CommandPtr m_nothing = autos::DoesNothing(&drive);
     frc2::CommandPtr m_placeandleave = autos::PlaceAndLeave(&drive, &m_intake);
-    frc2::CommandPtr m_placeandbalance = autos::PlaceAndBalance(&drive, &m_intake);
+    frc2::CommandPtr m_placeandbalance = autos::PlaceAndBalance(&drive, &m_intake, &m_Brake);
 
     std::unique_ptr<CompleteArmSubsystem> m_arm;
 

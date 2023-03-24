@@ -25,7 +25,7 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * robot is disabled.
  */
 void Robot::DisabledInit() {
-    BrakeSubsystem::SetHardware;
+    m_container.m_Brake.SetSoftware();
 }
 
 void Robot::DisabledPeriodic() {
@@ -36,12 +36,12 @@ void Robot::DisabledPeriodic() {
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+    m_container.m_Brake.SetSoftware();
     m_autonomousCommand = m_container.GetAutonomousCommand();
 
     if (m_autonomousCommand != nullptr) {
         m_autonomousCommand->Schedule();
     }
-    BrakeSubsystem::UnsetHardware;
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -54,7 +54,8 @@ void Robot::TeleopInit() {
     if (m_autonomousCommand) {
         m_autonomousCommand->Cancel();
     }
-    BrakeSubsystem::UnsetHardware;
+
+    m_container.ReleaseBrakes();
 }
 
 /**

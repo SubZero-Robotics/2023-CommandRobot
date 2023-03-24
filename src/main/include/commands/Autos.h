@@ -23,5 +23,6 @@ frc2::CommandPtr DoesNothing(DriveSubsystem* m_drive);
 frc2::CommandPtr PlaceAndLeave(DriveSubsystem* m_drive,
                                IntakeSubsystem* m_intake);
 frc2::CommandPtr PlaceAndBalance(DriveSubsystem* m_drive,
-                                 IntakeSubsystem* m_intake);
+                                 IntakeSubsystem* m_intake,
+                                 BrakeSubsystem* m_brake);
 }  // namespace autos
