@@ -289,6 +289,8 @@ frc2::CommandPtr CompleteArmSubsystem::AutoPlaceLow() {
 frc2::CommandPtr CompleteArmSubsystem::BrakeModeOn() {
     return SetMovementLED(MovementType::BrakeModeOn)
         .AndThen(frc2::InstantCommand([this]() {
+            m_brake->SetSoftware();
+            m_brake->SetHardware();
                  }).ToPtr())
         .AndThen(SetMovementLED(MovementType::None));
 }
@@ -296,6 +298,7 @@ frc2::CommandPtr CompleteArmSubsystem::BrakeModeOn() {
 frc2::CommandPtr CompleteArmSubsystem::BrakeModeOff() {
     return SetMovementLED(MovementType::BrakeModeOff)
         .AndThen(frc2::InstantCommand([this]() {
+                    m_brake->UnsetHardware();
                      m_brake->UnsetBrakeMode();
                  }).ToPtr())
         .AndThen(SetMovementLED(MovementType::None));

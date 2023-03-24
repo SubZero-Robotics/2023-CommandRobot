@@ -26,6 +26,7 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  */
 void Robot::DisabledInit() {
     m_container.m_Brake.SetSoftware();
+    m_container.m_Brake.SetHardware();
 }
 
 void Robot::DisabledPeriodic() {
