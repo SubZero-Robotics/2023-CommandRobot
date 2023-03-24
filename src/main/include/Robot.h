@@ -10,6 +10,7 @@
 #include <optional>
 
 #include "RobotContainer.h"
+#include "subsystems/BrakeSubsystem.h"
 
 class Robot : public frc::TimedRobot {
    public:

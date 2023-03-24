@@ -12,12 +12,18 @@ void BrakeSubsystem::Periodic() {}
 
 void BrakeSubsystem::SimulationPeriodic() {}
 
-void BrakeSubsystem::Set() {
+void BrakeSubsystem::SetSoftware() {
     SetBrakeMode();
+}
+
+void BrakeSubsystem::UnsetSoftware() {
+    UnsetBrakeMode();
+}
+
+void BrakeSubsystem::SetHardware() {
     exampleDoublePH.Set(frc::DoubleSolenoid::Value::kForward);
 }
 
-void BrakeSubsystem::Unset() {
-    UnsetBrakeMode();
+void BrakeSubsystem::UnsetHardware() {
     exampleDoublePH.Set(frc::DoubleSolenoid::Value::kReverse);
 }

@@ -23,8 +23,10 @@ class BrakeSubsystem : public frc2::SubsystemBase {
      */
     void SimulationPeriodic() override;
 
-    void Set();
-    void Unset();
+    void SetSoftware();
+    void UnsetSoftware();
+    void SetHardware();
+    void UnsetHardware();
 
     void SetBrakeMode() {
         _lTalon.SetNeutralMode(Brake);
