@@ -22,7 +22,7 @@ parser.add_argument('-c', '--class-list', help='Path to CSV class list',
                     default='../models/classes.csv')
 parser.add_argument('--no-boxes', help='Don\'t display bounding boxes on the stream',
                     action='store_true')
-parser.add_argument('--camera_passthrough', help='Only display the camera stream; does not invoke the model',
+parser.add_argument('--camera-passthrough', help='Only display the camera stream; does not invoke the model',
                     action='store_true')
 parser.add_argument('-r', '--resize', help='Resize the resulting frame as WIDTH, HEIGHT; example: -r 240, 240',
                     type=int, nargs=2)
