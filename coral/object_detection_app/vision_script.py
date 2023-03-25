@@ -22,6 +22,10 @@ parser.add_argument('-c', '--class-list', help='Path to CSV class list',
                     default='../models/classes.csv')
 parser.add_argument('--no-boxes', help='Don\'t display bounding boxes on the stream',
                     action='store_true')
+parser.add_argument('--camera_passthrough', help='Only display the camera stream; does not invoke the model',
+                    action='store_true')
+parser.add_argument('-r', '--resize', help='Resize the resulting frame as WIDTH, HEIGHT; example: -r 240, 240',
+                    type=int, nargs=2)
 args = vars(parser.parse_args())
 
 THRESHOLD = args['threshold']
@@ -49,18 +53,21 @@ def detectObjects():
     while True:
         frame = dataSource.getImage()
         frame = dataSource.preprocessImage(destW, destH, frame)
-        outputs = interpreter.invoke(frame)
-        filteredOutputs = []
-        for output in outputs:
-            if output.score >= THRESHOLD:
-                filteredOutputs.append(output)
-                if args['verbose']:
-                    print('Found: ', output)
-        if not args['noBoxes']:
-            frame = dataSource.drawBoundingBoxes(
-                filteredOutputs, frame, colors)
-        if args['verbose'] and len(filteredOutputs) > 0:
-            print('-' * 30)
+        if not args['camera_passthrough']:
+            outputs = interpreter.invoke(frame)
+            filteredOutputs = []
+            for output in outputs:
+                if output.score >= THRESHOLD:
+                    filteredOutputs.append(output)
+                    if args['verbose']:
+                        print('Found: ', output)
+            if not args['no_boxes']:
+                frame = dataSource.drawBoundingBoxes(
+                    filteredOutputs, frame, colors)
+            if args['verbose'] and len(filteredOutputs) > 0:
+                print('-' * 30)
+        if 'resize' in args:
+            frame = cv.resize(frame, tuple(args['resize']))
         with lock:
             outputFrame = frame.copy()
         if not args['no_networking']:
