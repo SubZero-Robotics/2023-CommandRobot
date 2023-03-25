@@ -24,7 +24,7 @@ parser.add_argument('--no-boxes', help='Don\'t display bounding boxes on the str
                     action='store_true')
 parser.add_argument('--camera-passthrough', help='Only display the camera stream; does not invoke the model',
                     action='store_true')
-parser.add_argument('-r', '--resize', help='Resize the resulting frame as WIDTH, HEIGHT; example: -r 240, 240',
+parser.add_argument('-r', '--resize', help='Resize the resulting frame as WIDTH HEIGHT; example: -r 240 240',
                     type=int, nargs=2)
 args = vars(parser.parse_args())
 
