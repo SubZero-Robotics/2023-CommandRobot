@@ -12,7 +12,7 @@ void IntakeSubsystem::Out() {
         LEDControllerSubsystem::Colors::Yellow) {
         m_intakeSpinnyBoy.Set(-ArmConstants::kOuttakeSpeed);
     } else {
-        m_intakeSpinnyBoy.Set(ArmConstants::kOuttakeSpeed);
+        m_intakeSpinnyBoy.Set(ArmConstants::kOuttakeSpeed * 2);
     }
 }
 

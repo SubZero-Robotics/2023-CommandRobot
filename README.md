@@ -154,6 +154,13 @@ The reviewer is responsible for looking over the PR, testing the changes themsel
 |   Coral   | 10.56.90.4  |
 | LimeLight | 10.56.90.11 |
 
+Restart Script:
+- ```sudo systemctl restart-daemon```
+- ```sudo systemctl restart vision```
+
+Check status of vision:
+- ```sudo systemctl status vision```
+
 ## Contact
 
 If you would like to contact the subzero robotics programmers, you can do so at [5690programmers@gmail.com](mailto:5690Programmers@gmail.com)
