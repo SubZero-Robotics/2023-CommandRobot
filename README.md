@@ -61,10 +61,10 @@ Following the WPILib command based structure we have broken our robot up into a 
 
 |     Purpose/Name     | CAN ID | Motor/Driver Type |
 | :------------------: | :----: | :---------------: |
-|   Left drive lead    |   7    |      TalonFX      |
+|   Left drive lead    |   6    |      TalonFX      |
 |  Left drive follow   |   5    |      TalonFX      |
 |   Right drive lead   |   8    |      TalonFX      |
-|  Right drive follow  |   6    |      TalonFX      |
+|  Right drive follow  |   7    |      TalonFX      |
 |  Lead arm rotation   |   1    |     SparkMax      |
 | Follow arm rotation  |   3    |     SparkMax      |
 |    Wrist rotation    |   15   |     SparkMax      |

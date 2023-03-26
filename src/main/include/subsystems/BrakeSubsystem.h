@@ -4,6 +4,7 @@
 #include <frc/Compressor.h>
 #include <frc/DoubleSolenoid.h>
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/InstantCommand.h>
 #include <frc2/command/SubsystemBase.h>
 
 #include "Constants.h"
@@ -23,8 +24,12 @@ class BrakeSubsystem : public frc2::SubsystemBase {
      */
     void SimulationPeriodic() override;
 
-    void Set();
-    void Unset();
+    void SetSoftware();
+    void UnsetSoftware();
+    void SetHardware();
+    void UnsetHardware();
+
+    frc2::CommandPtr SetBrakes(bool state);
 
     void SetBrakeMode() {
         _lTalon.SetNeutralMode(Brake);
@@ -40,13 +45,13 @@ class BrakeSubsystem : public frc2::SubsystemBase {
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
 
-    // frc::Compressor m_compressor{DriveConstants::kPenumaticsModuleID,
-    //                              frc::PneumaticsModuleType::CTREPCM};
-    // frc::DoubleSolenoid exampleDoublePH{
-    //     DriveConstants::kPenumaticsModuleID,
-    //     frc::PneumaticsModuleType::CTREPCM,
-    //     DriveConstants::kSolenoidForwardChannel,
-    //     DriveConstants::kSolenoidReverseChannel};
+    frc::Compressor m_compressor{DriveConstants::kPenumaticsModuleID,
+                                 frc::PneumaticsModuleType::CTREPCM};
+    frc::DoubleSolenoid exampleDoublePH{
+        DriveConstants::kPenumaticsModuleID,
+        frc::PneumaticsModuleType::CTREPCM,
+        DriveConstants::kSolenoidForwardChannel,
+        DriveConstants::kSolenoidReverseChannel};
     WPI_TalonFX &_rTalon;
     WPI_TalonFX &_lTalon;
 };

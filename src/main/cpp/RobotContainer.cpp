@@ -91,9 +91,9 @@ void RobotContainer::ConfigureBindings() {
 
     DriverXbox.RightBumper().OnTrue(LEDToggle(&m_leds).ToPtr());
 
-    DriverXbox.X().OnTrue(BrakeSet(&m_Brake).ToPtr());
+    DriverXbox.X().OnTrue(m_Brake.SetBrakes(true));
 
-    DriverXbox.Y().OnTrue(BrakeStop(&m_Brake).ToPtr());
+    DriverXbox.Y().OnTrue(m_Brake.SetBrakes(false));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

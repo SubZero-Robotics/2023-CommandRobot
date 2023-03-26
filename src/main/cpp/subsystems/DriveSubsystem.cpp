@@ -17,13 +17,14 @@
 using namespace DriveConstants;
 
 DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
-                               WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow)
+                               WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow, BrakeSubsystem* brake)
     : RightLead(rightLead),
       RightFollow(rightFollow),
       RightLeadSim(rightLead.GetSimCollection()),
       LeftLead(leftLead),
       LeftFollow(leftFollow),
-      LeftLeadSim(leftLead.GetSimCollection()) {
+      LeftLeadSim(leftLead.GetSimCollection()),
+      m_brake(brake) {
     // Implementation of subsystem constructor goes here.
     // Stuff you want to happen once, when robot code starts running
 
@@ -119,7 +120,7 @@ void DriveSubsystem::Periodic() {
 
 void DriveSubsystem::DisabledInit() { SetCoastMode(); }
 
-void DriveSubsystem::TeleopInit() { m_brake.Unset(); }
+void DriveSubsystem::TeleopInit() { m_brake->UnsetBrakeMode(); }
 
 void DriveSubsystem::BrakeInit() { SetBrakeMode(); }
 

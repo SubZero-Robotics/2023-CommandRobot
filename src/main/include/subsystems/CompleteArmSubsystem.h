@@ -6,6 +6,7 @@
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/WaitCommand.h>
 
 #include <vector>
 
