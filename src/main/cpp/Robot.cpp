@@ -29,8 +29,7 @@ void Robot::DisabledInit() {
     m_container.m_Brake.SetHardware();
 }
 
-void Robot::DisabledPeriodic() {
-}
+void Robot::DisabledPeriodic() {}
 
 /**
  * This autonomous runs the autonomous command selected by your {@link

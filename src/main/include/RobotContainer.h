@@ -66,7 +66,8 @@ class RobotContainer {
     // build an actual autonomous
     ExampleSubsystem m_subsystem;
 
-    DriveSubsystem drive{RightLead, RightFollow, LeftLead, LeftFollow, &m_Brake};
+    DriveSubsystem drive{RightLead, RightFollow, LeftLead, LeftFollow,
+                         &m_Brake};
 
     // Arm Subsystem
     std::unique_ptr<RotateArmSubsystem> m_effector;
@@ -84,7 +85,8 @@ class RobotContainer {
     frc2::CommandPtr m_straightback = autos::StraightBack(&drive, 60);
     frc2::CommandPtr m_nothing = autos::DoesNothing(&drive);
     frc2::CommandPtr m_placeandleave = autos::PlaceAndLeave(&drive, &m_intake);
-    frc2::CommandPtr m_placeandbalance = autos::PlaceAndBalance(&drive, &m_intake, &m_Brake);
+    frc2::CommandPtr m_placeandbalance =
+        autos::PlaceAndBalance(&drive, &m_intake, &m_Brake);
 
     std::unique_ptr<CompleteArmSubsystem> m_arm;
     std::unique_ptr<AssistSubsystem> m_assist;

@@ -66,5 +66,8 @@ frc2::CommandPtr autos::PlaceAndBalance(DriveSubsystem* m_drive,
     return SpinIntakeTimer(m_intake, 1000_ms, false)
         .ToPtr()
         .AndThen(autos::StraightBack(m_drive, 94))
-        .AndThen([m_brake](){ m_brake->SetSoftware(); m_brake->SetHardware(); });
+        .AndThen([m_brake]() {
+            m_brake->SetSoftware();
+            m_brake->SetHardware();
+        });
 }

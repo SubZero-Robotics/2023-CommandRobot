@@ -17,7 +17,8 @@
 using namespace DriveConstants;
 
 DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
-                               WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow, BrakeSubsystem* brake)
+                               WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow,
+                               BrakeSubsystem* brake)
     : RightLead(rightLead),
       RightFollow(rightFollow),
       RightLeadSim(rightLead.GetSimCollection()),

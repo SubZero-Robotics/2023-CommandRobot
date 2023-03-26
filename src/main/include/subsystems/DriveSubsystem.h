@@ -38,7 +38,8 @@ struct Encoders {
 
 class DriveSubsystem : public frc2::SubsystemBase {
    public:
-    DriveSubsystem(WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&, BrakeSubsystem* brake);
+    DriveSubsystem(WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&,
+                   BrakeSubsystem* brake);
 
     void DisabledInit();
 
@@ -214,7 +215,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     frc::DifferentialDrive m_drive{RightLead, LeftLead};
 
-    BrakeSubsystem *m_brake;
+    BrakeSubsystem* m_brake;
 
     // The default (starting) values for the encoder
     double lEncoder = 0.0;
