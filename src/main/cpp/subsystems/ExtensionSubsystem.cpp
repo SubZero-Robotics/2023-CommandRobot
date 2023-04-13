@@ -2,7 +2,7 @@
 
 ExtensionSubsystem::ExtensionSubsystem()
     : BaseSingleAxisSubsystem(m_config, m_extensionMotor, m_encoder, &min,
-                              nullptr, "EXTEND", "\033[96;40;4m") {
+                              nullptr, "EXTEND") {
     m_extensionMotor.SetInverted(true);
     _config = m_config;
     _controller = m_config.pid;

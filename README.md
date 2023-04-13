@@ -61,27 +61,49 @@ Following the WPILib command based structure we have broken our robot up into a 
 
 |     Purpose/Name     | CAN ID | Motor/Driver Type |
 | :------------------: | :----: | :---------------: |
-|   Left drive lead    |   6    |      TalonFX      |
-|  Left drive follow   |   5    |      TalonFX      |
+|   Left drive lead*    |   6    |      TalonFX      |
+|  Left drive follow*   |   5    |      TalonFX      |
 |   Right drive lead   |   8    |      TalonFX      |
 |  Right drive follow  |   7    |      TalonFX      |
 |  Lead arm rotation   |   1    |     SparkMax      |
 | Follow arm rotation  |   3    |     SparkMax      |
 |    Wrist rotation    |   15   |     SparkMax      |
 |    Intake spinner    |   17   |     SparkMax      |
-|   Extension motor    |   50   |     SparkMax      |
+|   Extension motor*    |   50   |     SparkMax      |
 | Pneumatic controller |   9    |       RevPH       |
 
+\* = Inverted
 
 ## Network Map
 
 |  Device   |             Address              |
 | :-------: | :------------------------------: |
+|  Gateway  | 10.56.90.1|
 |  Gateway  | 10.56.90.129 (subject to change) |
 |    RIO    |            10.56.90.2            |
 |   Coral   |            10.56.90.4            |
 | LimeLight |           10.56.90.11            |
 |  Laptop   |             Dynamic              |
+
+## Vision Service
+
+The vision service is a systemd service that autostarts the python script on the Coral Dev Board on boot. 
+
+### The vision.service File
+
+The vision.service file contains the command to run the vision python script. The file is located at `/etc/systemd/system/vision.service`
+
+### Restarting the Service
+
+If you made a change to the vision.service file make sure to reload the daemon and the vision script with these commands:
+
+1. `sudo systemctl daemon-reload`
+2. `sudo systemctl restart vision`
+
+### Checking Status
+
+To check the status of the vision service, use this command:
+`sudo systemctl status vision`
 
 ## Getting started
 

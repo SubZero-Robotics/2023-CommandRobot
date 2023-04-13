@@ -29,7 +29,7 @@ class GamepieceFunni
     }
 
     void Execute() override {
-        auto time = !state ? 50_ms : 50_ms;
+        auto time = 100_ms;
         if (m_timer.HasElapsed(time)) {
             state = 1 - state;
 
