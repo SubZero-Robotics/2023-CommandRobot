@@ -54,9 +54,9 @@ enum Button {
 };
 
 namespace Logging {
-    enum class Level { VERBOSE = 0, INFO, WARNING, ERROR };
-    constexpr Level MinLogLevel = Level::VERBOSE;
-}
+enum class Level { VERBOSE = 0, INFO, WARNING, ERROR };
+constexpr Level MinLogLevel = Level::VERBOSE;
+}  // namespace Logging
 
 enum Axis {
     kLeftX = 0,
@@ -325,19 +325,15 @@ constexpr auto kPlaceDuration = 2000_ms;
 namespace Intake {
 
 constexpr WholeArmPose IntakePose = {
-    .arm = 60,
-    .extension = 2,
-    .wrist = 90,
-    .reverseDirection = false
-};
+    .arm = 60, .extension = 2, .wrist = 90, .reverseDirection = false};
 
 constexpr auto kDuration = 750_ms;
 
 constexpr double kDistance = -10;
 constexpr double kSpeed = 0.1;
-}
+}  // namespace Intake
 
- } // namespace AutoConstants
+}  // namespace AutoConstants
 
 constexpr uint8_t kLEDCotrollerSlaveAddress = 0x01;
 constexpr int kLidarInputPin = 5;

@@ -43,7 +43,8 @@ frc2::CommandPtr AssistSubsystem::GetAutoPlaceCommand(
 
     return std::move(cmd)
         // Spit out piece
-        .AndThen(SpinIntakeTimer(m_intake, AutoConstants::kPlaceDuration, false).ToPtr())
+        .AndThen(SpinIntakeTimer(m_intake, AutoConstants::kPlaceDuration, false)
+                     .ToPtr())
         .AndThen(m_arm->TravelMode())
         .AndThen(m_leds->DisplayCurrentColor());
 }
@@ -55,10 +56,13 @@ frc2::CommandPtr AssistSubsystem::AutoIntake() {
         // TODO: Change angle based on game piece
         .AndThen(m_arm->SetPose(AutoConstants::Intake::IntakePose))
         // Move forward slowly until we reach the cube
-        .AndThen(autos::StraightBack(m_drive, AutoConstants::Intake::kDistance, AutoConstants::Intake::kSpeed))
+        .AndThen(autos::StraightBack(m_drive, AutoConstants::Intake::kDistance,
+                                     AutoConstants::Intake::kSpeed))
         .RaceWith(IntakeIn(m_intake).ToPtr())
         // Intake a little bit more
-        .AndThen(SpinIntakeTimer(m_intake, AutoConstants::Intake::kDuration, true).ToPtr())
+        .AndThen(
+            SpinIntakeTimer(m_intake, AutoConstants::Intake::kDuration, true)
+                .ToPtr())
         .AndThen(m_arm->TravelMode())
         .AndThen(m_leds->DisplayCurrentColor());
 }
