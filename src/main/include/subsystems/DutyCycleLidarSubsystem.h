@@ -10,23 +10,19 @@
 
 #include "Constants.h"
 
-class VL53L1XController : frc2::SubsystemBase {
+class DutyCycleLidarSubsystem : frc2::SubsystemBase {
    public:
-    VL53L1XController(int digitalPort) {
-        _input = std::make_unique<frc::DigitalInput>(digitalPort);
-        _dutyCycle = std::make_unique<frc::DutyCycle>(_input.get());
-    }
+    DutyCycleLidarSubsystem(int dutyCyclePort, int validationPort);
 
-    void Periodic() override {
-        auto pwmRatio = _dutyCycle->GetOutput();
-        _currentDistance = kLidarMaxDistance * pwmRatio;
-        frc::SmartDashboard::PutNumber("Lidar MM", GetDistance());
-    }
+    void Periodic() override;
 
     inline double GetDistance() const { return (double)_currentDistance; }
 
+    inline double IsValid() const { return !_inputValid->Get(); }
+
    private:
     std::unique_ptr<frc::DigitalInput> _input;
+    std::unique_ptr<frc::DigitalInput> _inputValid;
     std::unique_ptr<frc::DutyCycle> _dutyCycle;
     uint16_t _currentDistance;
 };

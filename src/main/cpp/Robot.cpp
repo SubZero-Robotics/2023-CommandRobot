@@ -24,7 +24,10 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() {}
+void Robot::DisabledInit() {
+    m_container.m_Brake.SetSoftware();
+    m_container.m_Brake.SetHardware();
+}
 
 void Robot::DisabledPeriodic() {}
 
@@ -33,6 +36,7 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+    m_container.m_Brake.SetSoftware();
     m_autonomousCommand = m_container.GetAutonomousCommand();
 
     if (m_autonomousCommand) {
@@ -50,6 +54,8 @@ void Robot::TeleopInit() {
     if (m_autonomousCommand) {
         m_autonomousCommand->Cancel();
     }
+
+    m_container.ReleaseBrakes();
 }
 
 /**

@@ -24,16 +24,7 @@ class RotateWrist : public frc2::CommandHelper<frc2::CommandBase, RotateWrist> {
 
         if (abs(rotation) < kDeadzone) rotation = 0.0;
 
-        if (m_effector->AtLimitSwitch()) {
-            if (rotation < 0) {
-                m_effector->Rotate(rotation);
-                m_effector->ResetWristEncoder();
-            } else {
-                m_effector->Rotate(0.0);
-            }
-        } else {
-            m_effector->Rotate(rotation);
-        }
+        m_effector->RunMotorExternal(rotation);
     }
 
    private:

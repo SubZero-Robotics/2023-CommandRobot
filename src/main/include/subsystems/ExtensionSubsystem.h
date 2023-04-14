@@ -1,55 +1,42 @@
 #pragma once
 
-#include <frc/DigitalInput.h>
-#include <frc2/command/CommandPtr.h>
-#include <frc2/command/SubsystemBase.h>
-
 #include "Constants.h"
 #include "rev/CANSparkMax.h"
+#include "subsystems/BaseSingleAxisSubsystem.h"
+#include "utils/Logging.h"
 
-class ExtensionSubsystem : public frc2::SubsystemBase {
+class ExtensionSubsystem
+    : public BaseSingleAxisSubsystem<rev::CANSparkMax,
+                                     rev::SparkMaxRelativeEncoder> {
    public:
     ExtensionSubsystem();
 
-    /**
-     * Will be called periodically whenever the CommandScheduler runs.
-     */
-    void Periodic() override;
+    void ResetEncoder() override;
 
-    /**
-     * Will be called periodically whenever the CommandScheduler runs during
-     * simulation.
-     */
-    void SimulationPeriodic() override;
-
-    void Extend(double);
-
-    void PercentOutput(double);
-
-    void ResetEncoder() { m_encoder.SetPosition(0); }
-
-    void RunMotorHoming(double speed) {
-        // todo check direction for speed
-        m_extensionMotor.Set(speed);
-    }
-
-    float GetExtenderDistanceIn() {
-        return m_encoder.GetPosition() * ArmConstants::kTicksPerIn;
-    }
-
-    bool AtLimit() {
-        return !m_limitSwitch.Get() ||
-               GetExtenderDistanceIn() >= ArmConstants::kMaxArmDistanceIn;
-    }
+    double GetCurrentPosition() override;
 
    private:
-    frc::DigitalInput m_limitSwitch{ArmConstants::kExtenderLimitSwitchPort};
-
     rev::CANSparkMax m_extensionMotor{CANSparkMaxConstants::kExtensionMotorID,
                                       rev::CANSparkMax::MotorType::kBrushless};
 
     rev::SparkMaxRelativeEncoder m_encoder = m_extensionMotor.GetEncoder(
         rev::SparkMaxRelativeEncoder::Type::kHallSensor,
         ArmConstants::kTicksPerMotorRotation);
-    // 4096 is default ctre ticks
+
+    SingleAxisConfig m_config = {
+        .type = BaseSingleAxisSubsystem::AxisType::Linear,
+        .pid = frc2::PIDController(ArmConstants::kExtenderSetP,
+                                   ArmConstants::kExtenderSetI,
+                                   ArmConstants::kExtenderSetD),
+        .minDistance = 0,
+        .maxDistance = ArmConstants::kMaxArmDistance,
+        .distancePerRevolution = ArmConstants::kInPerRotation,
+        .stepSize = ArmConstants::kExtenderStepSize,
+        .motorMultiplier = .5,
+        .pidResultMultiplier = -6.0,
+        .minLimitSwitchPort = ArmConstants::kExtenderLimitSwitchPort,
+        .maxLimitSwitchPort = BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
+        .defaultMovementSpeed = ArmConstants::kExtenderHomingSpeed};
+
+    frc::DigitalInput min{ArmConstants::kExtenderLimitSwitchPort};
 };

@@ -6,6 +6,8 @@ LEDControllerSubsystem::LEDControllerSubsystem(uint8_t slaveAddress,
       _slaveAddress(slaveAddress),
       _lastCommand(LEDControllerSubsystem::CommandType::Off),
       _lastPattern(LEDControllerSubsystem::PatternType::None) {
+    setOn();
+    Logging::logToStdOut("LEDS", "SET TO ON", Logging::Level::VERBOSE);
     setColor(Colors::Yellow);
     setPattern(LEDControllerSubsystem::PatternType::SetAll, true);
 }
@@ -33,9 +35,12 @@ bool LEDControllerSubsystem::setPattern(
 
 bool LEDControllerSubsystem::setColor(uint8_t red, uint8_t green,
                                       uint8_t blue) {
+    // Logging::logToStdOut("LEDS", "SET COLOR START", Logging::Level::VERBOSE);
     _lastCommand = LEDControllerSubsystem::CommandType::ChangeColor;
     uint8_t buf[4] = {(uint8_t)_lastCommand, red, green, blue};
-    return !_i2c->WriteBulk(buf, 4);
+    _i2c->WriteBulk(buf, 4);
+    // Logging::logToStdOut("LEDS", "SET COLOR END", Logging::Level::VERBOSE);
+    return true;
 }
 
 bool LEDControllerSubsystem::setColor(uint32_t color) {
@@ -57,6 +62,27 @@ bool LEDControllerSubsystem::setColor(Colors color) {
     }
 
     return false;
+}
+
+frc2::CommandPtr LEDControllerSubsystem::SetMovementLED(uint32_t color,
+                                                        PatternType pattern) {
+    return frc2::InstantCommand(
+               [this, color, pattern]() {
+                   setOn();
+                   setColor(color);
+                   setPattern(pattern);
+               },
+               {this})
+        .ToPtr();
+}
+
+frc2::CommandPtr LEDControllerSubsystem::DisplayCurrentColor() {
+    return frc2::InstantCommand([this]() {
+               setOn();
+               setColor(_currentColor);
+               setPattern(PatternType::SetAll);
+           })
+        .ToPtr();
 }
 
 bool LEDControllerSubsystem::getPatternDone() {

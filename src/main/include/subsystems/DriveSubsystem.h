@@ -28,7 +28,7 @@
 #include <networktables/NetworkTableInstance.h>
 
 #include "Constants.h"
-#include "commands/BrakeSet.h"
+#include "commands/BrakeSetCommand.h"
 #include "subsystems/BrakeSubsystem.h"
 
 struct Encoders {
@@ -38,7 +38,8 @@ struct Encoders {
 
 class DriveSubsystem : public frc2::SubsystemBase {
    public:
-    DriveSubsystem(WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&);
+    DriveSubsystem(WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&, WPI_TalonFX&,
+                   BrakeSubsystem* brake);
 
     void DisabledInit();
 
@@ -62,6 +63,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
      * @param rotation the commanded rotation
      */
     void ArcadeDrive(double, double);
+
+    frc2::CommandPtr GetArcadeDriveCommand(double, double);
 
     void TankDrive(units::meters_per_second_t, units::meters_per_second_t);
 
@@ -212,7 +215,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
     frc::DifferentialDrive m_drive{RightLead, LeftLead};
 
-    BrakeSubsystem m_brake{RightLead, LeftLead};
+    BrakeSubsystem* m_brake;
 
     // The default (starting) values for the encoder
     double lEncoder = 0.0;

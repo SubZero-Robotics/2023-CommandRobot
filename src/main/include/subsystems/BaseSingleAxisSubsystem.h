@@ -4,47 +4,25 @@
 #include <frc/DigitalInput.h>
 #include <frc/DutyCycleEncoder.h>
 #include <frc/controller/PIDController.h>
-#include <frc/controller/ProfiledPIDController.h>
 #include <frc2/command/CommandPtr.h>
-#include <frc2/command/SubsystemBase.h>
+#include <frc2/command/FunctionalCommand.h>
+#include <rev/CANSparkMax.h>
+#include <rev/SparkMaxPIDController.h>
+#include <units/acceleration.h>
+#include <units/angle.h>
+#include <units/angular_acceleration.h>
+#include <units/angular_velocity.h>
+#include <units/length.h>
+#include <units/velocity.h>
 
 #include <memory>
 
-#include "constants.h"
+#include "Constants.h"
+#include "subsystems/ISingleAxisSubsystem.h"
+#include "utils/Logging.h"
 
-/**
- * @brief A base class for a single-axis subsystem
- *
- * @example BaseSingleAxisSubsystem<rev::CANSparkMax,
- units::meters>::SingleAxisConfig config = {
- BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>::AxisType::Linear, //
- type frc::ProfilePIDController(1.3, 0.0, 0.7,
-            frc::TrapezoidProfile<units::meters>::Constraints(1.75_mps,
- 0.75_mps_sq), 20_ms   // kDt (s)
-        ),   // PID
-        0,      // min distance
-        200,    // max distance
-        30,     // distance per revolution in linear units
-        1,      // motor direction
-        0,      // min limit switch port
-        1,      // max limit switch port
-        2,      // encoder port
-        0.33    // default movement speed of 33%
-    };
-
-    rev::CANSparkMax m_leadRotationMotor{
-        CANSparkMaxConstants::kLeadRotationMotorID,
-        rev::CANSparkMax::MotorType::kBrushless};
-
-    BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters> singleAxis =
- BaseSingleAxisSubsystem<rev::CANSparkMax, units::meters>(config,
- m_leadRotationMotor);
- *
- * @tparam Motor Any motor that supports Set(percent)
- * @tparam Unit Position unit (units::meters, etc.)
- */
-template <typename Motor, typename Unit>
-class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
+template <typename Motor, typename Encoder>
+class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
    public:
     enum ConfigConstants {
         MOTOR_DIRECTION_NORMAL = 1,
@@ -58,86 +36,125 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      * @brief Configuration for a single axis of absolute movement
      *
      * @param type Rotational or Linear direction
-     * @param pid ProfiledPIDController for moving the axis along a profile
+     * @param pid PIDController for moving the axis along a profile
      * @param minDistance Minimum distance in your choice of linear or
      * rotational units
      * @param maxDistance Maximum distance in your choice of linear or
      * rotational units
      * @param distancePerRevolution Distance the axis moves per revolution of
      * the motor
-     * @param motorDirection Set to 1 or -1 to reverse motor direction. Negative
-     * is always less distance
+     * @param motorMultiplier Set to 1.0 or -1.0 to reverse motor direction.
+     * Negative is always decreasing distance
+     * @param pidResultMultiplier Multiply the PID.Calculcate result by this
+     * value
      */
     struct SingleAxisConfig {
         AxisType type;
-        frc::ProfiledPIDController<Unit> pid;
+        frc2::PIDController pid;
         double minDistance;
         double maxDistance;
         double distancePerRevolution;
-        ConfigConstants motorDirection = MOTOR_DIRECTION_NORMAL;
-        int minLimitSwitchPort = (int)UNUSED_DIO_PORT;
-        int maxLimitSwitchPort = (int)UNUSED_DIO_PORT;
-        int absoluteEncoderPort = (int)UNUSED_DIO_PORT;
+        double stepSize;
+        double motorMultiplier = 1.0;
+        double pidResultMultiplier = 1.0;
+        int minLimitSwitchPort = UNUSED_DIO_PORT;
+        int maxLimitSwitchPort = UNUSED_DIO_PORT;
         double defaultMovementSpeed = 0.2;
     };
 
-    BaseSingleAxisSubsystem(SingleAxisConfig cfg, Motor &&motor)
-        : _motor(std::move(motor)),
+    BaseSingleAxisSubsystem(SingleAxisConfig &cfg, Motor &motor,
+                            Encoder &encoder, frc::DigitalInput *minSwitch,
+                            frc::DigitalInput *maxSwitch, std::string prefix,
+                            std::string ansiPrefixModifiers = "",
+                            bool log = false)
+        : _motor(motor),
+          _enc(encoder),
           _config(cfg),
           _controller(cfg.pid),
           _isHoming(false),
           _isMovingToPosition(false),
-          _targetPosition(0) {
-        if (IsValidPort(_config.absoluteEncoderPort)) {
-            _encoder = std::make_unique<frc::DutyCycleEncoder>(
-                _config.absoluteEncoderPort);
-            _encoder->SetDistancePerRotation(_config.distancePerRevolution);
-        }
-
-        if (IsValidPort(_config.minLimitSwitchPort)) {
-            _minLimitSwitch =
-                std::make_unique<frc::DigitalInput>(_config.minLimitSwitchPort);
-        }
-
-        if (IsValidPort(_config.maxLimitSwitchPort)) {
-            _maxLimitSwitch =
-                std::make_unique<frc::DigitalInput>(_config.maxLimitSwitchPort);
-        }
-
+          _targetPosition(0),
+          _prefix(prefix),
+          _ansiPrefixModifiers(ansiPrefixModifiers),
+          _log(log),
+          _minLimitSwitch(minSwitch),
+          _maxLimitSwitch(maxSwitch) {
         _config.defaultMovementSpeed =
             std::clamp(_config.defaultMovementSpeed, -1.0, 1.0);
     }
 
     /**
      * @brief Run motor at the specified speed.
-     * ! Make sure to use _config.motorDirection to invert if needed!
+     * ! Make sure to use _config.motorMultiplier to invert if needed!
      * This method will also prevent movement in certain directions if at a
      * limit. Use RunMotorExternal if moving the motor from an external command
      *
      * @param speed Percentage speed
      */
-    void RunMotorSpeed(double speed) const {
-        speed = std::clamp(speed * (int)_config.motorDirection, -1.0, 1.0);
+    void RunMotorSpeed(double speed, bool ignoreEncoder = false) override {
+        if (_log)
+            Logging::logToStdOut(
+                _prefix, "MUL IS " + std::to_string(_config.motorMultiplier),
+                Logging::Level::VERBOSE, _ansiPrefixModifiers);
+        speed *= _config.motorMultiplier;
+        speed = std::clamp(speed, -1.0, 1.0);
+        if (_log)
+            Logging::logToStdOut(_prefix, "SPEED IS " + std::to_string(speed),
+                                 Logging::Level::VERBOSE, _ansiPrefixModifiers);
 
-        if (AtHome()) {
-            if (speed > 0) {
+        bool homeState = ignoreEncoder ? AtLimitSwitchHome() : AtHome();
+        if (homeState) {
+            if (_log)
+                Logging::logToStdOut(_prefix, "AT HOME", Logging::Level::INFO,
+                                     _ansiPrefixModifiers);
+            if (speed < 0) {
+                if (_log)
+                    Logging::logToStdOut(
+                        _prefix, "SETTING SPEED TO: " + std::to_string(speed),
+                        Logging::Level::VERBOSE, _ansiPrefixModifiers);
                 _motor.Set(speed);
                 return;
             }
+
+            if (_log)
+                Logging::logToStdOut(
+                    _prefix, "NOT MOVING; AT HOME" + std::to_string(speed),
+                    Logging::Level::VERBOSE, _ansiPrefixModifiers);
 
             _motor.Set(0);
             return;
-        } else if (AtMax()) {
-            if (speed < 0) {
+        }
+
+        else if (AtMax()) {
+            if (_log)
+                Logging::logToStdOut(_prefix, "AT MAX", Logging::Level::INFO);
+            if (speed > 0) {
+                if (_log)
+                    Logging::logToStdOut(
+                        _prefix, "SETTING SPEED TO: " + std::to_string(speed),
+                        Logging::Level::VERBOSE, _ansiPrefixModifiers);
                 _motor.Set(speed);
                 return;
             }
 
+            if (_log)
+                Logging::logToStdOut(
+                    _prefix, "NOT MOVING; AT MAX " + std::to_string(speed),
+                    Logging::Level::VERBOSE, _ansiPrefixModifiers);
             _motor.Set(0);
             return;
         } else {
+            if (_log)
+                Logging::logToStdOut(
+                    _prefix, "SETTING SPEED TO: " + std::to_string(speed),
+                    Logging::Level::VERBOSE, _ansiPrefixModifiers);
             _motor.Set(speed);
         }
+    }
+
+    void RunMotorSpeedDefault(bool invertDirection = false) override {
+        RunMotorSpeed(invertDirection ? -_config.defaultMovementSpeed
+                                      : _config.defaultMovementSpeed);
     }
 
     /**
@@ -146,123 +163,226 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      *
      * @param speed Percentage speed
      */
-    void RunMotorExternal(double speed) {
-        StopMovement();
+    void RunMotorExternal(double speed) override {
+        // TODO: constant
+        if (abs(speed) <= 0.05) {
+            if (_isMovingToPosition)
+                return;  // Don't set the motor and overwrite a potential
+                         // automated movement
+
+            if (_config.type == AxisType::Rotational)
+                RunMotorSpeed(
+                    ArmConstants::kAntiGravityPercentage);  // Make 'er hover!
+            else
+                _motor.Set(0);
+
+            return;
+        }
+
+        // Overwrite current automated position with joystick input
+        if (_isMovingToPosition) {
+            StopMovement();
+        }
+
         RunMotorSpeed(speed);
     }
 
-    void UpdateMovement() {
+    void JoystickMoveStep(double rotation) override {
+        auto steps = rotation * _config.stepSize;
+        auto newTarget = IncrementTargetPosition(steps);
+        MoveToPosition(newTarget);
+    }
+
+    double IncrementTargetPosition(double steps) override {
+        return std::clamp(_targetPosition + steps, _config.minDistance,
+                          _config.maxDistance);
+    }
+
+    void UpdateMovement() override {
         if (_isMovingToPosition) {
-            double res = std::clamp(
-                _controller.Calculate(GetCurrentPosition(), _targetPosition),
-                -_config.defaultMovementSpeed, _config.defaultMovementSpeed);
-            if (!_controller.AtGoal()) {
-                RunMotorSpeed(res);
-            } else {
-                _isMovingToPosition = false;
+            if (_log)
+                Logging::logToStdOut(
+                    _prefix,
+                    "Target Position: " + std::to_string(_targetPosition) +
+                        std::string(_config.type == AxisType::Linear ? " in"
+                                                                     : " deg"),
+                    Logging::Level::INFO, _ansiPrefixModifiers);
+
+            auto res =
+                _controller.Calculate(GetCurrentPosition(), _targetPosition) *
+                _config.pidResultMultiplier;
+            auto clampedRes = std::clamp(res, -1.0, 1.0);
+            if (_log)
+                Logging::logToStdOut(
+                    _prefix, "Clamped Res: " + std::to_string(clampedRes),
+                    Logging::Level::INFO, _ansiPrefixModifiers);
+            Logging::logToSmartDashboard(_prefix + " TargetPos",
+                                         std::to_string(_targetPosition),
+                                         Logging::Level::INFO);
+
+            if (_controller.AtSetpoint()) {
+                Logging::logToStdOut(_prefix, "REACHED GOAL",
+                                     Logging::Level::INFO,
+                                     _ansiPrefixModifiers);
+                StopMovement();
+                return;
             }
+
+            RunMotorSpeed(clampedRes);
         }
     }
 
-    inline void ResetEncoder() const { _encoder->Reset(); }
+    virtual void ResetEncoder() = 0;
 
-    inline Unit GetCurrentPosition() const {
-        if (_encoder) {
-            return _encoder->GetDistance();
-        }
-    }
+    virtual double GetCurrentPosition() = 0;
 
-    bool AtHome() const {
+    bool AtHome() override {
         if (_minLimitSwitch) {
             if (AtLimitSwitchHome()) {
                 ResetEncoder();
+                if (_log)
+                    Logging::logToStdOut(_prefix, "AT HOME SWITCH",
+                                         Logging::Level::INFO,
+                                         _ansiPrefixModifiers);
                 return true;
             }
         }
 
-        if (_encoder) {
-            if (GetCurrentPosition() <= _config.minDistance) {
-                ResetEncoder();
-                return true;
-            }
+        // TODO: Constant wrap-around value
+        if (GetCurrentPosition() <= _config.minDistance ||
+            GetCurrentPosition() >= 350.0) {
+            if (_log)
+                Logging::logToStdOut(_prefix, "AT HOME ENC",
+                                     Logging::Level::INFO,
+                                     _ansiPrefixModifiers);
+            return true;
         }
 
         return false;
     }
 
-    inline bool AtMax() const {
+    inline bool AtMax() override {
         if (_maxLimitSwitch) {
-            return AtLimitSwitchMax();
+            if (AtLimitSwitchMax()) {
+                if (_log)
+                    Logging::logToStdOut(_prefix, "AT MAX SWITCH",
+                                         Logging::Level::INFO,
+                                         _ansiPrefixModifiers);
+                return true;
+            }
         }
 
-        if (_encoder) {
-            return GetCurrentPosition() >= _config.maxDistance;
+        if (GetCurrentPosition() >= _config.maxDistance &&
+            GetCurrentPosition() < 350) {
+            if (_log)
+                Logging::logToStdOut(_prefix, "AT MAX ENC",
+                                     Logging::Level::INFO,
+                                     _ansiPrefixModifiers);
+
+            return true;
         }
 
         return false;
     }
 
-    inline bool AtLimitSwitchHome() const {
+    inline bool AtLimitSwitchHome() override {
         if (_minLimitSwitch) {
-            return !_minLimitSwitch->Get();
+            auto state = !_minLimitSwitch->Get();
+            if (_log)
+                Logging::logToStdOut(
+                    _prefix, "MIN LIMIT SWITCH: " + std::to_string(state),
+                    Logging::Level::VERBOSE, _ansiPrefixModifiers);
+            return state;
         }
 
         return false;
     }
 
-    inline bool AtLimitSwitchMax() const {
+    inline bool AtLimitSwitchMax() override {
         if (_maxLimitSwitch) {
-            return !_maxLimitSwitch->Get();
+            auto state = !_maxLimitSwitch->Get();
+            if (_log)
+                Logging::logToStdOut(
+                    _prefix, "MAX LIMIT SWITCH: " + std::to_string(state),
+                    Logging::Level::VERBOSE, _ansiPrefixModifiers);
+            return state;
         }
 
         return false;
     }
 
-    void MoveToPosition(Unit position) {
+    void MoveToPosition(double position) override {
+        if (_log)
+            Logging::logToStdOut(_prefix,
+                                 "Moving to " + std::to_string(position),
+                                 Logging::Level::INFO, _ansiPrefixModifiers);
         _isMovingToPosition = true;
-        _targetPosition = position;
-        _controller.SetGoal(position);
+        _targetPosition =
+            std::clamp(position, _config.minDistance, _config.maxDistance);
     }
 
-    void Home() { _isHoming = true; }
+    void Home() override {
+        if (_log)
+            Logging::logToStdOut(_prefix, "Set homing to true",
+                                 Logging::Level::INFO, _ansiPrefixModifiers);
+        StopMovement();
+        _isHoming = true;
+    }
 
-    inline bool GetIsMovingToPosition() const { return _isMovingToPosition; }
+    inline bool GetIsMovingToPosition() override { return _isMovingToPosition; }
 
-    inline void StopMovement() {
+    inline void StopMovement() override {
+        if (_log)
+            Logging::logToStdOut(_prefix, "Movement stopped",
+                                 Logging::Level::INFO, _ansiPrefixModifiers);
         _isHoming = false;
         _isMovingToPosition = false;
-        _motor->Set(0);
+        _motor.Set(0);
     }
 
-    frc2::CommandPtr GetHomeCommand() {
+    frc2::CommandPtr GetHomeCommand() override {
         return frc2::FunctionalCommand(
                    [this] { Home(); },
-                   [this] { RunMotorSpeed(-_config.defaultMovementSpeed); },
-                   [this](bool interrupted) {
-                       RunMotorSpeed(0);
-                       ResetEncoder();
-                       _isHoming = false;
+                   // Ignore the home encoder value since it starts at 0
+                   [this] {
+                       RunMotorSpeed(_config.defaultMovementSpeed, true);
                    },
-                   [this] { AtHome(); }, {this})
+                   [this](bool interrupted) {
+                       StopMovement();
+                       ResetEncoder();
+                   },
+                   // Finish once limit switch is hit
+                   [this] { return AtLimitSwitchHome(); }, {this})
             .ToPtr();
     }
 
-    void Periodic() override { UpdateMovement(); }
+    void Periodic() override {
+        // auto res = frc::SmartDashboard::GetNumber(_prefix + " Position Set",
+        // 0); if (_log)
+        //     Logging::logToStdOut(_prefix, "Shuffleboard Position" +
+        //     std::to_string(res),
+        //                          Logging::Level::INFO);
+        // MoveToPosition(res);
+        UpdateMovement();
+    }
 
     static inline bool IsValidPort(int port) { return port >= 0 && port < 10; }
 
    protected:
-    Motor _motor;
-    SingleAxisConfig _config;
-    std::unique_ptr<frc::DutyCycleEncoder> _encoder;
-    frc::ProfiledPIDController<Unit> _controller;
-    bool _isHoming;
-    bool _isMovingToPosition;
-    Unit _targetPosition;
+    Motor &_motor;
+    Encoder &_enc;
+    SingleAxisConfig &_config;
+    frc2::PIDController _controller;
+    bool _isHoming = false;
+    bool _isMovingToPosition = false;
+    double _targetPosition = 0.0;
+    std::string _prefix;
+    std::string _ansiPrefixModifiers;
+    bool _log;
 
    private:
-    std::unique_ptr<frc::DigitalInput> _minLimitSwitch;
-    std::unique_ptr<frc::DigitalInput> _maxLimitSwitch;
+    frc::DigitalInput *_minLimitSwitch = nullptr;
+    frc::DigitalInput *_maxLimitSwitch = nullptr;
 };
 
 #endif

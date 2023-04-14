@@ -5,22 +5,24 @@
 
 #include "subsystems/IntakeSubsystem.h"
 
-class IntakeIn : public frc2::CommandHelper<frc2::CommandBase, IntakeIn> {
+class IntakeOut : public frc2::CommandHelper<frc2::CommandBase, IntakeOut> {
    public:
     /**
      * Creates a new Intake.
      *
      * @param subsystem The subsystem used by this command.
      */
-    explicit IntakeIn(IntakeSubsystem* subsystem)
+    explicit IntakeOut(IntakeSubsystem* subsystem)
         : m_intake{subsystem}, isFinished{false} {
         // Register that this command requires the subsystem.
         AddRequirements(m_intake);
     }
 
-    void Execute() override { m_intake->In(); }
+    void Execute() override { m_intake->Out(); }
 
     bool IsFinished() override { return isFinished; }
+
+    void End(bool interrupted) { m_intake->Stop(); }
 
    private:
     IntakeSubsystem* m_intake;

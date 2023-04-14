@@ -17,13 +17,15 @@
 using namespace DriveConstants;
 
 DriveSubsystem::DriveSubsystem(WPI_TalonFX& rightLead, WPI_TalonFX& rightFollow,
-                               WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow)
+                               WPI_TalonFX& leftLead, WPI_TalonFX& leftFollow,
+                               BrakeSubsystem* brake)
     : RightLead(rightLead),
       RightFollow(rightFollow),
       RightLeadSim(rightLead.GetSimCollection()),
       LeftLead(leftLead),
       LeftFollow(leftFollow),
-      LeftLeadSim(leftLead.GetSimCollection()) {
+      LeftLeadSim(leftLead.GetSimCollection()),
+      m_brake(brake) {
     // Implementation of subsystem constructor goes here.
     // Stuff you want to happen once, when robot code starts running
 
@@ -119,7 +121,7 @@ void DriveSubsystem::Periodic() {
 
 void DriveSubsystem::DisabledInit() { SetCoastMode(); }
 
-void DriveSubsystem::TeleopInit() { m_brake.Unset(); }
+void DriveSubsystem::TeleopInit() { m_brake->UnsetBrakeMode(); }
 
 void DriveSubsystem::BrakeInit() { SetBrakeMode(); }
 
@@ -135,6 +137,14 @@ void DriveSubsystem::ArcadeDrive(double currentPercentage, double rotation) {
         accelfilter.Calculate(currentPercentage);
     }
     previousPercentage = abs(currentPercentage);
+}
+
+frc2::CommandPtr DriveSubsystem::GetArcadeDriveCommand(double percentage,
+                                                       double rotation) {
+    return frc2::InstantCommand([this, percentage, rotation]() {
+               this->ArcadeDrive(percentage, rotation);
+           })
+        .ToPtr();
 }
 
 void DriveSubsystem::TankDrive(units::meters_per_second_t left,

@@ -3,36 +3,47 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
-#include <format>
 #include <iostream>
 
+#include "Constants.h"
+
 namespace Logging {
-enum class Level { VERBOSE, INFO, WARNING, ERROR };
+const std::string keyPrefix = "LOG";
 
 static void logToSmartDashboard(const std::string& key, const std::string& msg,
-                                Level level) {
-    frc::SmartDashboard::PutString(key, getLevelString(msg, level));
+                                Level level = Level::INFO) {
+    if ((int)level < (int)kMinLogLevel) return;
+    frc::SmartDashboard::PutString(key, msg);
 }
 
 static void logToStdOut(const std::string& key, const std::string& msg,
-                        Level level) {
-    std::cout << getLevelString(msg, level);
-}
-
-static std::string getLevelString(const std::string& msg, Level level) {
+                        Level level = Level::VERBOSE,
+                        const std::string& modifiersDontUse = "") {
+    if ((int)level < (int)kMinLogLevel) return;
     switch (level) {
         case Level::VERBOSE:
-            return std::format("VERBOSE: {}\n", msg);
+            std::cout << "VERBOSE: "
+                      << "[" << key << "] " << msg << std::endl;
+            break;
         case Level::INFO:
-            return std::format("INFO: {}\n", msg);
+            std::cout << "INFO: "
+                      << "[" << key << "] " << msg << std::endl;
+            break;
         case Level::WARNING:
-            return std::format("WARNING: {}\n", msg);
+            std::cout << "WARNING: "
+                      << "[" << key << "] " << msg << std::endl;
+            break;
         case Level::ERROR:
-            return std::format("ERROR: {}\n", msg);
+            std::cerr << "ERROR: "
+                      << "[" << key << "] " << msg << std::endl;
+            break;
         default:
-            return std::format("LOG: {}\n", msg);
+            std::cout << "LOG: "
+                      << "[" << key << "] " << msg << std::endl;
+            break;
     }
 }
+
 }  // namespace Logging
 
 #endif

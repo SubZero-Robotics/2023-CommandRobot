@@ -17,14 +17,16 @@
 
 #include "Constants.h"
 #include "commands/Autos.h"
+#include "subsystems/AssistSubsystem.h"
 #include "subsystems/BrakeSubsystem.h"
+#include "subsystems/CompleteArmSubsystem.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/DutyCycleLidarSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/ExtensionSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDControllerSubsystem.h"
 #include "subsystems/RotateArmSubsystem.h"
-#include "subsystems/VL53L1XSubsystem.h"
 #include "subsystems/WristSubsystem.h"
 
 /**
@@ -36,9 +38,16 @@
  */
 class RobotContainer {
    public:
+    BrakeSubsystem m_Brake{RightLead, LeftLead};
+
     RobotContainer();
 
-    frc2::CommandPtr GetAutonomousCommand();
+    frc2::Command* GetAutonomousCommand();
+
+    void ReleaseBrakes() {
+        m_Brake.UnsetHardware();
+        m_Brake.UnsetSoftware();
+    }
 
    private:
     // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -57,22 +66,30 @@ class RobotContainer {
     // build an actual autonomous
     ExampleSubsystem m_subsystem;
 
+    DriveSubsystem drive{RightLead, RightFollow, LeftLead, LeftFollow,
+                         &m_Brake};
+
     // Arm Subsystem
-    RotateArmSubsystem m_effector;
-    ExtensionSubsystem m_extender;
-    BrakeSubsystem m_Brake{RightLead, LeftLead};
-    LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress};
+    std::unique_ptr<RotateArmSubsystem> m_effector;
+    std::unique_ptr<ExtensionSubsystem> m_extender;
+    LEDControllerSubsystem m_leds{kLEDCotrollerSlaveAddress,
+                                  frc::I2C::Port::kMXP};
     IntakeSubsystem m_intake{&m_leds};
-    WristSubsystem m_wrist;
-    VL53L1XController m_lidar{kLidarInputPin};
+    std::unique_ptr<WristSubsystem> m_wrist;
+    DutyCycleLidarSubsystem m_lidar{kLidarInputPin, kLidarValidationPin};
 
     // Drive subsystem from 2022. We should probably make cross season code
     // easier to reuse.
-    std::unique_ptr<DriveSubsystem> drive;
     DriveSubsystem* m_drive;
 
-    frc2::CommandPtr m_straightback = autos::StraightBack(m_drive);
-    frc2::CommandPtr m_nothing = autos::DoesNothing(m_drive);
+    frc2::CommandPtr m_straightback = autos::StraightBack(&drive, 60);
+    frc2::CommandPtr m_nothing = autos::DoesNothing(&drive);
+    frc2::CommandPtr m_placeandleave = autos::PlaceAndLeave(&drive, &m_intake);
+    frc2::CommandPtr m_placeandbalance =
+        autos::PlaceAndBalance(&drive, &m_intake, &m_Brake);
+
+    std::unique_ptr<CompleteArmSubsystem> m_arm;
+    std::unique_ptr<AssistSubsystem> m_assist;
 
     frc::SendableChooser<frc2::Command*> m_chooser;
 

@@ -11,7 +11,7 @@ constexpr int32_t ceil(float num) {
                : static_cast<int32_t>(num) + (num > 0 ? 1 : 0);
 }
 
-constexpr uint16_t ledNum = 10;
+constexpr uint16_t ledNum = 150;
 
 /**
  * Will be called after set delay has passed

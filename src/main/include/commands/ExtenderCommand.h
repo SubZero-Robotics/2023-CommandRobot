@@ -24,24 +24,9 @@ class Extender : public frc2::CommandHelper<frc2::CommandBase, Extender> {
     void Execute() override {
         double outExtent = m_outExtent();
         double inExtent = m_inExtent();
-        auto rotation = outExtent >= inExtent ? outExtent : -inExtent;
+        auto rotation = outExtent >= inExtent ? -outExtent : inExtent;
 
-        // if (!m_extension->AtLimit() ||
-        //     m_extension->GetExtenderDistanceIn() >=
-        //     ArmConstants::kMaxArmDistanceIn) { m_extension->PercentOutput(0);
-        //     return;
-        // }
-
-        if (m_extension->AtLimit()) {
-            m_extension->ResetEncoder();
-            if (rotation > 0) {
-                m_extension->PercentOutput(rotation);
-            } else {
-                m_extension->PercentOutput(0.0);
-            }
-        } else {
-            m_extension->PercentOutput(rotation);
-        }
+        m_extension->RunMotorExternal(rotation);
     }
 
    private:
