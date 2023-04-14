@@ -55,7 +55,8 @@ enum Button {
 
 namespace Logging {
 enum class Level { VERBOSE = 0, INFO, WARNING, ERROR };
-constexpr Level MinLogLevel = Level::VERBOSE;
+// Don't log at levels below this one
+constexpr auto kMinLogLevel = Level::VERBOSE;
 }  // namespace Logging
 
 enum Axis {

@@ -15,8 +15,6 @@ class RotateArmSubsystem
 
     double GetCurrentPosition() override;
 
-    void UpdateMovement() override;
-
    private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
@@ -42,6 +40,7 @@ class RotateArmSubsystem
         .distancePerRevolution = 360.0,
         .stepSize = ArmConstants::kArmStepSize,
         .motorMultiplier = 1.0,
+        .pidResultMultiplier = -0.5,
         .minLimitSwitchPort = ArmConstants::kRotationLimitSwitchHomePort,
         .maxLimitSwitchPort = ArmConstants::kRotationLimitSwitchMaxPort,
         .defaultMovementSpeed = ArmConstants::kRotationHomingSpeed};

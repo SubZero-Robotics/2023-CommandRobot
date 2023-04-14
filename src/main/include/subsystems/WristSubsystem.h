@@ -17,8 +17,6 @@ class WristSubsystem
 
     void RunMotorExternal(double speed) override;
 
-    void UpdateMovement() override;
-
    private:
     rev::CANSparkMax m_wristMotor{CANSparkMaxConstants::kWristRotationMotorID,
                                   rev::CANSparkMax::MotorType::kBrushless};
@@ -36,6 +34,7 @@ class WristSubsystem
         .distancePerRevolution = 360.0,
         .stepSize = ArmConstants::kWristStepSize,
         .motorMultiplier = -1.0,
+        .pidResultMultiplier = 0.66,
         .minLimitSwitchPort = ArmConstants::kWristLimitSwitchPort,
         .maxLimitSwitchPort = BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
         .defaultMovementSpeed = -ArmConstants::kWristHomingSpeed};

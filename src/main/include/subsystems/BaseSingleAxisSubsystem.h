@@ -45,6 +45,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
      * the motor
      * @param motorMultiplier Set to 1.0 or -1.0 to reverse motor direction.
      * Negative is always decreasing distance
+     * @param pidResultMultiplier Multiply the PID.Calculcate result by this value
      */
     struct SingleAxisConfig {
         AxisType type;
@@ -54,6 +55,7 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
         double distancePerRevolution;
         double stepSize;
         double motorMultiplier = 1.0;
+        double pidResultMultiplier = 1.0;
         int minLimitSwitchPort = UNUSED_DIO_PORT;
         int maxLimitSwitchPort = UNUSED_DIO_PORT;
         double defaultMovementSpeed = 0.2;
@@ -206,8 +208,8 @@ class BaseSingleAxisSubsystem : public ISingleAxisSubsystem {
                     Logging::Level::INFO, _ansiPrefixModifiers);
 
             auto res =
-                _controller.Calculate(GetCurrentPosition(), _targetPosition);
-            auto clampedRes = std::clamp(res, -1.0, 1.0) * 0.65;
+                _controller.Calculate(GetCurrentPosition(), _targetPosition) * _config.pidResultMultiplier;
+            auto clampedRes = std::clamp(res, -1.0, 1.0);
             if (_log)
                 Logging::logToStdOut(
                     _prefix, "Clamped Res: " + std::to_string(clampedRes),

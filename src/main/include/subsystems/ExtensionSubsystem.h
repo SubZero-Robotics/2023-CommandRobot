@@ -15,8 +15,6 @@ class ExtensionSubsystem
 
     double GetCurrentPosition() override;
 
-    void UpdateMovement() override;
-
    private:
     rev::CANSparkMax m_extensionMotor{CANSparkMaxConstants::kExtensionMotorID,
                                       rev::CANSparkMax::MotorType::kBrushless};
@@ -35,6 +33,7 @@ class ExtensionSubsystem
         .distancePerRevolution = ArmConstants::kInPerRotation,
         .stepSize = ArmConstants::kExtenderStepSize,
         .motorMultiplier = .5,
+        .pidResultMultiplier = -6.0,
         .minLimitSwitchPort = ArmConstants::kExtenderLimitSwitchPort,
         .maxLimitSwitchPort = BaseSingleAxisSubsystem::UNUSED_DIO_PORT,
         .defaultMovementSpeed = ArmConstants::kExtenderHomingSpeed};
