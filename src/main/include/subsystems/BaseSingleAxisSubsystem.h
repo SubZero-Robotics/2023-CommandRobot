@@ -147,7 +147,9 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
      * @param speed Percentage speed
      */
     void RunMotorExternal(double speed) {
-        StopMovement();
+        if (_isHoming || _isMovingToPosition) {
+            StopMovement();
+        }
         RunMotorSpeed(speed);
     }
 
@@ -160,6 +162,7 @@ class BaseSingleAxisSubsystem : public frc2::SubsystemBase {
                 RunMotorSpeed(res);
             } else {
                 _isMovingToPosition = false;
+                StopMovement();
             }
         }
     }
