@@ -36,7 +36,7 @@ enum class PatternType {
 struct Pattern {
     PatternType type;
     uint16_t numStates;
-    uint16_t changeDelay;
+    uint16_t changeDelayDefault;
     ExecutePatternCallback cb;
 };
 
@@ -70,13 +70,17 @@ class PatternRunner {
      * Set the current pattern
      * @returns true if successful
      */
-    bool setCurrentPattern(PatternType, bool);
-    bool setCurrentPattern(uint8_t, bool);
+    bool setCurrentPattern(PatternType, uint16_t, bool);
+    bool setCurrentPattern(uint8_t, uint16_t, bool);
 
     /**
      * Get pointer to the current pattern
      */
     Pattern *currentPattern() const;
+
+    Pattern *getPattern(uint8_t index) const {
+        return &_patternArr[index];
+    }
 
     inline bool patternDone() const { return _oneShot && _doneRunning; }
 
@@ -95,7 +99,7 @@ class PatternRunner {
    private:
     inline bool shouldUpdate() const {
         // Only update if enough delay has passed and pattern can be run again
-        return (millis() - _lastUpdate >= currentPattern()->changeDelay) &&
+        return (millis() - _lastUpdate >= _delay) &&
                !(_oneShot && _doneRunning);
     }
 
@@ -106,6 +110,7 @@ class PatternRunner {
     uint8_t _numPatterns;
     uint8_t _curPattern;
     uint16_t _curState;
+    uint16_t _delay;
     bool _oneShot;
     bool _doneRunning;
     CRGB _curColor;

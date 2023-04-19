@@ -1,6 +1,6 @@
 #include "Patterns.h"
 
-void PatternRunner::update(bool forceUpdate = false) {
+void PatternRunner::update(bool forceUpdate) {
     auto curPattern = currentPattern();
 
     if (forceUpdate) {
@@ -34,13 +34,14 @@ void PatternRunner::incrementState(Pattern* curPattern) {
     _lastUpdate = millis();
 }
 
-bool PatternRunner::setCurrentPattern(uint8_t pattern, bool isOneShot = false) {
+bool PatternRunner::setCurrentPattern(uint8_t pattern, uint16_t delay, bool isOneShot = false) {
     if (pattern > patternCount - 1) {
         return false;
     }
 
     _curPattern = pattern;
     _oneShot = isOneShot;
+    _delay = delay;
     reset();
 
     Serial.print("Set pattern to ");
@@ -55,8 +56,9 @@ bool PatternRunner::setCurrentPattern(uint8_t pattern, bool isOneShot = false) {
 }
 
 bool PatternRunner::setCurrentPattern(PatternType type,
+                                        uint16_t delay,
                                       bool isOneShot = false) {
-    return setCurrentPattern((uint8_t)type, isOneShot);
+    return setCurrentPattern((uint8_t)type, delay, isOneShot);
 }
 
 Pattern* PatternRunner::currentPattern() const {

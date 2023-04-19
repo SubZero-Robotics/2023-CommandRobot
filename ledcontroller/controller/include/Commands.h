@@ -15,9 +15,11 @@ struct CommandOn {};
 
 struct CommandOff {};
 
+// Set delay to -1 to use default delay
 struct CommandPattern {
     uint8_t pattern;
     uint8_t oneShot;
+    int16_t delay;
 };
 
 struct CommandColor {

@@ -29,31 +29,31 @@ constexpr uint8_t ledBrightness = 100;
 static Pattern patterns[patternCount] = {
     {.type = PatternType::None,
      .numStates = 0,
-     .changeDelay = 0,
+     .changeDelayDefault = 0,
      .cb = executePatternNone},
     {.type = PatternType::SetAll,
      .numStates = 1,
-     .changeDelay = 500u,
+     .changeDelayDefault = 500u,
      .cb = executePatternSetAll},
     {.type = PatternType::Blink,
      .numStates = 2,
-     .changeDelay = 400u,
+     .changeDelayDefault = 400u,
      .cb = executePatternBlink},
     {.type = PatternType::RGBFade,
      .numStates = 256,
-     .changeDelay = 10u,
+     .changeDelayDefault = 10u,
      .cb = executePatternRGBFade},
     {.type = PatternType::HackerMode,
      .numStates = 2,
-     .changeDelay = 100u,
+     .changeDelayDefault = 100u,
      .cb = executePatternHackerMode},
     {.type = PatternType::Chase,
      .numStates = ledNum + chaseLEDWidth - 1,
-     .changeDelay = 500u,
+     .changeDelayDefault = 500u,
      .cb = executePatternChase},
     {.type = PatternType::Wipe,
      .numStates = ledNum,
-     .changeDelay = 500u,
+     .changeDelayDefault = 500u,
      .cb = executePatternWipe}};
 
 static volatile uint8_t receiveBuf[receiveBufSize];
@@ -99,22 +99,24 @@ void loop() {
                 systemOn = false;
                 break;
 
-            case CommandType::Pattern:
+            case CommandType::Pattern: {
                 // To set everything to a certain color, change color then call
                 // the 'set all' pattern
+                uint16_t delay = command.commandData.commandPattern.delay == -1 ?
+                    patternRunner.getPattern(command.commandData.commandPattern.pattern)->changeDelayDefault :
+                    command.commandData.commandPattern.delay;
+
                 patternRunner.setCurrentPattern(
                     command.commandData.commandPattern.pattern,
-                    command.commandData.commandPattern.oneShot);
-                break;
+                    command.commandData.commandPattern.oneShot,
+                    delay);
+            } break;
 
             case CommandType::ChangeColor: {
                 auto colors = command.commandData.commandColor;
                 currentColor = CRGB(colors.red, colors.green, colors.blue);
                 patternRunner.setCurrentColor(currentColor);
             } break;
-
-            case CommandType::ReadPatternDone:
-                break;
 
             default:
                 break;
@@ -163,11 +165,11 @@ void parseCommand(uint8_t *buf, size_t len) {
             break;
 
         case CommandType::Pattern:
-            memcpy(&command.commandData.commandPattern.pattern, &buf[1], 2);
+            memcpy(&command.commandData.commandPattern.pattern, &buf[1], sizeof(CommandPattern));
             break;
 
         case CommandType::ChangeColor:
-            memcpy(&command.commandData.commandColor.red, &buf[1], 3);
+            memcpy(&command.commandData.commandColor.red, &buf[1], sizeof(CommandColor));
             break;
 
         case CommandType::ReadPatternDone:

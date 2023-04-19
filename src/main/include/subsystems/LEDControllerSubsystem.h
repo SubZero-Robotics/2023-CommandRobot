@@ -71,7 +71,7 @@ class LEDControllerSubsystem : public frc2::SubsystemBase {
      * @param pattern
      * @param oneShot Only run the pattern once
      */
-    bool setPattern(PatternType pattern, bool oneShot = false);
+    bool setPattern(PatternType pattern, bool oneShot = false, int16_t delay=-1);
 
     /**
      * @brief Send the COLOR command

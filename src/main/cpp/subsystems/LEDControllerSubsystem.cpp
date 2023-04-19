@@ -17,20 +17,20 @@ bool LEDControllerSubsystem::initialize() { return !_i2c->AddressOnly(); }
 bool LEDControllerSubsystem::setOn() {
     _lastCommand = LEDControllerSubsystem::CommandType::On;
     uint8_t buf[1] = {(uint8_t)_lastCommand};
-    return !_i2c->WriteBulk(buf, 1);
+    return !_i2c->WriteBulk(buf, sizeof(buf));
 }
 
 bool LEDControllerSubsystem::setOff() {
     _lastCommand = LEDControllerSubsystem::CommandType::Off;
     uint8_t buf[1] = {(uint8_t)_lastCommand};
-    return !_i2c->WriteBulk(buf, 1);
+    return !_i2c->WriteBulk(buf, sizeof(buf));
 }
 
 bool LEDControllerSubsystem::setPattern(
-    LEDControllerSubsystem::PatternType pattern, bool oneShot) {
+    LEDControllerSubsystem::PatternType pattern, bool oneShot, int16_t delay) {
     _lastCommand = LEDControllerSubsystem::CommandType::Pattern;
-    uint8_t buf[3] = {(uint8_t)_lastCommand, (uint8_t)pattern, oneShot};
-    return !_i2c->WriteBulk(buf, 3);
+    uint8_t buf[5] = {(uint8_t)_lastCommand, (uint8_t)pattern, oneShot, delay};
+    return !_i2c->WriteBulk(buf, sizeof(buf));
 }
 
 bool LEDControllerSubsystem::setColor(uint8_t red, uint8_t green,
@@ -38,7 +38,7 @@ bool LEDControllerSubsystem::setColor(uint8_t red, uint8_t green,
     // Logging::logToStdOut("LEDS", "SET COLOR START", Logging::Level::VERBOSE);
     _lastCommand = LEDControllerSubsystem::CommandType::ChangeColor;
     uint8_t buf[4] = {(uint8_t)_lastCommand, red, green, blue};
-    _i2c->WriteBulk(buf, 4);
+    _i2c->WriteBulk(buf, sizeof(buf));
     // Logging::logToStdOut("LEDS", "SET COLOR END", Logging::Level::VERBOSE);
     return true;
 }
@@ -88,6 +88,6 @@ frc2::CommandPtr LEDControllerSubsystem::DisplayCurrentColor() {
 bool LEDControllerSubsystem::getPatternDone() {
     _lastCommand = LEDControllerSubsystem::CommandType::ReadPatternDone;
     uint8_t buf[1];
-    _i2c->Read((uint8_t)_lastCommand, 1, buf);
+    _i2c->Read((uint8_t)_lastCommand, sizeof(buf), buf);
     return buf[0];
 }
